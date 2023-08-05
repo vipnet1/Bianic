@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 import com.example.binancerebalancinghelper.NotificationsHelper;
-import com.example.binancerebalancinghelper.SharedPreferencesHelper;
+import com.example.binancerebalancinghelper.shared_preferences.SharedPreferencesHelper;
 import com.example.binancerebalancinghelper.consts.NotificationsConsts;
 
 public class RebalancingCheckIntentService extends IntentService {

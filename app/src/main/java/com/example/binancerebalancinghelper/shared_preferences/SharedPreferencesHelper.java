@@ -1,11 +1,13 @@
-package com.example.binancerebalancinghelper;
+package com.example.binancerebalancinghelper.shared_preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 
 public class SharedPreferencesHelper {
-    private static SharedPreferences prefs = null;
+    protected static SharedPreferences prefs = null;
+
+    protected SharedPreferencesHelper() {}
 
     public SharedPreferencesHelper(Context context) {
         if (prefs == null) {
@@ -31,5 +33,15 @@ public class SharedPreferencesHelper {
 
     public boolean getBoolean(String key, boolean defaultValue) {
         return prefs.getBoolean(key, defaultValue);
+    }
+
+    public void setString(String key, String value) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public String getString(String key, String defaultValue) {
+        return prefs.getString(key, defaultValue);
     }
 }
