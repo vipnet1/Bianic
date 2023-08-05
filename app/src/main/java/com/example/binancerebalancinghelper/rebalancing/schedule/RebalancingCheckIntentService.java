@@ -2,7 +2,8 @@ package com.example.binancerebalancinghelper.rebalancing.schedule;
 
 import android.app.IntentService;
 import android.content.Intent;
-
+import android.os.Build;
+import androidx.annotation.RequiresApi;
 import com.example.binancerebalancinghelper.NotificationsHelper;
 import com.example.binancerebalancinghelper.SharedPreferencesHelper;
 import com.example.binancerebalancinghelper.consts.NotificationsConsts;
@@ -13,6 +14,7 @@ public class RebalancingCheckIntentService extends IntentService {
         super("RebalancingCheckIntentService");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onHandleIntent(Intent intent) {
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(this);

@@ -2,7 +2,6 @@ package com.example.binancerebalancinghelper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 
 public class SharedPreferencesHelper {
