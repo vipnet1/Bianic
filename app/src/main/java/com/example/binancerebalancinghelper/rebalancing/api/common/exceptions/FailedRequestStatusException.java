@@ -1,4 +1,4 @@
-package com.example.binancerebalancinghelper.rebalancing.api.exceptions;
+package com.example.binancerebalancinghelper.rebalancing.api.common.exceptions;
 
 public class FailedRequestStatusException extends Exception {
     private final int status;

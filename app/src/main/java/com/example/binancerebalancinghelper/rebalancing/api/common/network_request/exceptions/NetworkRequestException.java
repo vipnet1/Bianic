@@ -1,4 +1,4 @@
-package com.example.binancerebalancinghelper.rebalancing.api.exceptions;
+package com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions;
 
 import java.io.IOException;
 

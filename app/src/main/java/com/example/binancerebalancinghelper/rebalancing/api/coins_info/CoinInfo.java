@@ -1,4 +1,4 @@
-package com.example.binancerebalancinghelper.rebalancing.api;
+package com.example.binancerebalancinghelper.rebalancing.api.coins_info;
 
 public class CoinInfo {
     public String symbol;
