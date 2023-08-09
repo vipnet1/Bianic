@@ -28,7 +28,7 @@ public class BinanceApi {
         this.context = context;
     }
 
-    protected List<CoinInfo> getCoinsInfo() throws NetworkRequestException,
+    public List<CoinInfo> getCoinsInfo() throws NetworkRequestException,
             FailedRequestStatusException, EmptyResponseBodyException, JsonParseException,
             CoinsInfoParseException, SignatureGenerationException {
 

@@ -5,8 +5,18 @@ import android.content.Intent;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 import com.example.binancerebalancinghelper.NotificationsHelper;
+import com.example.binancerebalancinghelper.rebalancing.api.BinanceApi;
+import com.example.binancerebalancinghelper.rebalancing.api.coins_info.CoinInfo;
+import com.example.binancerebalancinghelper.rebalancing.api.coins_info.exceptions.CoinsInfoParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.EmptyResponseBodyException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.FailedRequestStatusException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
 import com.example.binancerebalancinghelper.shared_preferences.SharedPreferencesHelper;
 import com.example.binancerebalancinghelper.consts.NotificationsConsts;
+
+import java.util.List;
 
 public class RebalancingCheckIntentService extends IntentService {
 
@@ -17,6 +27,24 @@ public class RebalancingCheckIntentService extends IntentService {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onHandleIntent(Intent intent) {
+        BinanceApi binanceApi = new BinanceApi(this);
+        try {
+            List<CoinInfo> coinsInfo = binanceApi.getCoinsInfo();
+            String a = "sdf";
+        } catch (NetworkRequestException e) {
+            e.printStackTrace();
+        } catch (FailedRequestStatusException e) {
+            e.printStackTrace();
+        } catch (EmptyResponseBodyException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (CoinsInfoParseException e) {
+            e.printStackTrace();
+        } catch (SignatureGenerationException e) {
+            e.printStackTrace();
+        }
+
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(this);
 
         int count = sharedPreferencesHelper.getInt("count", 0);

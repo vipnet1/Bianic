@@ -49,7 +49,7 @@ public class NetworkRequestHelper {
     }
 
     private String getSignatureGenerationParams() {
-        return "?recvWindow=" + BinanceApiConsts.RECEIVE_WINDOW
+        return "recvWindow=" + BinanceApiConsts.RECEIVE_WINDOW
                 + "&timestamp=" + System.currentTimeMillis();
     }
 
@@ -71,7 +71,7 @@ public class NetworkRequestHelper {
 
     private String getRequestUrl(String signatureGenerationParams, String signature,
                                  String endpoint, String additionalQueryParams) {
-        return BinanceApiConsts.MAIN_ENDPOINT + "/" + endpoint
+        return BinanceApiConsts.MAIN_ENDPOINT + endpoint + "?"
                 + getQueryParams(signatureGenerationParams, signature) + additionalQueryParams;
     }
 
