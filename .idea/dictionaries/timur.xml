@@ -4,8 +4,11 @@
       <w>binance</w>
       <w>binancerebalancinghelper</w>
       <w>consts</w>
+      <w>hmac</w>
+      <w>infos</w>
       <w>rebalance</w>
       <w>rebalancing</w>
+      <w>recv</w>
     </words>
   </dictionary>
 </component>
