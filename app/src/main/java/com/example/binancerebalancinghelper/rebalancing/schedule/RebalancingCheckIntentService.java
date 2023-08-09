@@ -6,8 +6,8 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import com.example.binancerebalancinghelper.NotificationsHelper;
 import com.example.binancerebalancinghelper.rebalancing.api.BinanceApi;
-import com.example.binancerebalancinghelper.rebalancing.api.coins_info.CoinInfo;
-import com.example.binancerebalancinghelper.rebalancing.api.coins_info.exceptions.CoinsInfoParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.CoinAmount;
+import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.EmptyResponseBodyException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.FailedRequestStatusException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
@@ -29,7 +29,7 @@ public class RebalancingCheckIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         BinanceApi binanceApi = new BinanceApi(this);
         try {
-            List<CoinInfo> coinsInfo = binanceApi.getCoinsInfo();
+            List<CoinAmount> coinsAmount = binanceApi.getCoinsAmount();
             String a = "sdf";
         } catch (NetworkRequestException e) {
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class RebalancingCheckIntentService extends IntentService {
             e.printStackTrace();
         } catch (JsonParseException e) {
             e.printStackTrace();
-        } catch (CoinsInfoParseException e) {
+        } catch (CoinsAmountParseException e) {
             e.printStackTrace();
         } catch (SignatureGenerationException e) {
             e.printStackTrace();
