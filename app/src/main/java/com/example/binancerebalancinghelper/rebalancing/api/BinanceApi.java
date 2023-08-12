@@ -11,7 +11,6 @@ import com.example.binancerebalancinghelper.rebalancing.api.coins_price.CoinsPri
 import com.example.binancerebalancinghelper.rebalancing.api.coins_price.exceptions.CoinsPriceParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.EmptyResponseBodyException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.FailedRequestStatusException;
-import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.NetworkAuthRequestHelper;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.NetworkRequestHelper;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
@@ -30,7 +29,7 @@ public class BinanceApi {
     }
 
     public List<CoinAmount> getCoinsAmount() throws NetworkRequestException,
-            FailedRequestStatusException, EmptyResponseBodyException, JsonParseException,
+            FailedRequestStatusException, EmptyResponseBodyException,
             CoinsAmountParseException, SignatureGenerationException {
 
         NetworkAuthRequestHelper networkAuthRequestHelper = new NetworkAuthRequestHelper(context);
@@ -52,7 +51,7 @@ public class BinanceApi {
     }
 
     public List<CoinPrice> getCoinsPrice(String[] symbols) throws NetworkRequestException,
-            FailedRequestStatusException, EmptyResponseBodyException, JsonParseException,
+            FailedRequestStatusException, EmptyResponseBodyException,
             CoinsPriceParseException {
 
         NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper();

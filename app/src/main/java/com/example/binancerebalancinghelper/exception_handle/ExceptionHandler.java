@@ -1,4 +1,4 @@
-package com.example.binancerebalancinghelper.rebalancing.exception_handle;
+package com.example.binancerebalancinghelper.exception_handle;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.binancerebalancinghelper.notifications.NotificationType;
 import com.example.binancerebalancinghelper.notifications.NotificationsHelper;
 import com.example.binancerebalancinghelper.consts.ExceptionHandleConsts;
-import com.example.binancerebalancinghelper.consts.NotificationsConsts;
-import com.example.binancerebalancinghelper.rebalancing.exception_handle.exceptions.CriticalException;
+import com.example.binancerebalancinghelper.exception_handle.exceptions.CriticalException;
 import com.example.binancerebalancinghelper.sqlite.SqliteDbHelper;
 import com.example.binancerebalancinghelper.sqlite.consts.ExceptionsLogTableConsts;
 

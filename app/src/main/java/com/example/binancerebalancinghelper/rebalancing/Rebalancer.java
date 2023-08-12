@@ -9,15 +9,14 @@ import com.example.binancerebalancinghelper.rebalancing.api.coins_price.CoinPric
 import com.example.binancerebalancinghelper.rebalancing.api.coins_price.exceptions.CoinsPriceParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.EmptyResponseBodyException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.FailedRequestStatusException;
-import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
 import com.example.binancerebalancinghelper.rebalancing.data_format.CoinDetails;
 import com.example.binancerebalancinghelper.rebalancing.data_format.CoinsDetailsBuilder;
 import com.example.binancerebalancinghelper.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
-import com.example.binancerebalancinghelper.rebalancing.exception_handle.CriticalExceptionHandler;
-import com.example.binancerebalancinghelper.rebalancing.exception_handle.ExceptionHandler;
-import com.example.binancerebalancinghelper.rebalancing.exception_handle.exceptions.CriticalException;
+import com.example.binancerebalancinghelper.exception_handle.CriticalExceptionHandler;
+import com.example.binancerebalancinghelper.exception_handle.ExceptionHandler;
+import com.example.binancerebalancinghelper.exception_handle.exceptions.CriticalException;
 import com.example.binancerebalancinghelper.rebalancing.watch.threshold.ThresholdWatch;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class Rebalancer {
             thresholdWatch.check(coinsDetails);
 
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
-                | JsonParseException | SignatureGenerationException | CoinsPriceParseException
+                | SignatureGenerationException | CoinsPriceParseException
                 | CoinsAmountParseException | CoinsDetailsBuilderException e) {
             ExceptionHandler exceptionHandler = new ExceptionHandler(context);
             exceptionHandler.handleException(e);
