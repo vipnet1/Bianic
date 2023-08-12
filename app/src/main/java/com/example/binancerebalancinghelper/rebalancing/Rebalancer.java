@@ -2,8 +2,6 @@ package com.example.binancerebalancinghelper.rebalancing;
 
 import android.content.Context;
 
-import com.example.binancerebalancinghelper.NotificationsHelper;
-import com.example.binancerebalancinghelper.consts.NotificationsConsts;
 import com.example.binancerebalancinghelper.rebalancing.api.BinanceApi;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.CoinAmount;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
@@ -17,6 +15,9 @@ import com.example.binancerebalancinghelper.rebalancing.api.common.network_reque
 import com.example.binancerebalancinghelper.rebalancing.data_format.CoinDetails;
 import com.example.binancerebalancinghelper.rebalancing.data_format.CoinsDetailsBuilder;
 import com.example.binancerebalancinghelper.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
+import com.example.binancerebalancinghelper.rebalancing.exception_handle.CriticalExceptionHandler;
+import com.example.binancerebalancinghelper.rebalancing.exception_handle.ExceptionHandler;
+import com.example.binancerebalancinghelper.rebalancing.exception_handle.exceptions.CriticalException;
 import com.example.binancerebalancinghelper.rebalancing.watch.threshold.ThresholdWatch;
 
 import java.util.List;
@@ -44,21 +45,14 @@ public class Rebalancer {
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
                 | JsonParseException | SignatureGenerationException | CoinsPriceParseException
                 | CoinsAmountParseException | CoinsDetailsBuilderException e) {
-            showExceptionNotification(e);
+            ExceptionHandler exceptionHandler = new ExceptionHandler(context);
+            exceptionHandler.handleException(e);
         }
-    }
-
-    private void showExceptionNotification(Exception exception) {
-        NotificationsHelper notificationsHelper = new NotificationsHelper(context);
-
-        try {
-            String exceptionClassName = exception.getClass().toString();
-            int lastDotIndex = exceptionClassName.lastIndexOf('.');
-            String className = exceptionClassName.substring(lastDotIndex + 1);
-
-            notificationsHelper.pushNotification("Exception occurred", className, NotificationsConsts.MESSAGE_NOTIFICATION_ID);
-        } catch (Exception e) {
-            notificationsHelper.pushNotification("Exception occurred", "While trying to show exception", NotificationsConsts.MESSAGE_NOTIFICATION_ID);
+        catch(Exception e) {
+            CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
+            criticalExceptionHandler.handleException(
+                    new CriticalException(e, CriticalException.CriticalExceptionType.UNLABELED_EXCEPTION)
+            );
         }
     }
 }

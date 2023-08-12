@@ -7,4 +7,7 @@ public abstract class NotificationsConsts {
 
     public static final int REBALANCING_RUNNING_NOTIFICATION_ID = 1;
     public static final int MESSAGE_NOTIFICATION_ID = 2;
+    public static final int NORMAL_EXCEPTION_NOTIFICATION_ID = 3;
+    public static final int CRITICAL_EXCEPTION_NOTIFICATION_ID = 4;
+    public static final int FATAL_EXCEPTION_NOTIFICATION_ID = 5;
 }

@@ -7,8 +7,10 @@
       <w>hmac</w>
       <w>infos</w>
       <w>rebalance</w>
+      <w>rebalancer</w>
       <w>rebalancing</w>
       <w>recv</w>
+      <w>sqlite</w>
     </words>
   </dictionary>
 </component>
