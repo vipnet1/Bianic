@@ -49,7 +49,7 @@ public class CoinsPriceApi {
         String result = resultBuilder.toString();
         int lastCharIndex = result.length() - 1;
 
-        if(result.charAt(lastCharIndex) == ',') {
+        if (result.charAt(lastCharIndex) == ',') {
             result = result.substring(0, lastCharIndex);
         }
 

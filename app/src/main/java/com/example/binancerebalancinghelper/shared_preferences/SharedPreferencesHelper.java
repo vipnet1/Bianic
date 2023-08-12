@@ -2,12 +2,14 @@ package com.example.binancerebalancinghelper.shared_preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 
 public class SharedPreferencesHelper {
     protected static SharedPreferences prefs = null;
 
-    protected SharedPreferencesHelper() {}
+    protected SharedPreferencesHelper() {
+    }
 
     public SharedPreferencesHelper(Context context) {
         if (prefs == null) {

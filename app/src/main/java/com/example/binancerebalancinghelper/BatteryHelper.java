@@ -27,6 +27,6 @@ public class BatteryHelper {
 
     private boolean isIgnoringBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        return  powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+        return powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
     }
 }
