@@ -6,18 +6,18 @@ import android.content.SharedPreferences;
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 
 public class SharedPreferencesHelper {
-    private static SharedPreferences regularSpPrefs = null;
+    private static SharedPreferences regularPrefs = null;
     protected SharedPreferences usedPrefsRef = null;
 
     protected SharedPreferencesHelper() {
     }
 
     public SharedPreferencesHelper(Context context) {
-        if (regularSpPrefs == null) {
-            regularSpPrefs = context.getSharedPreferences(SharedPrefsConsts.SHARED_PREFS_FILE, Context.MODE_PRIVATE);
+        if (regularPrefs == null) {
+            regularPrefs = context.getSharedPreferences(SharedPrefsConsts.SHARED_PREFS_FILE, Context.MODE_PRIVATE);
         }
 
-        usedPrefsRef = regularSpPrefs;
+        usedPrefsRef = regularPrefs;
     }
 
     public void setInt(String key, int value) {

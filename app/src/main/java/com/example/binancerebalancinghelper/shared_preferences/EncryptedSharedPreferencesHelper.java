@@ -14,14 +14,14 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 public class EncryptedSharedPreferencesHelper extends SharedPreferencesHelper {
-    private static SharedPreferences encryptedSpPrefs = null;
+    private static SharedPreferences encryptedPrefs = null;
 
     public EncryptedSharedPreferencesHelper(Context context) {
-        if (encryptedSpPrefs == null) {
+        if (encryptedPrefs == null) {
             try {
                 String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
 
-                encryptedSpPrefs = EncryptedSharedPreferences.create(
+                encryptedPrefs = EncryptedSharedPreferences.create(
                         SharedPrefsConsts.SECRET_SHARED_PREFS_FILE,
                         masterKeyAlias,
                         context,
@@ -29,7 +29,7 @@ public class EncryptedSharedPreferencesHelper extends SharedPreferencesHelper {
                         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
                 );
 
-                usedPrefsRef = encryptedSpPrefs;
+                usedPrefsRef = encryptedPrefs;
             } catch (GeneralSecurityException | IOException e) {
                 CriticalExceptionHandler exceptionHandler = new CriticalExceptionHandler(context);
                 exceptionHandler.handleException(

@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="timur">
     <words>
+      <w>apikey</w>
       <w>binance</w>
       <w>binancerebalancinghelper</w>
       <w>consts</w>
@@ -11,6 +12,7 @@
       <w>rebalancing</w>
       <w>recv</w>
       <w>sqlite</w>
+      <w>usdt</w>
     </words>
   </dictionary>
 </component>
