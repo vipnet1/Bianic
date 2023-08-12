@@ -4,7 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.binancerebalancinghelper.NotificationsHelper;
+import com.example.binancerebalancinghelper.notifications.NotificationType;
+import com.example.binancerebalancinghelper.notifications.NotificationsHelper;
 import com.example.binancerebalancinghelper.consts.ExceptionHandleConsts;
 import com.example.binancerebalancinghelper.consts.NotificationsConsts;
 import com.example.binancerebalancinghelper.rebalancing.exception_handle.exceptions.CriticalException;
@@ -51,7 +52,7 @@ public class ExceptionHandler {
             String className = exceptionClassName.substring(lastDotIndex + 1);
 
             notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_NORMAL + " exception occurred",
-                    className, NotificationsConsts.NORMAL_EXCEPTION_NOTIFICATION_ID);
+                    className, NotificationType.NORMAL_EXCEPTION);
         } catch (Exception e) {
             CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
             criticalExceptionHandler.handleException(

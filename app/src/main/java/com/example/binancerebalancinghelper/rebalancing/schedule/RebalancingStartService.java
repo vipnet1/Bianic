@@ -7,8 +7,8 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import com.example.binancerebalancinghelper.NotificationsHelper;
-import com.example.binancerebalancinghelper.consts.NotificationsConsts;
+import com.example.binancerebalancinghelper.notifications.NotificationType;
+import com.example.binancerebalancinghelper.notifications.NotificationsHelper;
 
 public class RebalancingStartService extends Service {
     @Nullable
@@ -23,7 +23,8 @@ public class RebalancingStartService extends Service {
         Notification notification = notificationsHelper.getPersistentNotification("Rebalancing Check",
                 "Checking whether should rebalance");
 
-        startForeground(NotificationsConsts.REBALANCING_RUNNING_NOTIFICATION_ID, notification);
+        int notificationId = notificationsHelper.getNextNotificationId(NotificationType.REBALANCING_RUNNING);
+        startForeground(notificationId, notification);
 
         RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(this);
         rebalancingAlarm.start();

@@ -4,7 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.binancerebalancinghelper.NotificationsHelper;
+import com.example.binancerebalancinghelper.notifications.NotificationType;
+import com.example.binancerebalancinghelper.notifications.NotificationsHelper;
 import com.example.binancerebalancinghelper.consts.ExceptionHandleConsts;
 import com.example.binancerebalancinghelper.consts.NotificationsConsts;
 import com.example.binancerebalancinghelper.rebalancing.exception_handle.exceptions.CriticalException;
@@ -38,7 +39,7 @@ public class CriticalExceptionHandler {
             sqLiteDatabase.close();
         } catch (Exception e) {
             notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
-                    "While writing exception to db", NotificationsConsts.FATAL_EXCEPTION_NOTIFICATION_ID);
+                    "While writing exception to db", NotificationType.FATAL_EXCEPTION);
         }
     }
 
@@ -51,10 +52,10 @@ public class CriticalExceptionHandler {
             String className = exceptionClassName.substring(lastDotIndex + 1);
 
             notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_CRITICAL + " exception occurred",
-                    className, NotificationsConsts.CRITICAL_EXCEPTION_NOTIFICATION_ID);
+                    className, NotificationType.CRITICAL_EXCEPTION);
         } catch (Exception e) {
             notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
-                    "While trying to show exception", NotificationsConsts.FATAL_EXCEPTION_NOTIFICATION_ID);
+                    "While trying to show exception", NotificationType.FATAL_EXCEPTION);
         }
     }
 }
