@@ -1,6 +1,8 @@
 package com.example.binancerebalancinghelper.rebalancing.api.coins_amount;
 
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.json.JsonHelper;
+import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,10 +11,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+
 public class CoinsAmountApi {
-    public List<CoinAmount> parseCoinsAmount(JSONObject bodyJson) throws CoinsAmountParseException {
+    public List<CoinAmount> parseCoinsAmount(ResponseBody responseBody) throws CoinsAmountParseException {
         try {
-            JSONArray balances = bodyJson.getJSONArray("balances");
+            JsonHelper jsonHelper = new JsonHelper();
+            JSONObject jsonBody = jsonHelper.parseResponseJsonObject(responseBody);
+
+            JSONArray balances = jsonBody.getJSONArray("balances");
             List<CoinAmount> coinAmounts = new ArrayList<>();
 
             for (int i = 0; i < balances.length(); i++) {
@@ -26,7 +33,7 @@ public class CoinsAmountApi {
             }
 
             return coinAmounts;
-        } catch (JSONException e) {
+        } catch (JSONException | JsonParseException e) {
             throw new CoinsAmountParseException(e);
         }
     }

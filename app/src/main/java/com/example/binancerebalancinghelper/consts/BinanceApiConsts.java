@@ -9,5 +9,7 @@ public class BinanceApiConsts {
 
     public static final String API_KEY_HEADER_NAME = "X-MBX-APIKEY";
 
+    public static final String USDT_SYMBOL = "USDT";
+
     public static final int MIN_COUNTED_COIN_PRICE_USD = 100;
 }

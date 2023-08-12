@@ -8,6 +8,8 @@ import com.example.binancerebalancinghelper.NotificationsHelper;
 import com.example.binancerebalancinghelper.rebalancing.api.BinanceApi;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.CoinAmount;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.coins_price.CoinPrice;
+import com.example.binancerebalancinghelper.rebalancing.api.coins_price.exceptions.CoinsPriceParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.EmptyResponseBodyException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.FailedRequestStatusException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
@@ -29,6 +31,7 @@ public class RebalancingCheckIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         BinanceApi binanceApi = new BinanceApi(this);
         try {
+//            List<CoinPrice> coinsPrice = binanceApi.getCoinsPrice(new String[]{"BTC"});
             List<CoinAmount> coinsAmount = binanceApi.getCoinsAmount();
             String a = "sdf";
         } catch (NetworkRequestException e) {

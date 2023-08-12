@@ -71,8 +71,8 @@ public class NetworkAuthRequestHelper {
 
     private String getRequestUrl(String signatureGenerationParams, String signature,
                                  String endpoint, String additionalQueryParams) {
-        return BinanceApiConsts.MAIN_ENDPOINT + endpoint + "?"
-                + getQueryParams(signatureGenerationParams, signature) + additionalQueryParams;
+        return BinanceApiConsts.MAIN_ENDPOINT + endpoint + "?" + additionalQueryParams + "&"
+                + getQueryParams(signatureGenerationParams, signature);
     }
 
     private Response performRequestImpl(String requestUrl) throws NetworkRequestException {

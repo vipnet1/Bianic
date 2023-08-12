@@ -5,20 +5,17 @@ import android.content.Context;
 import com.example.binancerebalancinghelper.consts.BinanceApiConsts;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.CoinAmount;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.CoinsAmountApi;
+import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_price.CoinPrice;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_price.CoinsPriceApi;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_price.exceptions.CoinsPriceParseException;
-import com.example.binancerebalancinghelper.rebalancing.api.common.json.JsonHelper;
-import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.NetworkAuthRequestHelper;
-import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.EmptyResponseBodyException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.exceptions.FailedRequestStatusException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.NetworkAuthRequestHelper;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.NetworkRequestHelper;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -37,7 +34,6 @@ public class BinanceApi {
             CoinsAmountParseException, SignatureGenerationException {
 
         NetworkAuthRequestHelper networkAuthRequestHelper = new NetworkAuthRequestHelper(context);
-        JsonHelper jsonHelper = new JsonHelper();
         CoinsAmountApi coinsAmountApi = new CoinsAmountApi();
 
         Response response = networkAuthRequestHelper.performRequest(BinanceApiConsts.ACCOUNT_ENDPOINT, "");
@@ -50,21 +46,20 @@ public class BinanceApi {
             throw new EmptyResponseBodyException();
         }
 
-        JSONObject jsonBody = jsonHelper.parseResponseJson(responseBody);
+        List<CoinAmount> result = coinsAmountApi.parseCoinsAmount(responseBody);
         networkAuthRequestHelper.closeResponseBody(responseBody);
-
-        return coinsAmountApi.parseCoinsAmount(jsonBody);
+        return result;
     }
 
-    public List<CoinPrice> getCoinsPrice() throws NetworkRequestException,
+    public List<CoinPrice> getCoinsPrice(String[] symbols) throws NetworkRequestException,
             FailedRequestStatusException, EmptyResponseBodyException, JsonParseException,
             CoinsPriceParseException {
 
         NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper();
-        JsonHelper jsonHelper = new JsonHelper();
         CoinsPriceApi coinsPriceApi = new CoinsPriceApi();
 
-        Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_PRICE_ENDPOINT, "");
+        Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_PRICE_ENDPOINT,
+                "?symbols=" + coinsPriceApi.getSymbolsForQuery(symbols));
         if(!response.isSuccessful()) {
             throw new FailedRequestStatusException(response.code(), response.message());
         }
@@ -74,9 +69,8 @@ public class BinanceApi {
             throw new EmptyResponseBodyException();
         }
 
-        JSONObject jsonBody = jsonHelper.parseResponseJson(responseBody);
+        List<CoinPrice> result = coinsPriceApi.parseCoinsPrice(responseBody);
         networkRequestHelper.closeResponseBody(responseBody);
-
-        return coinsPriceApi.parseCoinsPrice(jsonBody);
+        return result;
     }
 }

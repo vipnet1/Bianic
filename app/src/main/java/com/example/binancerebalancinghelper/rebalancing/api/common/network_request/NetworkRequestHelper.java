@@ -11,9 +11,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class NetworkRequestHelper {
-    public Response performRequest(String endpoint, String additionalQueryParams) throws NetworkRequestException {
+    public Response performRequest(String endpoint, String queryParams) throws NetworkRequestException {
         return performRequestImpl(
-                getRequestUrl(endpoint, additionalQueryParams)
+                getRequestUrl(endpoint, queryParams)
         );
     }
 
