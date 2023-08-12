@@ -17,6 +17,7 @@ import com.example.binancerebalancinghelper.rebalancing.api.common.network_reque
 import com.example.binancerebalancinghelper.rebalancing.data_format.CoinDetails;
 import com.example.binancerebalancinghelper.rebalancing.data_format.CoinsDetailsBuilder;
 import com.example.binancerebalancinghelper.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
+import com.example.binancerebalancinghelper.rebalancing.watch.threshold.ThresholdWatch;
 
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class Rebalancer {
 
             CoinsDetailsBuilder coinsDetailsBuilder = new CoinsDetailsBuilder();
             List<CoinDetails> coinsDetails = coinsDetailsBuilder.getCoinsDetails(coinsAmount, coinsPrice);
+
+            ThresholdWatch thresholdWatch = new ThresholdWatch(context);
+            thresholdWatch.check(coinsDetails);
 
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
                 | JsonParseException | SignatureGenerationException | CoinsPriceParseException

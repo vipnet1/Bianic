@@ -1,6 +1,6 @@
 package com.example.binancerebalancinghelper.rebalancing.data_format;
 
-import com.example.binancerebalancinghelper.consts.BinanceApiConsts;
+import com.example.binancerebalancinghelper.consts.CoinsDetailsBuilderConsts;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.CoinAmount;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_price.CoinPrice;
 import com.example.binancerebalancinghelper.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
@@ -56,10 +56,10 @@ public class CoinsDetailsBuilder {
         }
 
         for (CoinAmount coinAmount : coinsAmount) {
-            CoinPrice coinPrice = coinPriceMap.get(coinAmount.symbol + BinanceApiConsts.USDT_SYMBOL);
+            CoinPrice coinPrice = coinPriceMap.get(coinAmount.symbol);
             CoinDetails coinDetails = new CoinDetails(coinAmount, coinPrice);
 
-            if (coinDetails.coinPortfolioUsdValue > BinanceApiConsts.MIN_COUNTED_COIN_PRICE_USD) {
+            if (coinDetails.coinPortfolioUsdValue > CoinsDetailsBuilderConsts.MIN_BUILT_COIN_PORTFOLIO_USD) {
                 coinsDetails.add(coinDetails);
             }
         }
