@@ -35,6 +35,7 @@ public class NetworkAuthRequestHelper {
         secretKey = sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY, "");
     }
 
+    // additionalQueryParams should finish with '&'
     public Response performRequest(String endpoint, String additionalQueryParams) throws SignatureGenerationException, NetworkRequestException {
         String signatureGenerationParams = getSignatureGenerationParams();
         String signature = generateSignature(signatureGenerationParams, secretKey);
@@ -71,8 +72,8 @@ public class NetworkAuthRequestHelper {
 
     private String getRequestUrl(String signatureGenerationParams, String signature,
                                  String endpoint, String additionalQueryParams) {
-        return BinanceApiConsts.MAIN_ENDPOINT + endpoint + "?" + additionalQueryParams + "&"
-                + getQueryParams(signatureGenerationParams, signature);
+        return BinanceApiConsts.MAIN_ENDPOINT + endpoint + "?" + additionalQueryParams +
+                getQueryParams(signatureGenerationParams, signature);
     }
 
     private Response performRequestImpl(String requestUrl) throws NetworkRequestException {
