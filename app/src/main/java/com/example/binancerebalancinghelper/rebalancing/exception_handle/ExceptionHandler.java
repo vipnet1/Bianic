@@ -33,8 +33,6 @@ public class ExceptionHandler {
             contentValues.put(ExceptionsLogTableConsts.MESSAGE_COLUMN, exception.toString());
 
             sqLiteDatabase.insert(ExceptionsLogTableConsts.TABLE_NAME, null, contentValues);
-
-            sqLiteDatabase.close();
         } catch (Exception e) {
             CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
             criticalExceptionHandler.handleException(

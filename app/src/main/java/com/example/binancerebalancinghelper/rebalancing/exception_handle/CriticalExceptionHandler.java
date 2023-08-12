@@ -35,8 +35,6 @@ public class CriticalExceptionHandler {
             contentValues.put(ExceptionsLogTableConsts.MESSAGE_COLUMN, exception.toString());
 
             sqLiteDatabase.insert(ExceptionsLogTableConsts.TABLE_NAME, null, contentValues);
-
-            sqLiteDatabase.close();
         } catch (Exception e) {
             notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
                     "While writing exception to db", NotificationType.FATAL_EXCEPTION);
