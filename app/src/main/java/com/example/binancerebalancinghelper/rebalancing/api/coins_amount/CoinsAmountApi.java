@@ -14,6 +14,12 @@ import java.util.List;
 import okhttp3.ResponseBody;
 
 public class CoinsAmountApi {
+    /**
+     *
+     * @param responseBody The response body
+     * @return The coins amount I have for each coin. If none doesn't count that record
+     * @throws CoinsAmountParseException Exception occurred in this function
+     */
     public List<CoinAmount> parseCoinsAmount(ResponseBody responseBody) throws CoinsAmountParseException {
         try {
             JsonHelper jsonHelper = new JsonHelper();

@@ -32,7 +32,7 @@ public class NetworkRequestHelper {
                     .url(requestUrl)
                     .build();
 
-            return  client.newCall(request).execute();
+            return client.newCall(request).execute();
         } catch (IOException e) {
             throw new NetworkRequestException(e);
         }

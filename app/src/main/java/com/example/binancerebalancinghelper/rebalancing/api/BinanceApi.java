@@ -37,12 +37,12 @@ public class BinanceApi {
         CoinsAmountApi coinsAmountApi = new CoinsAmountApi();
 
         Response response = networkAuthRequestHelper.performRequest(BinanceApiConsts.ACCOUNT_ENDPOINT, "");
-        if(!response.isSuccessful()) {
+        if (!response.isSuccessful()) {
             throw new FailedRequestStatusException(response.code(), response.message());
         }
 
         ResponseBody responseBody = response.body();
-        if(responseBody == null) {
+        if (responseBody == null) {
             throw new EmptyResponseBodyException();
         }
 
@@ -60,12 +60,12 @@ public class BinanceApi {
 
         Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_PRICE_ENDPOINT,
                 "?symbols=" + coinsPriceApi.getSymbolsForQuery(symbols));
-        if(!response.isSuccessful()) {
+        if (!response.isSuccessful()) {
             throw new FailedRequestStatusException(response.code(), response.message());
         }
 
         ResponseBody responseBody = response.body();
-        if(responseBody == null) {
+        if (responseBody == null) {
             throw new EmptyResponseBodyException();
         }
 

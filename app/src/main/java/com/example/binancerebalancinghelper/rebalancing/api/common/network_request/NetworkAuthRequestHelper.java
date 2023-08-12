@@ -84,7 +84,7 @@ public class NetworkAuthRequestHelper {
                     .addHeader(BinanceApiConsts.API_KEY_HEADER_NAME, apiKey)
                     .build();
 
-            return  client.newCall(request).execute();
+            return client.newCall(request).execute();
         } catch (IOException e) {
             throw new NetworkRequestException(e);
         }

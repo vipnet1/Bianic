@@ -1,6 +1,6 @@
 package com.example.binancerebalancinghelper.consts;
 
-public class SharedPrefsConsts {
+public abstract class SharedPrefsConsts {
     public static final String SHARED_PREFS_FILE = "DefaultPrefs";
     public static final String SECRET_SHARED_PREFS_FILE = "SecretPrefs";
 

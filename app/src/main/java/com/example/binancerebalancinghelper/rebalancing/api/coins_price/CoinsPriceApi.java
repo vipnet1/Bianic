@@ -29,7 +29,10 @@ public class CoinsPriceApi {
                 String symbol = jsonObject.getString("symbol");
                 double price = Double.parseDouble(jsonObject.getString("price"));
 
-                coinPrices.add(new CoinPrice(symbol, price));
+                String symbolWithoutUsdt = symbol.substring(
+                        0, symbol.length() - BinanceApiConsts.USDT_SYMBOL.length()
+                );
+                coinPrices.add(new CoinPrice(symbolWithoutUsdt, price));
             }
 
             return coinPrices;
@@ -49,7 +52,7 @@ public class CoinsPriceApi {
         String result = resultBuilder.toString();
         int lastCharIndex = result.length() - 1;
 
-        if(result.charAt(lastCharIndex) == ',') {
+        if (result.charAt(lastCharIndex) == ',') {
             result = result.substring(0, lastCharIndex);
         }
 
