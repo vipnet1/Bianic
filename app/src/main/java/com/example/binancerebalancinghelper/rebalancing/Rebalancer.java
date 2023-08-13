@@ -33,7 +33,7 @@ public class Rebalancer {
             BinanceApi binanceApi = new BinanceApi(context);
 
             List<CoinAmount> coinsAmount = binanceApi.getCoinsAmount();
-            List<CoinPrice> coinsPrice = binanceApi.getCoinsPrice(new String[]{"BTC"});
+            List<CoinPrice> coinsPrice = binanceApi.getCoinsPrice(getSymbolsFromCoinsAmount(coinsAmount));
 
             CoinsDetailsBuilder coinsDetailsBuilder = new CoinsDetailsBuilder();
             List<CoinDetails> coinsDetails = coinsDetailsBuilder.getCoinsDetails(coinsAmount, coinsPrice);
@@ -53,5 +53,16 @@ public class Rebalancer {
                     new CriticalException(e, CriticalException.CriticalExceptionType.UNLABELED_EXCEPTION)
             );
         }
+    }
+
+    private String[] getSymbolsFromCoinsAmount(List<CoinAmount> coinsAmount) {
+        String[] results = new String[coinsAmount.size()];
+
+        int index = 0;
+        for(CoinAmount coinAmount : coinsAmount) {
+            results[index++] = coinAmount.symbol;
+        }
+
+        return results;
     }
 }

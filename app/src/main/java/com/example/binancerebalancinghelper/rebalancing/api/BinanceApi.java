@@ -15,6 +15,8 @@ import com.example.binancerebalancinghelper.rebalancing.api.common.network_reque
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.NetworkRequestHelper;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.ResponseParser;
+import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
 
 import java.util.List;
 
@@ -36,13 +38,14 @@ public class BinanceApi {
         CoinsAmountApi coinsAmountApi = new CoinsAmountApi();
 
         Response response = networkAuthRequestHelper.performRequest(BinanceApiConsts.ACCOUNT_ENDPOINT, "");
-        if (!response.isSuccessful()) {
-            throw new FailedRequestStatusException(response.code(), response.message());
-        }
 
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
             throw new EmptyResponseBodyException();
+        }
+
+        if (!response.isSuccessful()) {
+            throw new FailedRequestStatusException(response.code(), tryGetFailedRequestMessage(responseBody));
         }
 
         List<CoinAmount> result = coinsAmountApi.parseCoinsAmount(responseBody);
@@ -59,17 +62,28 @@ public class BinanceApi {
 
         Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_PRICE_ENDPOINT,
                 "?symbols=" + coinsPriceApi.getSymbolsForQuery(symbols));
-        if (!response.isSuccessful()) {
-            throw new FailedRequestStatusException(response.code(), response.message());
-        }
 
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
             throw new EmptyResponseBodyException();
         }
 
+        if (!response.isSuccessful()) {
+            throw new FailedRequestStatusException(response.code(), tryGetFailedRequestMessage(responseBody));
+        }
+
         List<CoinPrice> result = coinsPriceApi.parseCoinsPrice(responseBody);
         networkRequestHelper.closeResponseBody(responseBody);
         return result;
     }
+
+    private String tryGetFailedRequestMessage(ResponseBody responseBody) {
+        try {
+            ResponseParser responseParser = new ResponseParser();
+            return responseParser.parseResponseString(responseBody);
+        } catch (ResponseParseException e) {
+            return "Failed to get reason";
+        }
+    }
 }
+

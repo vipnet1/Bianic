@@ -51,8 +51,14 @@ public class NetworkAuthRequestHelper {
 
     private String getSignatureGenerationParams() {
         return "recvWindow=" + BinanceApiConsts.RECEIVE_WINDOW
-                + "&timestamp=" + System.currentTimeMillis();
+                + "&timestamp=" + getTimestampForRequest();
     }
+
+    // if phone's time is ahead of binance than request will fail, so take some time back to avoid it.
+    private long getTimestampForRequest() {
+        return System.currentTimeMillis() - BinanceApiConsts.SUBSTRUCTED_TIMESTAMP_FROM_REQUEST;
+    }
+
 
     private String generateSignature(String params, String secretKey) throws SignatureGenerationException {
         try {

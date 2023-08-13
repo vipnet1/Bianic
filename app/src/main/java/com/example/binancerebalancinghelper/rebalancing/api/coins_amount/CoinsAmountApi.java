@@ -1,8 +1,8 @@
 package com.example.binancerebalancinghelper.rebalancing.api.coins_amount;
 
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
-import com.example.binancerebalancinghelper.rebalancing.api.common.json.JsonHelper;
-import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.ResponseParser;
+import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,8 +22,8 @@ public class CoinsAmountApi {
      */
     public List<CoinAmount> parseCoinsAmount(ResponseBody responseBody) throws CoinsAmountParseException {
         try {
-            JsonHelper jsonHelper = new JsonHelper();
-            JSONObject jsonBody = jsonHelper.parseResponseJsonObject(responseBody);
+            ResponseParser responseParser = new ResponseParser();
+            JSONObject jsonBody = responseParser.parseResponseJsonObject(responseBody);
 
             JSONArray balances = jsonBody.getJSONArray("balances");
             List<CoinAmount> coinAmounts = new ArrayList<>();
@@ -39,7 +39,7 @@ public class CoinsAmountApi {
             }
 
             return coinAmounts;
-        } catch (JSONException | JsonParseException e) {
+        } catch (JSONException | ResponseParseException e) {
             throw new CoinsAmountParseException(e);
         }
     }

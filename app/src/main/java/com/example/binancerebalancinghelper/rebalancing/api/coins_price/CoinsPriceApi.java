@@ -1,10 +1,9 @@
 package com.example.binancerebalancinghelper.rebalancing.api.coins_price;
 
 import com.example.binancerebalancinghelper.consts.BinanceApiConsts;
-import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_price.exceptions.CoinsPriceParseException;
-import com.example.binancerebalancinghelper.rebalancing.api.common.json.JsonHelper;
-import com.example.binancerebalancinghelper.rebalancing.api.common.json.exceptions.JsonParseException;
+import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.ResponseParser;
+import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,8 +17,8 @@ import okhttp3.ResponseBody;
 public class CoinsPriceApi {
     public List<CoinPrice> parseCoinsPrice(ResponseBody jsonBody) throws CoinsPriceParseException {
         try {
-            JsonHelper jsonHelper = new JsonHelper();
-            JSONArray jsonArray = jsonHelper.parseResponseJsonArray(jsonBody);
+            ResponseParser responseParser = new ResponseParser();
+            JSONArray jsonArray = responseParser.parseResponseJsonArray(jsonBody);
 
             List<CoinPrice> coinPrices = new ArrayList<>();
 
@@ -36,7 +35,7 @@ public class CoinsPriceApi {
             }
 
             return coinPrices;
-        } catch (JSONException | JsonParseException e) {
+        } catch (JSONException | ResponseParseException e) {
             throw new CoinsPriceParseException(e);
         }
     }

@@ -20,10 +20,5 @@ public class MainActivity extends AppCompatActivity {
 
         Intent serviceIntent = new Intent(this, RebalancingCheckIntentService.class);
         this.startService(serviceIntent);
-
-//        Intent startIntent = new Intent(this, RebalancingStartService.class);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            this.startForegroundService(startIntent);
-//        }
     }
 }
