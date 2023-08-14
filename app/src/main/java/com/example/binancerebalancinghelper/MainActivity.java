@@ -1,30 +1,26 @@
 package com.example.binancerebalancinghelper;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.Toast;
 
-import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingCheckIntentService;
-import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingStartService;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String ROOT_TAG_PREFIX = "root_tag_";
+    private static final int ROOT_TAG_LENGTH = 10;
+
     private LayoutInflater layoutInflater;
-    private ScrollView recordsScrollView;
     private LinearLayout dynamicLinearLayout;
 
+    private View editedRecordRoot = null;
     private String symbolBeforeEdit;
     private String allocationBeforeEdit;
 
@@ -60,19 +56,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        this.startService(serviceIntent);
 
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        recordsScrollView = (ScrollView) findViewById(R.id.sv_coins_allocation);
-        dynamicLinearLayout = (LinearLayout) findViewById(R.id.layout_dynamic);
+        dynamicLinearLayout = findViewById(R.id.layout_dynamic);
 
         addBtnAddRecordListener();
     }
 
     private void handleActionEdit(View recordRoot) {
-        Button btnRemove = (Button) recordRoot.findViewById(R.id.btn_remove);
-        Button btnApply = (Button) recordRoot.findViewById(R.id.btn_apply);
-        Button btnEdit = (Button) recordRoot.findViewById(R.id.btn_edit);
-        Button btnCancel = (Button) recordRoot.findViewById(R.id.btn_cancel);
-        EditText edtSymbol = (EditText) recordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = (EditText) recordRoot.findViewById(R.id.edt_allocation);
+        if(editedRecordRoot != null) {
+                Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        editedRecordRoot = recordRoot;
+
+        Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
+        Button btnApply = recordRoot.findViewById(R.id.btn_apply);
+        Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
+        Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
+        EditText edtSymbol = recordRoot.findViewById(R.id.edt_symbol);
+        EditText edtAllocation = recordRoot.findViewById(R.id.edt_allocation);
 
         btnRemove.setVisibility(View.VISIBLE);
         btnApply.setVisibility(View.VISIBLE);
@@ -87,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleActionApply(View recordRoot) {
-        EditText edtSymbol = (EditText) recordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = (EditText) recordRoot.findViewById(R.id.edt_allocation);
+        EditText edtSymbol = recordRoot.findViewById(R.id.edt_symbol);
+        EditText edtAllocation = recordRoot.findViewById(R.id.edt_allocation);
 
         symbolBeforeEdit = edtSymbol.getText().toString();
         allocationBeforeEdit = edtAllocation.getText().toString();
@@ -97,16 +99,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleActionRemove(View recordRoot) {
-        recordsScrollView.removeView(recordRoot);
+        dynamicLinearLayout.removeView(recordRoot);
+        editedRecordRoot = null;
     }
 
     private void handleActionCancel(View recordRoot) {
-        Button btnRemove = (Button) recordRoot.findViewById(R.id.btn_remove);
-        Button btnApply = (Button) recordRoot.findViewById(R.id.btn_apply);
-        Button btnEdit = (Button) recordRoot.findViewById(R.id.btn_edit);
-        Button btnCancel = (Button) recordRoot.findViewById(R.id.btn_cancel);
-        EditText edtSymbol = (EditText) recordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = (EditText) recordRoot.findViewById(R.id.edt_allocation);
+        Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
+        Button btnApply = recordRoot.findViewById(R.id.btn_apply);
+        Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
+        Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
+        EditText edtSymbol = recordRoot.findViewById(R.id.edt_symbol);
+        EditText edtAllocation = recordRoot.findViewById(R.id.edt_allocation);
 
         btnRemove.setVisibility(View.INVISIBLE);
         btnApply.setVisibility(View.GONE);
@@ -118,29 +121,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         edtSymbol.setEnabled(false);
         edtAllocation.setEnabled(false);
+
+        editedRecordRoot = null;
     }
 
     private View getRecordRoot(View view) {
-        return dynamicLinearLayout.findViewWithTag(view.getTag());
+        String rootTag = ((String)view.getTag()).substring(ROOT_TAG_PREFIX.length());
+        return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
     private void addBtnAddRecordListener() {
-        Button btnAddRecord = (Button) findViewById(R.id.btn_add_record);
-        btnAddRecord.setOnClickListener((View.OnClickListener) v -> {
+        Button btnAddRecord = findViewById(R.id.btn_add_record);
+        btnAddRecord.setOnClickListener(v -> {
             View recordRoot = addEmptyRecord();
 
-            Button btnRemove = (Button) recordRoot.findViewById(R.id.btn_remove);
-            Button btnApply = (Button) recordRoot.findViewById(R.id.btn_apply);
-            Button btnEdit = (Button) recordRoot.findViewById(R.id.btn_edit);
-            Button btnCancel = (Button) recordRoot.findViewById(R.id.btn_cancel);
+            Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
+            Button btnApply = recordRoot.findViewById(R.id.btn_apply);
+            Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
+            Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
 
             btnRemove.setOnClickListener(this);
             btnApply.setOnClickListener(this);
             btnEdit.setOnClickListener(this);
             btnCancel.setOnClickListener(this);
 
-            String recordTag = generateRandomString(10);
-            String childrenTag = "rootTag_" + recordTag;
+            String recordTag = generateRandomString(ROOT_TAG_LENGTH);
+            String childrenTag = ROOT_TAG_PREFIX + recordTag;
 
             recordRoot.setTag(recordTag);
             btnRemove.setTag(childrenTag);
@@ -150,19 +156,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private View addEmptyRecord() {
+        View rootView = layoutInflater.inflate(R.layout.portfolio_coin_record, null);
+        dynamicLinearLayout.addView(rootView);
+        return rootView;
+    }
+
     private String generateRandomString(int length)
     {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random rng = new Random();
-        String characters = "abcdefghijklmnopqrstuvwxyz0123456789";
         char[] text = new char[length];
+
         for (int i = 0; i < length; i++)
         {
             text[i] = characters.charAt(rng.nextInt(characters.length()));
         }
-        return new String(text);
-    }
 
-    private View addEmptyRecord() {
-        return layoutInflater.inflate(R.layout.portfolio_coin_record, dynamicLinearLayout);
+        return new String(text);
     }
 }
