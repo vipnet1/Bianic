@@ -20,8 +20,7 @@
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -30,20 +29,20 @@
         <receiver
             android:name=".rebalancing.schedule.RebalancingReceiver"
             android:enabled="true"
-            android:exported="false" >
-        </receiver>
+            android:exported="false" />
 
         <service
             android:name=".rebalancing.schedule.RebalancingCheckIntentService"
             android:enabled="true"
             android:exported="false" />
-
-        <service android:name=".rebalancing.schedule.RebalancingStartService"
+        <service
+            android:name=".rebalancing.schedule.RebalancingStartService"
             android:enabled="true"
-            android:exported="false"
-            />
+            android:exported="false" />
 
-        <activity android:name=".MainActivity" android:label="Portfolio Allocation"
+        <activity
+            android:name=".MainActivity"
+            android:label="Portfolio Allocation"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +50,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ExceptionsActivity" android:label="Exceptions" />
+
     </application>
 
 </manifest>

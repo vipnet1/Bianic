@@ -1,8 +1,12 @@
 package com.example.binancerebalancinghelper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +46,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(viewId == R.id.btn_remove) {
             handleActionRemove(recordRoot);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if(itemId == R.id.redirect_exceptions) {
+            Intent intent = new Intent(this, ExceptionsActivity.class);
+            intent.putExtra("startedFromMain", true);
+
+            this.startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

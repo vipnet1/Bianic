@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:background="#E91E1E"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:text="Created At"
+            />
+
+        <TextView
+            android:id="@+id/tv_created_at"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:text="2023-02-05"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:text="Severity"
+            />
+
+        <TextView
+            android:id="@+id/tv_severity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:text="Critical"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:text="Message"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_margin="10dp"
+        android:text="The message"
+        />
+
+    <Button
+        android:id="@+id/btn_add_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear" />
+
+</LinearLayout>
