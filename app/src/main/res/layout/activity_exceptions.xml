@@ -13,10 +13,11 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/layout_dynamic"
+            android:id="@+id/layout_dynamic_exceptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
         </LinearLayout>
     </ScrollView>
 

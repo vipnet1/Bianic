@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingCheckIntentService;
+import com.example.binancerebalancinghelper.utils.StringUtils;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -78,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BatteryHelper batteryHelper = new BatteryHelper(this);
         batteryHelper.requestIgnoreBatteryOptimizationsIfNeeded();
 
-//        Intent serviceIntent = new Intent(this, RebalancingCheckIntentService.class);
-//        this.startService(serviceIntent);
+        Intent serviceIntent = new Intent(this, RebalancingCheckIntentService.class);
+        this.startService(serviceIntent);
 
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        dynamicLinearLayout = findViewById(R.id.layout_dynamic);
+        dynamicLinearLayout = findViewById(R.id.layout_dynamic_main);
 
         addBtnAddRecordListener();
     }
@@ -171,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnEdit.setOnClickListener(this);
             btnCancel.setOnClickListener(this);
 
-            String recordTag = generateRandomString(ROOT_TAG_LENGTH);
+            StringUtils stringUtils = new StringUtils();
+            String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
             String childrenTag = ROOT_TAG_PREFIX + recordTag;
 
             recordRoot.setTag(recordTag);
@@ -186,19 +190,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View rootView = layoutInflater.inflate(R.layout.portfolio_coin_record, null);
         dynamicLinearLayout.addView(rootView);
         return rootView;
-    }
-
-    private String generateRandomString(int length)
-    {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random rng = new Random();
-        char[] text = new char[length];
-
-        for (int i = 0; i < length; i++)
-        {
-            text[i] = characters.charAt(rng.nextInt(characters.length()));
-        }
-
-        return new String(text);
     }
 }

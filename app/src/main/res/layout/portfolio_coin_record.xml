@@ -80,4 +80,11 @@
             android:text="Cancel" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/record_db_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        />
+
 </LinearLayout>
