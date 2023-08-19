@@ -18,6 +18,7 @@ import com.example.binancerebalancinghelper.exception_handle.CriticalExceptionHa
 import com.example.binancerebalancinghelper.exception_handle.ExceptionHandler;
 import com.example.binancerebalancinghelper.exception_handle.exceptions.CriticalException;
 import com.example.binancerebalancinghelper.rebalancing.watch.threshold.ThresholdWatch;
+import com.example.binancerebalancinghelper.shared_preferences.exceptions.KeyNotFoundException;
 
 import java.util.List;
 
@@ -43,11 +44,11 @@ public class Rebalancer {
 
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
                 | SignatureGenerationException | CoinsPriceParseException
-                | CoinsAmountParseException | CoinsDetailsBuilderException e) {
+                | CoinsAmountParseException | CoinsDetailsBuilderException
+                | KeyNotFoundException e) {
             ExceptionHandler exceptionHandler = new ExceptionHandler(context);
             exceptionHandler.handleException(e);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
             criticalExceptionHandler.handleException(
                     new CriticalException(e, CriticalException.CriticalExceptionType.UNLABELED_EXCEPTION)
@@ -59,7 +60,7 @@ public class Rebalancer {
         String[] results = new String[coinsAmount.size()];
 
         int index = 0;
-        for(CoinAmount coinAmount : coinsAmount) {
+        for (CoinAmount coinAmount : coinsAmount) {
             results[index++] = coinAmount.symbol;
         }
 

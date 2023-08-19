@@ -17,6 +17,7 @@ import com.example.binancerebalancinghelper.rebalancing.api.common.network_reque
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
 import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.ResponseParser;
 import com.example.binancerebalancinghelper.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
+import com.example.binancerebalancinghelper.shared_preferences.exceptions.KeyNotFoundException;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class BinanceApi {
 
     public List<CoinAmount> getCoinsAmount() throws NetworkRequestException,
             FailedRequestStatusException, EmptyResponseBodyException,
-            CoinsAmountParseException, SignatureGenerationException {
+            CoinsAmountParseException, SignatureGenerationException, KeyNotFoundException {
 
         NetworkAuthRequestHelper networkAuthRequestHelper = new NetworkAuthRequestHelper(context);
         CoinsAmountApi coinsAmountApi = new CoinsAmountApi();

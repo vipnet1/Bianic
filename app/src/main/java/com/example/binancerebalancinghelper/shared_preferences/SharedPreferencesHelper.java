@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
+import com.example.binancerebalancinghelper.shared_preferences.exceptions.KeyNotFoundException;
 
 public class SharedPreferencesHelper {
     private static SharedPreferences regularPrefs = null;
@@ -30,29 +31,15 @@ public class SharedPreferencesHelper {
         return usedPrefsRef.getInt(key, defaultValue);
     }
 
-    public void setBoolean(String key, boolean value) {
-        SharedPreferences.Editor editor = usedPrefsRef.edit();
-        editor.putBoolean(key, value);
-        editor.apply();
-    }
-
-    public boolean getBoolean(String key, boolean defaultValue) {
-        return usedPrefsRef.getBoolean(key, defaultValue);
-    }
-
-    public void setString(String key, String value) {
-        SharedPreferences.Editor editor = usedPrefsRef.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
     public String getString(String key, String defaultValue) {
         return usedPrefsRef.getString(key, defaultValue);
     }
 
-    public void clear() {
-        SharedPreferences.Editor editor = usedPrefsRef.edit();
-        editor.clear();
-        editor.apply();
+    public String getString(String key) throws KeyNotFoundException {
+        if(!usedPrefsRef.contains(key)) {
+            throw new KeyNotFoundException(key);
+        }
+
+        return usedPrefsRef.getString(key, "");
     }
 }

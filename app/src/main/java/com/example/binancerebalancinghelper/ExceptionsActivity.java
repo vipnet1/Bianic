@@ -47,14 +47,15 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         int itemId = item.getItemId();
 
         if(itemId == R.id.redirect_main) {
-            finish();
-
-            if(!getIntent().hasExtra("startedFromMain")) {
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-
+            handleActionRedirectMain();
+            return true;
+        }
+        else if(itemId == R.id.refresh) {
+            handleActionRefresh();
+            return true;
+        }
+        else if(itemId == R.id.clear_all_exceptions) {
+            handleActionClearAllExceptions();
             return true;
         }
 
@@ -146,11 +147,37 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
+    private void handleActionRedirectMain() {
+        finish();
+
+        if(!getIntent().hasExtra("startedFromMain")) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+    }
+
+    private void handleActionRefresh() {
+        dynamicLinearLayout.removeAllViews();
+        loadExceptions();
+    }
+
+    private void handleActionClearAllExceptions() {
+        dynamicLinearLayout.removeAllViews();
+        clearAllExceptionsFromDb();
+    }
+
     private void handleActionClearException(View recordRoot) {
         TextView recordDbId = recordRoot.findViewById(R.id.record_db_id);
+        dynamicLinearLayout.removeView(recordRoot);
+
         String id = recordDbId.getTag().toString();
         clearExceptionFromDb(id);
-        dynamicLinearLayout.removeView(recordRoot);
+    }
+
+    private void clearAllExceptionsFromDb() {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
+        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME, null, null);
     }
 
     private void clearExceptionFromDb(String exceptionId) {

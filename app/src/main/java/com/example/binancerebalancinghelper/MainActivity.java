@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingCheckIntentService;
 import com.example.binancerebalancinghelper.utils.StringUtils;
 
-import java.util.Random;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;

@@ -8,6 +8,7 @@ import com.example.binancerebalancinghelper.rebalancing.api.common.network_reque
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
 import com.example.binancerebalancinghelper.shared_preferences.EncryptedSharedPreferencesHelper;
 import com.example.binancerebalancinghelper.shared_preferences.SharedPreferencesHelper;
+import com.example.binancerebalancinghelper.shared_preferences.exceptions.KeyNotFoundException;
 
 import org.apache.commons.codec.binary.Hex;
 
@@ -28,11 +29,11 @@ public class NetworkAuthRequestHelper {
     private final String apiKey;
     private final String secretKey;
 
-    public NetworkAuthRequestHelper(Context context) {
+    public NetworkAuthRequestHelper(Context context) throws KeyNotFoundException {
         SharedPreferencesHelper sharedPreferencesHelper = new EncryptedSharedPreferencesHelper(context);
 
-        apiKey = sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY, "");
-        secretKey = sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY, "");
+        apiKey = sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY);
+        secretKey = sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY);
     }
 
     // additionalQueryParams should finish with '&'
