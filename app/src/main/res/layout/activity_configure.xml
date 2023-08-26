@@ -7,5 +7,148 @@
     android:orientation="vertical"
     tools:context=".ConfigureActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <LinearLayout
+            android:id="@+id/layout_dynamic_configure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="Api Key"
+                android:textColor="#2F3E4C"
+                />
+
+            <EditText
+                android:id="@+id/edt_api_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:inputType="textPassword"
+                android:enabled="true"
+                android:hint="Api Key" />
+
+            <Button
+                android:id="@+id/btn_show_beginning_api"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#9C27B0"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="5dp"
+                android:visibility="visible"
+                android:text="Show Beginning Of Api" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="Secret Key"
+                android:textColor="#2F3E4C"
+                />
+
+            <EditText
+                android:id="@+id/edt_secret_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:inputType="textPassword"
+                android:enabled="true"
+                android:hint="Secret Key" />
+
+            <Button
+                android:id="@+id/btn_show_beginning_secret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#9C27B0"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="5dp"
+                android:visibility="visible"
+                android:text="Show Beginning Of Secret" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="Validation Interval"
+                android:textColor="#2F3E4C"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="Every how many MINUTES check whether should rebalance."
+                android:textColor="#2F3E4C"
+                />
+
+            <EditText
+                android:id="@+id/edt_validation_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:inputType="number"
+                android:enabled="true"
+                android:hint="Validation interval in minutes" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#4CAF50"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="60dp"
+                android:visibility="visible"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/btn_revert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#9C27B0"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="5dp"
+                android:visibility="visible"
+                android:text="Revert" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
