@@ -52,6 +52,7 @@
         </activity>
 
         <activity android:name=".ExceptionsActivity" android:label="Exceptions" />
+        <activity android:name=".ConfigureActivity" android:label="Configure" />
 
     </application>
 

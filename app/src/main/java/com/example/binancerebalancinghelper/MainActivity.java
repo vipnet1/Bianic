@@ -58,12 +58,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int itemId = item.getItemId();
 
         if (itemId == R.id.redirect_exceptions) {
-            Intent intent = new Intent(this, ExceptionsActivity.class);
-            this.startActivity(intent);
+            handleActionRedirectExceptions();
+            return true;
+        }
+        else if(itemId == R.id.redirect_configure) {
+            handleActionRedirectConfigure();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void handleActionRedirectExceptions() {
+        Intent intent = new Intent(this, ExceptionsActivity.class);
+        this.startActivity(intent);
+    }
+
+    private void handleActionRedirectConfigure() {
+        Intent intent = new Intent(this, ConfigureActivity.class);
+        this.startActivity(intent);
     }
 
     @Override

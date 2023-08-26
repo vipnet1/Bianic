@@ -3,5 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/redirect_exceptions"
         android:title="Exceptions"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
+    <item android:id="@+id/redirect_configure"
+        android:title="Configure"
+        app:showAsAction="ifRoom" />
 </menu>

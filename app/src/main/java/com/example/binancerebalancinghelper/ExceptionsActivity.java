@@ -149,10 +149,6 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
 
     private void handleActionRedirectMain() {
         finish();
-
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 
     private void handleActionRefresh() {
