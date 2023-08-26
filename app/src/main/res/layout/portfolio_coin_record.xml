@@ -15,7 +15,7 @@
             android:layout_weight="0.4"
             android:layout_margin="10dp"
             android:inputType="text"
-            android:enabled="false"
+            android:enabled="true"
             android:hint="Symbol" />
 
         <EditText
@@ -25,7 +25,7 @@
             android:layout_weight="0.4"
             android:layout_margin="10dp"
             android:inputType="numberDecimal"
-            android:enabled="false"
+            android:enabled="true"
             android:hint="Allocation %" />
         <Button
             android:id="@+id/btn_remove"
@@ -38,7 +38,7 @@
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:text="X" />
     </LinearLayout>
 
@@ -54,7 +54,7 @@
             android:layout_weight="0.7"
             android:backgroundTint="#4CAF50"
             android:layout_margin="10dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="Apply" />
 
         <Button
@@ -65,7 +65,7 @@
             android:backgroundTint="#03A9F4"
             android:layout_margin="10dp"
             android:text="Edit"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <Button
@@ -76,7 +76,7 @@
             android:backgroundTint="#9C27B0"
             android:layout_margin="10dp"
             android:textSize="10sp"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:text="Cancel" />
     </LinearLayout>
 

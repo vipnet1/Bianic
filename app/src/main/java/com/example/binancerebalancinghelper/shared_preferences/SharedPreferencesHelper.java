@@ -27,6 +27,12 @@ public class SharedPreferencesHelper {
         editor.apply();
     }
 
+    public void setString(String key, String value) {
+        SharedPreferences.Editor editor = usedPrefsRef.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
     public int getInt(String key, int defaultValue) {
         return usedPrefsRef.getInt(key, defaultValue);
     }

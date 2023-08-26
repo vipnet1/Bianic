@@ -35,16 +35,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View recordRoot = getRecordRoot(view);
         int viewId = view.getId();
 
-        if(viewId == R.id.btn_edit) {
+        if (viewId == R.id.btn_edit) {
             handleActionEdit(recordRoot);
-        }
-        else if(viewId == R.id.btn_apply) {
+        } else if (viewId == R.id.btn_apply) {
             handleActionApply(recordRoot);
-        }
-        else if(viewId == R.id.btn_cancel) {
+        } else if (viewId == R.id.btn_cancel) {
             handleActionCancel(recordRoot);
-        }
-        else if(viewId == R.id.btn_remove) {
+        } else if (viewId == R.id.btn_remove) {
             handleActionRemove(recordRoot);
         }
     }
@@ -60,10 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if(itemId == R.id.redirect_exceptions) {
+        if (itemId == R.id.redirect_exceptions) {
             Intent intent = new Intent(this, ExceptionsActivity.class);
-            intent.putExtra("startedFromMain", true);
-
             this.startActivity(intent);
             return true;
         }
@@ -89,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleActionEdit(View recordRoot) {
-        if(editedRecordRoot != null) {
-                Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
+        if (editedRecordRoot != null) {
+            Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -119,10 +114,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EditText edtSymbol = recordRoot.findViewById(R.id.edt_symbol);
         EditText edtAllocation = recordRoot.findViewById(R.id.edt_allocation);
 
-        symbolBeforeEdit = edtSymbol.getText().toString();
-        allocationBeforeEdit = edtAllocation.getText().toString();
+        String symbol = edtSymbol.getText().toString();
+        String allocation = edtAllocation.getText().toString();
+
+        if (!validateRecordInput(symbol, allocation)) {
+            return;
+        }
+
+        validateRecordInput(symbol, allocation);
+
+        symbolBeforeEdit = symbol;
+        allocationBeforeEdit = allocation;
 
         handleActionCancel(recordRoot);
+    }
+
+    private boolean validateRecordInput(String symbol, String allocation) {
+        if (allocation.isEmpty()) {
+            Toast.makeText(this, "Allocation cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        int allocationPercent = Integer.parseInt(allocation);
+        if (allocationPercent < 1) {
+            Toast.makeText(this, "Minimal allocation is 1%", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (allocationPercent > 100) {
+            Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (symbol.isEmpty()) {
+            Toast.makeText(this, "Symbol cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     private void handleActionRemove(View recordRoot) {
@@ -153,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private View getRecordRoot(View view) {
-        String rootTag = ((String)view.getTag()).substring(ROOT_TAG_PREFIX.length());
+        String rootTag = ((String) view.getTag()).substring(ROOT_TAG_PREFIX.length());
         return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
