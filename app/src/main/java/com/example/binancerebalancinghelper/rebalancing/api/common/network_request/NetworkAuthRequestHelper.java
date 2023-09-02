@@ -2,6 +2,7 @@ package com.example.binancerebalancinghelper.rebalancing.api.common.network_requ
 
 import android.content.Context;
 
+import com.example.binancerebalancinghelper.configuration.ConfigurationManager;
 import com.example.binancerebalancinghelper.consts.BinanceApiConsts;
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 import com.example.binancerebalancinghelper.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
@@ -30,10 +31,10 @@ public class NetworkAuthRequestHelper {
     private final String secretKey;
 
     public NetworkAuthRequestHelper(Context context) throws KeyNotFoundException {
-        SharedPreferencesHelper sharedPreferencesHelper = new EncryptedSharedPreferencesHelper(context);
+        ConfigurationManager configurationManager = new ConfigurationManager(context);
 
-        apiKey = sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY);
-        secretKey = sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY);
+        apiKey = configurationManager.getApiKeyFailOnNotFound();
+        secretKey = configurationManager.getSecretKeyFailOnNotFound();
     }
 
     // additionalQueryParams should finish with '&'

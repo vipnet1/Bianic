@@ -53,6 +53,14 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_configure);
+
+        initOperations();
+    }
+
     private void handleActionShowBeginningApi() {
         String apiKey = edtApiKey.getText().toString();
         String first5ApiCharacters = apiKey.substring(0, Math.min(apiKey.length(), ConfigurationConsts.SHOW_KEY_CHARACTERS_NUMBER));
@@ -74,27 +82,14 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
     private void handleActionSave() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
 
-        configurationManager
+        String apiKey = edtApiKey.getText().toString();
+        configurationManager.setApiKey(apiKey);
 
-        try {
-            edtApiKey.setText(configurationManager.getApiKey());
-        } catch (KeyNotFoundException ignored) {
-        }
+        String secretKey = edtSecretKey.getText().toString();
+        configurationManager.setSecretKey(secretKey);
 
-        try {
-            edtSecretKey.setText(configurationManager.getSecretKey());
-        } catch (KeyNotFoundException ignored) {
-        }
-
-        edtSecretKey.setText(configurationManager.getValidationInterval());
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_configure);
-
-        initOperations();
+        int validationInterval = Integer.parseInt(edtValidationInterval.getText().toString());
+        configurationManager.setValidationInterval(validationInterval);
     }
 
     private void initOperations() {
@@ -116,16 +111,9 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
     private void setConfigurationData() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
-        try {
-            edtApiKey.setText(configurationManager.getApiKey());
-        } catch (KeyNotFoundException ignored) {
-        }
 
-        try {
-            edtSecretKey.setText(configurationManager.getSecretKey());
-        } catch (KeyNotFoundException ignored) {
-        }
-
+        edtApiKey.setText(configurationManager.getApiKey());
+        edtSecretKey.setText(configurationManager.getSecretKey());
         edtSecretKey.setText(configurationManager.getValidationInterval());
     }
 

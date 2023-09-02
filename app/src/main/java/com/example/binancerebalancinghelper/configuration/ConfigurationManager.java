@@ -12,14 +12,22 @@ public class ConfigurationManager {
     private final SharedPreferencesHelper sharedPreferencesHelper;
 
     public ConfigurationManager(Context context) {
-        this.sharedPreferencesHelper = new EncryptedSharedPreferencesHelper(context);
+        sharedPreferencesHelper = new EncryptedSharedPreferencesHelper(context);
     }
 
-    public String getApiKey() throws KeyNotFoundException {
+    public String getApiKey() {
+        return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY, "");
+    }
+
+    public String getApiKeyFailOnNotFound() throws KeyNotFoundException {
         return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY);
     }
 
-    public String getSecretKey() throws KeyNotFoundException {
+    public String getSecretKey() {
+        return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY, "");
+    }
+
+    public String getSecretKeyFailOnNotFound() throws KeyNotFoundException {
         return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY);
     }
 
