@@ -7,5 +7,7 @@ public abstract class SharedPrefsConsts {
     public static final String BINANCE_API_KEY = "binance_api_key";
     public static final String BINANCE_SECRET_KEY = "binance_secret_key";
 
+    public static final String VALIDATION_INTERVAL_MINUTES = "validation_interval_minutes";
+
     public static final String NEXT_NOTIFICATION_TYPE_ID_PREFIX = "next_notification_id_";
 }
