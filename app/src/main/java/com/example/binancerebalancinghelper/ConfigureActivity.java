@@ -63,20 +63,31 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
     private void handleActionShowBeginningApi() {
         String apiKey = edtApiKey.getText().toString();
-        String first5ApiCharacters = apiKey.substring(0, Math.min(apiKey.length(), ConfigurationConsts.SHOW_KEY_CHARACTERS_NUMBER));
 
+        if(apiKey.isEmpty()) {
+            Toast.makeText(this, "Api key is empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String first5ApiCharacters = apiKey.substring(0, Math.min(apiKey.length(), ConfigurationConsts.SHOW_KEY_CHARACTERS_NUMBER));
         Toast.makeText(this, "Api key begins with '" + first5ApiCharacters + "'", Toast.LENGTH_LONG).show();
     }
 
     private void handleActionShowBeginningSecret() {
         String secretKey = edtSecretKey.getText().toString();
-        String first5SecretCharacters = secretKey.substring(0, Math.min(secretKey.length(), ConfigurationConsts.SHOW_KEY_CHARACTERS_NUMBER));
 
+        if(secretKey.isEmpty()) {
+            Toast.makeText(this, "Secret key is empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String first5SecretCharacters = secretKey.substring(0, Math.min(secretKey.length(), ConfigurationConsts.SHOW_KEY_CHARACTERS_NUMBER));
         Toast.makeText(this, "Secret key begins with '" + first5SecretCharacters + "'", Toast.LENGTH_LONG).show();
     }
 
     private void handleActionRevert() {
         setConfigurationData();
+        Toast.makeText(this, "Reverted configuration", Toast.LENGTH_LONG).show();
     }
 
     private void handleActionSave() {
@@ -90,6 +101,8 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
         int validationInterval = Integer.parseInt(edtValidationInterval.getText().toString());
         configurationManager.setValidationInterval(validationInterval);
+
+        Toast.makeText(this, "Saved configuration", Toast.LENGTH_LONG).show();
     }
 
     private void initOperations() {
@@ -114,7 +127,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
         edtApiKey.setText(configurationManager.getApiKey());
         edtSecretKey.setText(configurationManager.getSecretKey());
-        edtSecretKey.setText(configurationManager.getValidationInterval());
+        edtValidationInterval.setText(String.valueOf(configurationManager.getValidationInterval()));
     }
 
     private void handleActionRedirectMain() {

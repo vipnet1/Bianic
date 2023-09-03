@@ -10,25 +10,27 @@ import com.example.binancerebalancinghelper.shared_preferences.exceptions.KeyNot
 
 public class ConfigurationManager {
     private final SharedPreferencesHelper sharedPreferencesHelper;
+    private final SharedPreferencesHelper encryptedSharedPreferencesHelper;
 
     public ConfigurationManager(Context context) {
-        sharedPreferencesHelper = new EncryptedSharedPreferencesHelper(context);
+        sharedPreferencesHelper = new SharedPreferencesHelper(context);
+        encryptedSharedPreferencesHelper = new EncryptedSharedPreferencesHelper(context);
     }
 
     public String getApiKey() {
-        return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY, "");
+        return encryptedSharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY, "");
     }
 
     public String getApiKeyFailOnNotFound() throws KeyNotFoundException {
-        return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY);
+        return encryptedSharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY);
     }
 
     public String getSecretKey() {
-        return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY, "");
+        return encryptedSharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY, "");
     }
 
     public String getSecretKeyFailOnNotFound() throws KeyNotFoundException {
-        return sharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY);
+        return encryptedSharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_SECRET_KEY);
     }
 
     public int getValidationInterval() {
@@ -36,11 +38,11 @@ public class ConfigurationManager {
     }
 
     public void setApiKey(String apiKey) {
-        sharedPreferencesHelper.setString(SharedPrefsConsts.BINANCE_API_KEY, apiKey);
+        encryptedSharedPreferencesHelper.setString(SharedPrefsConsts.BINANCE_API_KEY, apiKey);
     }
 
     public void setSecretKey(String secretKey) {
-        sharedPreferencesHelper.setString(SharedPrefsConsts.BINANCE_API_KEY, secretKey);
+        encryptedSharedPreferencesHelper.setString(SharedPrefsConsts.BINANCE_SECRET_KEY, secretKey);
     }
 
     public void setValidationInterval(int validationInterval) {

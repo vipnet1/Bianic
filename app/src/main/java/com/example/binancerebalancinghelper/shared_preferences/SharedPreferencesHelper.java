@@ -8,9 +8,10 @@ import com.example.binancerebalancinghelper.shared_preferences.exceptions.KeyNot
 
 public class SharedPreferencesHelper {
     private static SharedPreferences regularPrefs = null;
-    protected SharedPreferences usedPrefsRef = null;
+    protected SharedPreferences usedPrefsRef;
 
     protected SharedPreferencesHelper() {
+        usedPrefsRef = null;
     }
 
     public SharedPreferencesHelper(Context context) {

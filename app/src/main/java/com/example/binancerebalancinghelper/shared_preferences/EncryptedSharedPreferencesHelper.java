@@ -17,6 +17,8 @@ public class EncryptedSharedPreferencesHelper extends SharedPreferencesHelper {
     private static SharedPreferences encryptedPrefs = null;
 
     public EncryptedSharedPreferencesHelper(Context context) {
+        super();
+
         if (encryptedPrefs == null) {
             try {
                 String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
@@ -29,7 +31,6 @@ public class EncryptedSharedPreferencesHelper extends SharedPreferencesHelper {
                         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
                 );
 
-                usedPrefsRef = encryptedPrefs;
             } catch (GeneralSecurityException | IOException e) {
                 CriticalExceptionHandler exceptionHandler = new CriticalExceptionHandler(context);
                 exceptionHandler.handleException(
@@ -38,5 +39,7 @@ public class EncryptedSharedPreferencesHelper extends SharedPreferencesHelper {
                 );
             }
         }
+
+        usedPrefsRef = encryptedPrefs;
     }
 }
