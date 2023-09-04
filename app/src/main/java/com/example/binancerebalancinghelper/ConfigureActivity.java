@@ -147,12 +147,24 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
             return false;
         }
 
+        float value = Float.parseFloat(thresholdRebalancingPercentText);
+        if(value < 0.1) {
+            Toast.makeText(this, "Threshold rebalancing percent - value cannot be lower than 0.1", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return true;
     }
 
     private boolean isValidationIntervalInputValid(String validationIntervalText) {
         if (validationIntervalText.isEmpty()) {
             Toast.makeText(this, "Validation interval - cannot be empty", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        int value = Integer.parseInt(validationIntervalText);
+        if(value < 1) {
+            Toast.makeText(this, "Validation interval - cannot be lower than 1", Toast.LENGTH_LONG).show();
             return false;
         }
 
