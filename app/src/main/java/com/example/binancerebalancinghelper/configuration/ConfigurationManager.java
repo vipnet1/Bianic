@@ -37,6 +37,18 @@ public class ConfigurationManager {
         return sharedPreferencesHelper.getInt(SharedPrefsConsts.VALIDATION_INTERVAL_MINUTES, ConfigurationConsts.DEFAULT_VALIDATION_INTERVAL_MINUTES);
     }
 
+    public int isRebalancingActivated() {
+        return sharedPreferencesHelper.getInt(SharedPrefsConsts.IS_REBALANCING_ACTIVATED, ConfigurationConsts.DEFAULT_IS_REBALANCING_ACTIVATED);
+    }
+
+    public float getThresholdRebalancingPercent() {
+        return sharedPreferencesHelper.getFloat(SharedPrefsConsts.THRESHOLD_REBALANCING_PERCENT, ConfigurationConsts.DEFAULT_THRESHOLD_REBALANCING_PERCENT);
+    }
+
+    public void setIsRebalancingActivated(int isRebalancingActivated) {
+        sharedPreferencesHelper.setInt(SharedPrefsConsts.IS_REBALANCING_ACTIVATED, isRebalancingActivated);
+    }
+
     public void setApiKey(String apiKey) {
         encryptedSharedPreferencesHelper.setString(SharedPrefsConsts.BINANCE_API_KEY, apiKey);
     }
@@ -47,5 +59,9 @@ public class ConfigurationManager {
 
     public void setValidationInterval(int validationInterval) {
         sharedPreferencesHelper.setInt(SharedPrefsConsts.VALIDATION_INTERVAL_MINUTES, validationInterval);
+    }
+
+    public void setThresholdRebalancingPercent(float thresholdRebalancingPercent) {
+        sharedPreferencesHelper.setFloat(SharedPrefsConsts.THRESHOLD_REBALANCING_PERCENT, thresholdRebalancingPercent);
     }
 }

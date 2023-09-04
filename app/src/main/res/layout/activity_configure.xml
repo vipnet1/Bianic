@@ -123,7 +123,102 @@
                 android:layout_margin="10dp"
                 android:inputType="number"
                 android:enabled="true"
+                android:maxLength="6"
                 android:hint="Validation interval in minutes" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="Threshold Rebalancing Percent"
+                android:textColor="#2F3E4C"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="By what percent ANY COIN INITIAL ALLOCATION have to go up/down for you to get notified. We threat the coins that you added in the main page as your whole portfolio even if you have other coins."
+                android:textColor="#2F3E4C"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="Suppose you have 30% BTC and 70% ETH of your total portfolio, and you put 10 in the setting below. Some day BTC went up and now above 33% of your whole portfolio. BTC went up by more than 10% of it's initial allocation so you will get notified."
+                android:textColor="#275581"
+                />
+
+            <EditText
+                android:id="@+id/edt_threshold_rebalancing_percent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:inputType="numberDecimal"
+                android:enabled="true"
+                android:maxLength="12"
+                android:hint="Threshold rebalancing percent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="Rebalancing Check Activation"
+                android:textColor="#2F3E4C"
+                />
+
+            <Button
+                android:id="@+id/btn_activate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#4CAF50"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30dp"
+                android:visibility="visible"
+                android:text="Activate" />
+
+            <Button
+                android:id="@+id/btn_deactivate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#E91E63"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30dp"
+                android:visibility="gone"
+                android:text="Deactivate" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="#03A9F4"
+                />
 
             <Button
                 android:id="@+id/btn_save"

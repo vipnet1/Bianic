@@ -28,6 +28,12 @@ public class SharedPreferencesHelper {
         editor.apply();
     }
 
+    public void setFloat(String key, float value) {
+        SharedPreferences.Editor editor = usedPrefsRef.edit();
+        editor.putFloat(key, value);
+        editor.apply();
+    }
+
     public void setString(String key, String value) {
         SharedPreferences.Editor editor = usedPrefsRef.edit();
         editor.putString(key, value);
@@ -36,6 +42,10 @@ public class SharedPreferencesHelper {
 
     public int getInt(String key, int defaultValue) {
         return usedPrefsRef.getInt(key, defaultValue);
+    }
+
+    public float getFloat(String key, float defaultValue) {
+        return usedPrefsRef.getFloat(key, defaultValue);
     }
 
     public String getString(String key, String defaultValue) {
