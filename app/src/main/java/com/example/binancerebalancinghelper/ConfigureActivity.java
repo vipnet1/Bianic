@@ -167,8 +167,8 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         }
 
         int value = Integer.parseInt(validationIntervalText);
-        if (value < 1) {
-            Toast.makeText(this, "Validation interval - cannot be lower than 1", Toast.LENGTH_LONG).show();
+        if (value < 2) {
+            Toast.makeText(this, "Validation interval - cannot be lower than 2", Toast.LENGTH_LONG).show();
             return false;
         }
 

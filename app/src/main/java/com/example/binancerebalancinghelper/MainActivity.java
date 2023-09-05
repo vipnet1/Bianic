@@ -87,9 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BatteryHelper batteryHelper = new BatteryHelper(this);
         batteryHelper.requestIgnoreBatteryOptimizationsIfNeeded();
 
-        Intent serviceIntent = new Intent(this, RebalancingCheckIntentService.class);
-        this.startService(serviceIntent);
-
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dynamicLinearLayout = findViewById(R.id.layout_dynamic_main);
 
