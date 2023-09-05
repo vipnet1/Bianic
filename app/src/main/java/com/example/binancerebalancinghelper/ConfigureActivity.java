@@ -1,5 +1,7 @@
 package com.example.binancerebalancinghelper;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.binancerebalancinghelper.configuration.ConfigurationManager;
 import com.example.binancerebalancinghelper.consts.ConfigurationConsts;
+import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingAlarm;
+import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingStartService;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
@@ -148,7 +152,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         }
 
         float value = Float.parseFloat(thresholdRebalancingPercentText);
-        if(value < 0.1) {
+        if (value < 0.1) {
             Toast.makeText(this, "Threshold rebalancing percent - value cannot be lower than 0.1", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -163,7 +167,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         }
 
         int value = Integer.parseInt(validationIntervalText);
-        if(value < 1) {
+        if (value < 1) {
             Toast.makeText(this, "Validation interval - cannot be lower than 1", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -173,6 +177,9 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
     private void handleActionSave() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
+
+        int previousValidationInterval = configurationManager.getValidationInterval();
+        int previousIsRebalancingActivated = configurationManager.isRebalancingActivated();
 
         String validationIntervalText = edtValidationInterval.getText().toString();
         String thresholdRebalancingPercentText = edtThresholdRebalancingPercent.getText().toString();
@@ -199,7 +206,33 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
             configurationManager.setIsRebalancingActivated(1);
         }
 
+        int newValidationInterval = configurationManager.getValidationInterval();
+        int newIsRebalancingActivated = configurationManager.isRebalancingActivated();
+
+        changeRebalancerIfNeeded(previousValidationInterval, previousIsRebalancingActivated, newValidationInterval, newIsRebalancingActivated);
+
         Toast.makeText(this, "Saved configuration", Toast.LENGTH_LONG).show();
+    }
+
+    private void changeRebalancerIfNeeded(int previousValidationInterval, int previousIsRebalancingActivated, int newValidationInterval, int newIsRebalancingActivated) {
+        if (newIsRebalancingActivated == previousIsRebalancingActivated) {
+            if (previousValidationInterval != newValidationInterval) {
+                Intent startIntent = new Intent(getApplicationContext(), RebalancingStartService.class);
+                stopService(startIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(startIntent);
+                }
+            }
+        } else {
+            Intent startIntent = new Intent(getApplicationContext(), RebalancingStartService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (newIsRebalancingActivated == 1) {
+                    startForegroundService(startIntent);
+                } else {
+                    stopService(startIntent);
+                }
+            }
+        }
     }
 
     private void initOperations() {
