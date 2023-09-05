@@ -130,16 +130,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String symbol = edtSymbol.getText().toString();
         String allocation = edtAllocation.getText().toString();
 
-        if (!validateRecordInput(symbol, allocation)) {
+        if (!validateSymbolInput(symbol) || !validateAllocationInput(allocation)) {
             return;
         }
-
-        validateRecordInput(symbol, allocation);
 
         symbolBeforeEdit = symbol;
         allocationBeforeEdit = allocation;
 
         handleActionCancel(recordRoot);
+    }
+
+    private boolean validateAllocationInput(String allocationInput) {
+        if (allocationInput.isEmpty()) {
+            Toast.makeText(this, "Allocation cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        int dotIndex = allocationInput.indexOf(".");
+
+        if (dotIndex < 0) {
+            float allocation = Float.parseFloat(allocationInput);
+            if (allocation > 100) {
+                Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (allocation < 0.1) {
+                Toast.makeText(this, "Minimal allocation is 0.1%", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            return true;
+        }
+
+        if (dotIndex == 0) {
+            Toast.makeText(this, "Dot cannot be first character in allocation", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (dotIndex == allocationInput.length() - 1) {
+            Toast.makeText(this, "Dot cannot be last character in allocation", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String charsAfterDot = allocationInput.substring(dotIndex + 1);
+
+        if (charsAfterDot.length() > 2) {
+            Toast.makeText(this, "up to 2 digits after dot in allocation", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        float allocation = Float.parseFloat(allocationInput);
+        if (allocation > 100) {
+            Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (allocation < 0.1) {
+            Toast.makeText(this, "Minimal allocation is 0.1%", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateSymbolInput(String symbolInput) {
+        if (symbolInput.isEmpty()) {
+            Toast.makeText(this, "Symbol cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     private boolean validateRecordInput(String symbol, String allocation) {
