@@ -1,7 +1,10 @@
 package com.example.binancerebalancinghelper;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,8 +18,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingCheckIntentService;
+import com.example.binancerebalancinghelper.sqlite.SqliteDbHelper;
+import com.example.binancerebalancinghelper.sqlite.consts.ExceptionsLogTableConsts;
+import com.example.binancerebalancinghelper.sqlite.consts.ThresholdAllocationTableConsts;
 import com.example.binancerebalancinghelper.utils.StringUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String ROOT_TAG_PREFIX = "root_tag_";
@@ -60,8 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (itemId == R.id.redirect_exceptions) {
             handleActionRedirectExceptions();
             return true;
-        }
-        else if(itemId == R.id.redirect_configure) {
+        } else if (itemId == R.id.redirect_configure) {
             handleActionRedirectConfigure();
             return true;
         }
@@ -91,6 +98,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dynamicLinearLayout = findViewById(R.id.layout_dynamic_main);
 
         addBtnAddRecordListener();
+        addBtnSaveListener();
+        addBtnRevertListener();
+
+        loadStoredRecords();
     }
 
     private void handleActionEdit(View recordRoot) {
@@ -200,29 +211,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private boolean validateRecordInput(String symbol, String allocation) {
-        if (allocation.isEmpty()) {
-            Toast.makeText(this, "Allocation cannot be empty", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        int allocationPercent = Integer.parseInt(allocation);
-        if (allocationPercent < 1) {
-            Toast.makeText(this, "Minimal allocation is 1%", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (allocationPercent > 100) {
-            Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (symbol.isEmpty()) {
-            Toast.makeText(this, "Symbol cannot be empty", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
-    }
-
     private void handleActionRemove(View recordRoot) {
         dynamicLinearLayout.removeView(recordRoot);
         editedRecordRoot = null;
@@ -255,31 +243,193 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
+    private void handleAddRecord() {
+        if (editedRecordRoot != null) {
+            Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        View recordRoot = addEmptyRecord();
+
+        Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
+        Button btnApply = recordRoot.findViewById(R.id.btn_apply);
+        Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
+        Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
+
+        btnRemove.setOnClickListener(this);
+        btnApply.setOnClickListener(this);
+        btnEdit.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
+
+        StringUtils stringUtils = new StringUtils();
+        String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
+        String childrenTag = ROOT_TAG_PREFIX + recordTag;
+
+        recordRoot.setTag(recordTag);
+        btnRemove.setTag(childrenTag);
+        btnApply.setTag(childrenTag);
+        btnEdit.setTag(childrenTag);
+        btnCancel.setTag(childrenTag);
+
+        editedRecordRoot = recordRoot;
+    }
+
     private void addBtnAddRecordListener() {
         Button btnAddRecord = findViewById(R.id.btn_add_record);
         btnAddRecord.setOnClickListener(v -> {
-            View recordRoot = addEmptyRecord();
-
-            Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
-            Button btnApply = recordRoot.findViewById(R.id.btn_apply);
-            Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
-            Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
-
-            btnRemove.setOnClickListener(this);
-            btnApply.setOnClickListener(this);
-            btnEdit.setOnClickListener(this);
-            btnCancel.setOnClickListener(this);
-
-            StringUtils stringUtils = new StringUtils();
-            String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
-            String childrenTag = ROOT_TAG_PREFIX + recordTag;
-
-            recordRoot.setTag(recordTag);
-            btnRemove.setTag(childrenTag);
-            btnApply.setTag(childrenTag);
-            btnEdit.setTag(childrenTag);
-            btnCancel.setTag(childrenTag);
+            handleAddRecord();
         });
+    }
+
+    private boolean performSaveValidations() {
+        if (editedRecordRoot != null) {
+            Toast.makeText(this, "Can't save while editing record", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!validateSymbolNamesDistinct()) {
+            return false;
+        }
+
+        return validateSumRecords100();
+    }
+
+    private boolean performRevertValidations() {
+        if (editedRecordRoot != null) {
+            Toast.makeText(this, "Can't revert while editing record", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateSumRecords100() {
+        float totalAllocationsSum = 0.0f;
+        for (int i = 0; i < dynamicLinearLayout.getChildCount(); i++) {
+            View view = dynamicLinearLayout.getChildAt(i);
+            EditText edtAllocation = view.findViewById(R.id.edt_allocation);
+
+            float allocation = Float.parseFloat(edtAllocation.getText().toString());
+            totalAllocationsSum += allocation;
+        }
+
+        if (totalAllocationsSum != 100.0f) {
+            Toast.makeText(this, "Total allocations sum is not 100 - it's " + totalAllocationsSum, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateSymbolNamesDistinct() {
+        Set<String> existingAllocations = new HashSet<>();
+        for (int i = 0; i < dynamicLinearLayout.getChildCount(); i++) {
+            View view = dynamicLinearLayout.getChildAt(i);
+            EditText edtSymbol = view.findViewById(R.id.edt_symbol);
+
+            String symbol = edtSymbol.getText().toString();
+            if (existingAllocations.contains(symbol)) {
+                Toast.makeText(this, "Same symbol name in multiple records - " + symbol, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            existingAllocations.add(symbol);
+        }
+
+        return true;
+    }
+
+    private void saveRecords() {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
+
+        if(dynamicLinearLayout.getChildCount() == 0) {
+            sqLiteDatabase.execSQL("DELETE FROM " + ThresholdAllocationTableConsts.TABLE_NAME);
+            return;
+        }
+
+        for (int i = 0; i < dynamicLinearLayout.getChildCount(); i++) {
+            View view = dynamicLinearLayout.getChildAt(i);
+
+            EditText edtSymbol = view.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = view.findViewById(R.id.edt_allocation);
+
+            String symbol = edtSymbol.getText().toString();
+            float allocation = Float.parseFloat(edtAllocation.getText().toString());
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ThresholdAllocationTableConsts.SYMBOL_COLUMN, symbol);
+            contentValues.put(ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN, allocation);
+
+            sqLiteDatabase.insert(ThresholdAllocationTableConsts.TABLE_NAME, null, contentValues);
+        }
+    }
+
+    private void addBtnSaveListener() {
+        Button btnSave = findViewById(R.id.btn_save);
+        btnSave.setOnClickListener(v -> {
+            if (!performSaveValidations()) {
+                return;
+            }
+
+            saveRecords();
+
+            Toast.makeText(this, "Saved records", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void addBtnRevertListener() {
+        Button btnRevert = findViewById(R.id.btn_revert);
+        btnRevert.setOnClickListener(v -> {
+            if (!performRevertValidations()) {
+                return;
+            }
+
+            revertRecords();
+
+            Toast.makeText(this, "Restored previous records", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void revertRecords() {
+        dynamicLinearLayout.removeAllViews();
+        loadStoredRecords();
+    }
+
+    private Cursor getRecordsFromDb() {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
+
+        return sqLiteDatabase.rawQuery("" +
+                        "SELECT * FROM " + ThresholdAllocationTableConsts.TABLE_NAME
+                        + " ORDER BY " + ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN + " DESC",
+                null);
+    }
+
+    private void loadStoredRecords() {
+        Cursor storedRecords = getRecordsFromDb();
+
+        int symbolColumnIndex = storedRecords.getColumnIndex(ThresholdAllocationTableConsts.SYMBOL_COLUMN);
+        int percentOfPortfolioColumnIndex = storedRecords.getColumnIndex(ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN);
+
+        while (storedRecords.moveToNext()) {
+            String symbol = storedRecords.getString(symbolColumnIndex);
+            float percentOfPortfolio = storedRecords.getFloat(percentOfPortfolioColumnIndex);
+
+            addRecordFromDb(symbol, percentOfPortfolio);
+        }
+
+        storedRecords.close();
+    }
+
+    private void addRecordFromDb(String symbol, float percentOfPortfolio) {
+        handleAddRecord();
+
+        EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+        EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+
+        edtSymbol.setText(symbol);
+        edtAllocation.setText(String.valueOf(percentOfPortfolio));
+
+        handleActionApply(editedRecordRoot);
     }
 
     private View addEmptyRecord() {

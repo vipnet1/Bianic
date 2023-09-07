@@ -27,4 +27,18 @@
         android:backgroundTint="#BAA919"
         android:text="Add record" />
 
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4CAF50"
+        android:text="Save" />
+
+    <Button
+        android:id="@+id/btn_revert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E91E63"
+        android:text="Revert" />
+
 </LinearLayout>
