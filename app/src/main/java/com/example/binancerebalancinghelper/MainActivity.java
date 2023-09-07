@@ -342,6 +342,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void saveRecords() {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
 
+        sqLiteDatabase.beginTransaction();
+
+        sqLiteDatabase.delete(ThresholdAllocationTableConsts.TABLE_NAME, null, null);
+
         if(dynamicLinearLayout.getChildCount() == 0) {
             sqLiteDatabase.execSQL("DELETE FROM " + ThresholdAllocationTableConsts.TABLE_NAME);
             return;
@@ -361,7 +365,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             contentValues.put(ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN, allocation);
 
             sqLiteDatabase.insert(ThresholdAllocationTableConsts.TABLE_NAME, null, contentValues);
+            sqLiteDatabase.beginTransaction();
         }
+
+        sqLiteDatabase.setTransactionSuccessful();
+        sqLiteDatabase.endTransaction();
     }
 
     private void addBtnSaveListener() {

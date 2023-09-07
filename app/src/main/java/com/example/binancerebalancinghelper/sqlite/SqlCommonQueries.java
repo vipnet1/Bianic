@@ -9,7 +9,7 @@ public abstract class SqlCommonQueries {
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             ThresholdAllocationTableConsts.SYMBOL_COLUMN + " TEXT UNIQUE NOT NULL," +
             ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN + " REAL NOT NULL," +
-            "created_at TEXT DEFAULT CURRENT_TIMESTAMP);";
+            ThresholdAllocationTableConsts.CREATED_AT_COLUMN + " TEXT DEFAULT CURRENT_TIMESTAMP);";
 
     public static final String CREATE_EXCEPTIONS_LOG_TABLE = "" +
             "CREATE TABLE "+ ExceptionsLogTableConsts.TABLE_NAME +"(" +
