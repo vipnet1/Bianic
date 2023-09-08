@@ -1,9 +1,6 @@
 package com.example.binancerebalancinghelper;
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,9 +15,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.binancerebalancinghelper.consts.ExceptionHandleConsts;
-import com.example.binancerebalancinghelper.sqlite.SqliteDbHelper;
-import com.example.binancerebalancinghelper.sqlite.consts.ExceptionsLogTableConsts;
+import com.example.binancerebalancinghelper.db.ExceptionsLog.ExceptionsLogDb;
+import com.example.binancerebalancinghelper.db.ExceptionsLog.ExceptionsLogRecord;
 import com.example.binancerebalancinghelper.utils.StringUtils;
+
+import java.util.List;
 
 public class ExceptionsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String ROOT_TAG_PREFIX = "root_tag_";
@@ -46,15 +45,13 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if(itemId == R.id.redirect_main) {
+        if (itemId == R.id.redirect_main) {
             handleActionRedirectMain();
             return true;
-        }
-        else if(itemId == R.id.refresh) {
+        } else if (itemId == R.id.refresh) {
             handleActionRefresh();
             return true;
-        }
-        else if(itemId == R.id.clear_all_exceptions) {
+        } else if (itemId == R.id.clear_all_exceptions) {
             handleActionClearAllExceptions();
             return true;
         }
@@ -74,35 +71,15 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void loadExceptions() {
-        Cursor exceptions = getExceptionsFromDb();
+        ExceptionsLogDb db = new ExceptionsLogDb(this);
+        List<ExceptionsLogRecord> records = db.loadRecords(db.getRecordsOrderedByCreatedAt());
 
-        int idColumnIndex = exceptions.getColumnIndex(ExceptionsLogTableConsts.ID_COLUMN);
-        int createdAtColumnIndex = exceptions.getColumnIndex(ExceptionsLogTableConsts.CREATED_AT_COLUMN);
-        int severityColumnIndex = exceptions.getColumnIndex(ExceptionsLogTableConsts.SEVERITY_COLUMN);
-        int messageColumnIndex = exceptions.getColumnIndex(ExceptionsLogTableConsts.MESSAGE_COLUMN);
-
-        while (exceptions.moveToNext()) {
-            int id = exceptions.getInt(idColumnIndex);
-            String createdAt = exceptions.getString(createdAtColumnIndex);
-            String severity = exceptions.getString(severityColumnIndex);
-            String message = exceptions.getString(messageColumnIndex);
-
-            addExceptionRecord(id, createdAt, severity, message);
+        for (ExceptionsLogRecord record : records) {
+            addExceptionRecordToUi(record.getId(), record.getCreatedAt(), record.getSeverity(), record.getMessage());
         }
-
-        exceptions.close();
     }
 
-    private Cursor getExceptionsFromDb() {
-        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
-
-        return sqLiteDatabase.rawQuery("" +
-                "SELECT * FROM " + ExceptionsLogTableConsts.TABLE_NAME
-                + " ORDER BY " + ExceptionsLogTableConsts.CREATED_AT_COLUMN + " DESC",
-                null);
-    }
-
-    private void addExceptionRecord(int id, String createdAt, String severity, String message) {
+    private void addExceptionRecordToUi(int id, String createdAt, String severity, String message) {
         View recordRoot = addEmptyRecord();
 
         TextView tvRecordDbId = recordRoot.findViewById(R.id.record_db_id);
@@ -111,13 +88,11 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         TextView tvMessage = recordRoot.findViewById(R.id.tv_message);
         Button btnClearException = recordRoot.findViewById(R.id.btn_clear_exception);
 
-        if(severity.equals(ExceptionHandleConsts.SEVERITY_NORMAL)) {
+        if (severity.equals(ExceptionHandleConsts.SEVERITY_NORMAL)) {
             recordRoot.setBackgroundColor(Color.rgb(244, 236, 102));
-        }
-        else if(severity.equals(ExceptionHandleConsts.SEVERITY_CRITICAL)) {
+        } else if (severity.equals(ExceptionHandleConsts.SEVERITY_CRITICAL)) {
             recordRoot.setBackgroundColor(Color.rgb(244, 164, 102));
-        }
-        else {
+        } else {
             recordRoot.setBackgroundColor(Color.rgb(244, 107, 102));
         }
 
@@ -143,7 +118,7 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
     }
 
     private View getRecordRoot(View view) {
-        String rootTag = ((String)view.getTag()).substring(ROOT_TAG_PREFIX.length());
+        String rootTag = ((String) view.getTag()).substring(ROOT_TAG_PREFIX.length());
         return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
@@ -158,7 +133,9 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
 
     private void handleActionClearAllExceptions() {
         dynamicLinearLayout.removeAllViews();
-        clearAllExceptionsFromDb();
+
+        ExceptionsLogDb db = new ExceptionsLogDb(this);
+        db.clearAllExceptionsFromDb();
     }
 
     private void handleActionClearException(View recordRoot) {
@@ -166,16 +143,7 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         dynamicLinearLayout.removeView(recordRoot);
 
         String id = recordDbId.getTag().toString();
-        clearExceptionFromDb(id);
-    }
-
-    private void clearAllExceptionsFromDb() {
-        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
-        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME, null, null);
-    }
-
-    private void clearExceptionFromDb(String exceptionId) {
-        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
-        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME, "id=" + exceptionId, null);
+        ExceptionsLogDb db = new ExceptionsLogDb(this);
+        db.clearExceptionFromDb(id);
     }
 }

@@ -1,10 +1,7 @@
 package com.example.binancerebalancinghelper;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,12 +15,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.binancerebalancinghelper.sqlite.SqliteDbHelper;
-import com.example.binancerebalancinghelper.sqlite.consts.ExceptionsLogTableConsts;
-import com.example.binancerebalancinghelper.sqlite.consts.ThresholdAllocationTableConsts;
+import com.example.binancerebalancinghelper.db.ThresholdAllocation.ThresholdAllocationDb;
+import com.example.binancerebalancinghelper.db.ThresholdAllocation.ThresholdAllocationRecord;
 import com.example.binancerebalancinghelper.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -46,11 +44,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (viewId == R.id.btn_edit) {
             handleActionEdit(recordRoot);
         } else if (viewId == R.id.btn_apply) {
-            handleActionApply(recordRoot);
+            handleActionApply();
         } else if (viewId == R.id.btn_cancel) {
-            handleActionCancel(recordRoot);
+            handleActionCancel();
         } else if (viewId == R.id.btn_remove) {
-            handleActionRemove(recordRoot);
+            handleActionRemove();
         }
     }
 
@@ -76,16 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    private void handleActionRedirectExceptions() {
-        Intent intent = new Intent(this, ExceptionsActivity.class);
-        this.startActivity(intent);
-    }
-
-    private void handleActionRedirectConfigure() {
-        Intent intent = new Intent(this, ConfigureActivity.class);
-        this.startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,11 +85,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dynamicLinearLayout = findViewById(R.id.layout_dynamic_main);
 
-        addBtnAddRecordListener();
-        addBtnSaveListener();
-        addBtnRevertListener();
+        Button btnAddRecord = findViewById(R.id.btn_add_record);
+        btnAddRecord.setOnClickListener(v -> handleAddRecord());
 
-        loadStoredRecords();
+        Button btnSave = findViewById(R.id.btn_save);
+        btnSave.setOnClickListener(v -> handleSave());
+
+        Button btnRevert = findViewById(R.id.btn_revert);
+        btnRevert.setOnClickListener(v -> handleRevert());
+
+        loadThresholdAllocationRecords();
+    }
+
+    private void handleActionRedirectExceptions() {
+        Intent intent = new Intent(this, ExceptionsActivity.class);
+        this.startActivity(intent);
+    }
+
+    private void handleActionRedirectConfigure() {
+        Intent intent = new Intent(this, ConfigureActivity.class);
+        this.startActivity(intent);
     }
 
     private void handleActionEdit(View recordRoot) {
@@ -131,9 +134,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edtAllocation.setEnabled(true);
     }
 
-    private void handleActionApply(View recordRoot) {
-        EditText edtSymbol = recordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = recordRoot.findViewById(R.id.edt_allocation);
+    private void handleActionApply() {
+        EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+        EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
 
         String symbol = edtSymbol.getText().toString();
         String allocation = edtAllocation.getText().toString();
@@ -145,7 +148,82 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         symbolBeforeEdit = symbol;
         allocationBeforeEdit = allocation;
 
-        handleActionCancel(recordRoot);
+        handleActionCancel();
+    }
+
+    private void handleActionRemove() {
+        dynamicLinearLayout.removeView(editedRecordRoot);
+        editedRecordRoot = null;
+    }
+
+    private void handleActionCancel() {
+        Button btnRemove = editedRecordRoot.findViewById(R.id.btn_remove);
+        Button btnApply = editedRecordRoot.findViewById(R.id.btn_apply);
+        Button btnEdit = editedRecordRoot.findViewById(R.id.btn_edit);
+        Button btnCancel = editedRecordRoot.findViewById(R.id.btn_cancel);
+        EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+        EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+
+        btnRemove.setVisibility(View.INVISIBLE);
+        btnApply.setVisibility(View.GONE);
+        btnEdit.setVisibility(View.VISIBLE);
+        btnCancel.setVisibility(View.GONE);
+
+        edtSymbol.setText(symbolBeforeEdit);
+        edtAllocation.setText(allocationBeforeEdit);
+
+        edtSymbol.setEnabled(false);
+        edtAllocation.setEnabled(false);
+
+        editedRecordRoot = null;
+    }
+
+    private void handleAddRecord() {
+        if (editedRecordRoot != null) {
+            Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        View recordRoot = addEmptyRecord();
+
+        Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
+        Button btnApply = recordRoot.findViewById(R.id.btn_apply);
+        Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
+        Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
+
+        btnRemove.setOnClickListener(this);
+        btnApply.setOnClickListener(this);
+        btnEdit.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
+
+        StringUtils stringUtils = new StringUtils();
+        String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
+        String childrenTag = ROOT_TAG_PREFIX + recordTag;
+
+        recordRoot.setTag(recordTag);
+        btnRemove.setTag(childrenTag);
+        btnApply.setTag(childrenTag);
+        btnEdit.setTag(childrenTag);
+        btnCancel.setTag(childrenTag);
+
+        editedRecordRoot = recordRoot;
+    }
+
+    private void handleSave() {
+        if (!performSaveValidations()) {
+            return;
+        }
+        saveThresholdAllocationRecords();
+        revertRecords();
+        Toast.makeText(this, "Saved records", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleRevert() {
+        if (!performRevertValidations()) {
+            return;
+        }
+        revertRecords();
+        Toast.makeText(this, "Restored previous records", Toast.LENGTH_SHORT).show();
     }
 
     private boolean validateAllocationInput(String allocationInput) {
@@ -211,76 +289,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private void handleActionRemove(View recordRoot) {
-        dynamicLinearLayout.removeView(recordRoot);
-        editedRecordRoot = null;
-    }
-
-    private void handleActionCancel(View recordRoot) {
-        Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
-        Button btnApply = recordRoot.findViewById(R.id.btn_apply);
-        Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
-        Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
-        EditText edtSymbol = recordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = recordRoot.findViewById(R.id.edt_allocation);
-
-        btnRemove.setVisibility(View.INVISIBLE);
-        btnApply.setVisibility(View.GONE);
-        btnEdit.setVisibility(View.VISIBLE);
-        btnCancel.setVisibility(View.GONE);
-
-        edtSymbol.setText(symbolBeforeEdit);
-        edtAllocation.setText(allocationBeforeEdit);
-
-        edtSymbol.setEnabled(false);
-        edtAllocation.setEnabled(false);
-
-        editedRecordRoot = null;
-    }
-
-    private View getRecordRoot(View view) {
-        String rootTag = ((String) view.getTag()).substring(ROOT_TAG_PREFIX.length());
-        return dynamicLinearLayout.findViewWithTag(rootTag);
-    }
-
-    private void handleAddRecord() {
-        if (editedRecordRoot != null) {
-            Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        View recordRoot = addEmptyRecord();
-
-        Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
-        Button btnApply = recordRoot.findViewById(R.id.btn_apply);
-        Button btnEdit = recordRoot.findViewById(R.id.btn_edit);
-        Button btnCancel = recordRoot.findViewById(R.id.btn_cancel);
-
-        btnRemove.setOnClickListener(this);
-        btnApply.setOnClickListener(this);
-        btnEdit.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
-
-        StringUtils stringUtils = new StringUtils();
-        String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
-        String childrenTag = ROOT_TAG_PREFIX + recordTag;
-
-        recordRoot.setTag(recordTag);
-        btnRemove.setTag(childrenTag);
-        btnApply.setTag(childrenTag);
-        btnEdit.setTag(childrenTag);
-        btnCancel.setTag(childrenTag);
-
-        editedRecordRoot = recordRoot;
-    }
-
-    private void addBtnAddRecordListener() {
-        Button btnAddRecord = findViewById(R.id.btn_add_record);
-        btnAddRecord.setOnClickListener(v -> {
-            handleAddRecord();
-        });
-    }
-
     private boolean performSaveValidations() {
         if (editedRecordRoot != null) {
             Toast.makeText(this, "Can't save while editing record", Toast.LENGTH_SHORT).show();
@@ -339,17 +347,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private void saveRecords() {
-        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
+    private View getRecordRoot(View view) {
+        String rootTag = ((String) view.getTag()).substring(ROOT_TAG_PREFIX.length());
+        return dynamicLinearLayout.findViewWithTag(rootTag);
+    }
 
-        sqLiteDatabase.beginTransaction();
-
-        sqLiteDatabase.delete(ThresholdAllocationTableConsts.TABLE_NAME, null, null);
-
-        if(dynamicLinearLayout.getChildCount() == 0) {
-            sqLiteDatabase.execSQL("DELETE FROM " + ThresholdAllocationTableConsts.TABLE_NAME);
-            return;
-        }
+    private void saveThresholdAllocationRecords() {
+        List<ThresholdAllocationRecord> records = new ArrayList<>();
 
         for (int i = 0; i < dynamicLinearLayout.getChildCount(); i++) {
             View view = dynamicLinearLayout.getChildAt(i);
@@ -360,84 +364,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String symbol = edtSymbol.getText().toString();
             float allocation = Float.parseFloat(edtAllocation.getText().toString());
 
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(ThresholdAllocationTableConsts.SYMBOL_COLUMN, symbol);
-            contentValues.put(ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN, allocation);
-
-            sqLiteDatabase.insert(ThresholdAllocationTableConsts.TABLE_NAME, null, contentValues);
-            sqLiteDatabase.beginTransaction();
+            ThresholdAllocationRecord record = new ThresholdAllocationRecord(symbol, allocation);
+            records.add(record);
         }
 
-        sqLiteDatabase.setTransactionSuccessful();
-        sqLiteDatabase.endTransaction();
-    }
-
-    private void addBtnSaveListener() {
-        Button btnSave = findViewById(R.id.btn_save);
-        btnSave.setOnClickListener(v -> {
-            if (!performSaveValidations()) {
-                return;
-            }
-
-            saveRecords();
-
-            Toast.makeText(this, "Saved records", Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    private void addBtnRevertListener() {
-        Button btnRevert = findViewById(R.id.btn_revert);
-        btnRevert.setOnClickListener(v -> {
-            if (!performRevertValidations()) {
-                return;
-            }
-
-            revertRecords();
-
-            Toast.makeText(this, "Restored previous records", Toast.LENGTH_SHORT).show();
-        });
+        ThresholdAllocationDb db = new ThresholdAllocationDb(this);
+        db.saveRecords(records);
     }
 
     private void revertRecords() {
         dynamicLinearLayout.removeAllViews();
-        loadStoredRecords();
+        loadThresholdAllocationRecords();
     }
 
-    private Cursor getRecordsFromDb() {
-        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(this);
+    private void loadThresholdAllocationRecords() {
+        ThresholdAllocationDb db = new ThresholdAllocationDb(this);
+        List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecordsOrderedByDesiredAllocation());
 
-        return sqLiteDatabase.rawQuery("" +
-                        "SELECT * FROM " + ThresholdAllocationTableConsts.TABLE_NAME
-                        + " ORDER BY " + ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN + " DESC",
-                null);
-    }
-
-    private void loadStoredRecords() {
-        Cursor storedRecords = getRecordsFromDb();
-
-        int symbolColumnIndex = storedRecords.getColumnIndex(ThresholdAllocationTableConsts.SYMBOL_COLUMN);
-        int percentOfPortfolioColumnIndex = storedRecords.getColumnIndex(ThresholdAllocationTableConsts.PERCENT_OF_PORTFOLIO_COLUMN);
-
-        while (storedRecords.moveToNext()) {
-            String symbol = storedRecords.getString(symbolColumnIndex);
-            float percentOfPortfolio = storedRecords.getFloat(percentOfPortfolioColumnIndex);
-
-            addRecordFromDb(symbol, percentOfPortfolio);
+        for (ThresholdAllocationRecord record : records) {
+            addThresholdAllocationRecordToUi(record.getSymbol(), record.getDesiredAllocation());
         }
-
-        storedRecords.close();
     }
 
-    private void addRecordFromDb(String symbol, float percentOfPortfolio) {
+    private void addThresholdAllocationRecordToUi(String symbol, float desiredAllocation) {
         handleAddRecord();
 
         EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
         EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
 
         edtSymbol.setText(symbol);
-        edtAllocation.setText(String.valueOf(percentOfPortfolio));
+        edtAllocation.setText(String.valueOf(desiredAllocation));
 
-        handleActionApply(editedRecordRoot);
+        handleActionApply();
     }
 
     private View addEmptyRecord() {
