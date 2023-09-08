@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnValidateRecords.setOnClickListener(v -> handleValidateRecords());
 
         tvValidateRecords = findViewById(R.id.tv_validate_records);
+        setTvValidateRecords();
 
         loadThresholdAllocationRecords();
 
@@ -259,10 +260,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setTvValidateRecords();
         Toast.makeText(this, "Records are valid", Toast.LENGTH_SHORT).show();
-    }
-
-    private boolean validateBinanceRecords() {
-        return true;
     }
 
     private void setTvValidateRecords() {
