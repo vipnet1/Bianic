@@ -14,48 +14,24 @@ public class CoinsDetailsBuilder {
             List<CoinAmount> coinsAmount, List<CoinPrice> coinsPrice
     ) throws CoinsDetailsBuilderException {
         try {
-            List<CoinDetails> coinsDetails = buildCoinsDetails(coinsAmount, coinsPrice);
-            double portfolioUsdValue = getPortfolioUsdValue(coinsDetails);
-
-            for (CoinDetails coinDetails : coinsDetails) {
-                coinDetails.percentOfPortfolio = getCoinPercentOfPortfolio(
-                        coinDetails.coinPortfolioUsdValue, portfolioUsdValue
-                );
-            }
-
-            return coinsDetails;
+            return buildCoinsDetails(coinsAmount, coinsPrice);
         } catch (Exception e) {
             throw new CoinsDetailsBuilderException(e);
         }
     }
-
-    private double getCoinPercentOfPortfolio(double coinPortfolioUsdValue, double portfolioUsdValue) {
-        return coinPortfolioUsdValue * 100 / portfolioUsdValue;
-    }
-
-    private double getPortfolioUsdValue(List<CoinDetails> coinsDetails) {
-        double totalUsdValue = 0;
-
-        for (CoinDetails coinDetail : coinsDetails) {
-            totalUsdValue += coinDetail.coinPortfolioUsdValue;
-        }
-
-        return totalUsdValue;
-    }
-
 
     private List<CoinDetails> buildCoinsDetails(
             List<CoinAmount> coinsAmount, List<CoinPrice> coinsPrice
     ) {
         List<CoinDetails> coinsDetails = new ArrayList<>();
 
-        Map<String, CoinPrice> coinPriceMap = new HashMap<>();
-        for (CoinPrice coinPrice : coinsPrice) {
-            coinPriceMap.put(coinPrice.symbol, coinPrice);
+        Map<String, CoinAmount> coinAmountMap = new HashMap<>();
+        for (CoinAmount coinAmount : coinsAmount) {
+            coinAmountMap.put(coinAmount.getSymbol(), coinAmount);
         }
 
-        for (CoinAmount coinAmount : coinsAmount) {
-            CoinPrice coinPrice = coinPriceMap.get(coinAmount.symbol);
+        for (CoinPrice coinPrice : coinsPrice) {
+            CoinAmount coinAmount = coinAmountMap.get(coinPrice.getSymbol());
             CoinDetails coinDetails = new CoinDetails(coinAmount, coinPrice);
 
             coinsDetails.add(coinDetails);

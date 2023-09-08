@@ -75,7 +75,7 @@ public class Rebalancer {
 
         int index = 0;
         for (CoinAmount coinAmount : coinsAmount) {
-            results[index++] = coinAmount.symbol;
+            results[index++] = coinAmount.getSymbol();
         }
 
         return results;

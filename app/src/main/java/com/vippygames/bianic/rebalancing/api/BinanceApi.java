@@ -19,6 +19,7 @@ import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponsePars
 import com.vippygames.bianic.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
 import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Response;
@@ -57,6 +58,10 @@ public class BinanceApi {
     public List<CoinPrice> getCoinsPrice(String[] symbols) throws NetworkRequestException,
             FailedRequestStatusException, EmptyResponseBodyException,
             CoinsPriceParseException {
+
+        if(symbols.length == 0) {
+            return new ArrayList<>();
+        }
 
         NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper();
         CoinsPriceApi coinsPriceApi = new CoinsPriceApi();

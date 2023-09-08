@@ -51,15 +51,18 @@ public class BinanceRecordsValidation {
 
             CoinPrice usdtCoinPrice = new CoinPrice(BinanceApiConsts.USDT_SYMBOL, 1);
 
-            String[] coinsSymbols = getCoinsSymbols(records);
+            boolean areRecordsContainUsdt = areRecordsContainUsdt(records);
+            String[] coinsSymbols = getCoinsSymbols(records, areRecordsContainUsdt);
             List<CoinPrice> coinsPrice = binanceApi.getCoinsPrice(coinsSymbols);
-            coinsPrice.add(usdtCoinPrice);
+
+            if (areRecordsContainUsdt) {
+                coinsPrice.add(usdtCoinPrice);
+            }
 
             CoinsDetailsBuilder coinsDetailsBuilder = new CoinsDetailsBuilder();
             List<CoinDetails> coinsDetails = coinsDetailsBuilder.getCoinsDetails(coinsAmount, coinsPrice);
-            List<CoinDetails> relevantCoinsDetails = getRelevantCoinsDetails(coinsDetails, records);
 
-            validateCoinsAboveMinUsd(relevantCoinsDetails);
+            validateCoinsAboveMinUsd(coinsDetails);
 
             return true;
 
@@ -79,20 +82,6 @@ public class BinanceRecordsValidation {
         return false;
     }
 
-    private List<CoinDetails> getRelevantCoinsDetails(List<CoinDetails> coinsDetails, List<ThresholdAllocationRecord> records) {
-        Map<String, CoinDetails> symbolsToCoinDetails = new HashMap<>();
-        for (CoinDetails coinDetails : coinsDetails) {
-            symbolsToCoinDetails.put(coinDetails.getSymbol(), coinDetails);
-        }
-
-        List<CoinDetails> results = new ArrayList<>();
-        for(ThresholdAllocationRecord record : records) {
-            results.add(symbolsToCoinDetails.get(record.getSymbol()));
-        }
-
-        return results;
-    }
-
     private void validateCoinsFoundInPortfolio(List<ThresholdAllocationRecord> records, List<CoinAmount> coinsAmount) throws FailedValidateRecordsException {
         Set<String> foundSymbols = new HashSet<>();
         for (CoinAmount coinAmount : coinsAmount) {
@@ -110,8 +99,8 @@ public class BinanceRecordsValidation {
     }
 
     private void validateCoinsAboveMinUsd(List<CoinDetails> coinsDetails) throws FailedValidateRecordsException {
-        for(CoinDetails coinDetails : coinsDetails) {
-            if(coinDetails.getCoinPortfolioUsdValue() < BinanceRecordsValidationConsts.MIN_COIN_VALUE_USDT) {
+        for (CoinDetails coinDetails : coinsDetails) {
+            if (coinDetails.getCoinPortfolioUsdValue() < BinanceRecordsValidationConsts.MIN_COIN_VALUE_USDT) {
                 String message = "Coin value in USD in your portfolio is too small - min is "
                         + BinanceRecordsValidationConsts.MIN_COIN_VALUE_USDT + " but your is "
                         + coinDetails.getCoinPortfolioUsdValue();
@@ -122,18 +111,34 @@ public class BinanceRecordsValidation {
         }
     }
 
-    private String[] getCoinsSymbols(List<ThresholdAllocationRecord> records) {
-        List<String> symbols = new ArrayList<>();
-
-        for(ThresholdAllocationRecord record : records) {
-            String symbol = record.getSymbol();
-
-            if(!symbol.equals(BinanceApiConsts.USDT_SYMBOL)) {
-                symbols.add(symbol);
+    private boolean areRecordsContainUsdt(List<ThresholdAllocationRecord> records) {
+        for (ThresholdAllocationRecord record : records) {
+            if (record.getSymbol().equals(BinanceApiConsts.USDT_SYMBOL)) {
+                return true;
             }
         }
 
-        return (String[]) symbols.toArray();
+        return false;
+    }
+
+    private String[] getCoinsSymbols(List<ThresholdAllocationRecord> records, boolean areRecordsContainUsdt) {
+        String[] symbols;
+        if (areRecordsContainUsdt) {
+            symbols = new String[records.size() - 1];
+        } else {
+            symbols = new String[records.size()];
+        }
+
+        int indexToFill = 0;
+        for (ThresholdAllocationRecord record : records) {
+            String symbol = record.getSymbol();
+
+            if (!symbol.equals(BinanceApiConsts.USDT_SYMBOL)) {
+                symbols[indexToFill++] = symbol;
+            }
+        }
+
+        return symbols;
     }
 
     public void showToast(String message) {

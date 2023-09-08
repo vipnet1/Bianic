@@ -8,14 +8,12 @@ public class CoinDetails {
     private double amount;
     private double price;
     private double coinPortfolioUsdValue;
-    private double percentOfPortfolio;
 
     public CoinDetails(CoinAmount coinAmount, CoinPrice coinPrice) {
         this.symbol = coinAmount.getSymbol();
         this.amount = coinAmount.getAmount();
         this.price = coinPrice.getPrice();
         this.coinPortfolioUsdValue = this.amount * this.price;
-        this.percentOfPortfolio = -1;
     }
 
     public String getSymbol() {
