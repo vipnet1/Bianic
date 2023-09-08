@@ -33,6 +33,8 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(SqlCommonQueries.CREATE_THRESHOLD_ALLOCATION_TABLE);
         sqLiteDatabase.execSQL(SqlCommonQueries.CREATE_EXCEPTIONS_LOG_TABLE);
+        sqLiteDatabase.execSQL(SqlCommonQueries.CREATE_REPORTS_TABLE);
+        sqLiteDatabase.execSQL(SqlCommonQueries.CREATE_DETAILED_REPORTS_TABLE);
     }
 
     @Override
