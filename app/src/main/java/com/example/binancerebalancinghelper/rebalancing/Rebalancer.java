@@ -3,7 +3,7 @@ package com.example.binancerebalancinghelper.rebalancing;
 import android.content.Context;
 
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
-import com.example.binancerebalancinghelper.exceptions.UnvalidatedRecordsException;
+import com.example.binancerebalancinghelper.rebalancing.validation.exceptions.UnvalidatedRecordsException;
 import com.example.binancerebalancinghelper.rebalancing.api.BinanceApi;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.CoinAmount;
 import com.example.binancerebalancinghelper.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;

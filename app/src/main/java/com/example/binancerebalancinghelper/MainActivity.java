@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 import com.example.binancerebalancinghelper.db.ThresholdAllocation.ThresholdAllocationDb;
 import com.example.binancerebalancinghelper.db.ThresholdAllocation.ThresholdAllocationRecord;
+import com.example.binancerebalancinghelper.rebalancing.schedule.RebalancingCheckIntentService;
+import com.example.binancerebalancinghelper.rebalancing.validation.BinanceRecordsValidation;
 import com.example.binancerebalancinghelper.shared_preferences.SharedPreferencesHelper;
 import com.example.binancerebalancinghelper.utils.StringUtils;
 
@@ -105,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvValidateRecords = findViewById(R.id.tv_validate_records);
 
         loadThresholdAllocationRecords();
+
+        Intent serviceIntent = new Intent(this, RebalancingCheckIntentService.class);
+        this.startService(serviceIntent);
     }
 
     private void handleActionRedirectExceptions() {
@@ -244,18 +249,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (!validateRecordsBinance()) {
+        BinanceRecordsValidation binanceRecordsValidation = new BinanceRecordsValidation(this);
+        if (!binanceRecordsValidation.validateRecordsBinance()) {
             return;
         }
 
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
+        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
 
         setTvValidateRecords();
         Toast.makeText(this, "Records are valid", Toast.LENGTH_SHORT).show();
     }
 
-    private boolean validateRecordsBinance() {
+    private boolean validateBinanceRecords() {
         return true;
     }
 
@@ -264,9 +270,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int shouldValidateRecords = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
         if (shouldValidateRecords == 1) {
-            tvValidateRecords.setVisibility(View.VISIBLE);
-        } else {
             tvValidateRecords.setVisibility(View.GONE);
+        } else {
+            tvValidateRecords.setVisibility(View.VISIBLE);
         }
     }
 
@@ -409,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void revertRecords() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
+        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
         setTvValidateRecords();
 

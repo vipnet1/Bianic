@@ -1,4 +1,4 @@
-package com.example.binancerebalancinghelper.exceptions;
+package com.example.binancerebalancinghelper.rebalancing.validation.exceptions;
 
 public class UnvalidatedRecordsException extends Exception {
     @Override
