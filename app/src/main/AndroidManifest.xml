@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.binancerebalancinghelper">
+    package="com.vippygames.bianic">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -18,7 +18,7 @@
         android:theme="@style/Theme.BinanceRebalancingHelper">
 
         <receiver
-            android:name=".BootReceiver"
+            android:name="com.vippygames.bianic.BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -27,21 +27,21 @@
         </receiver>
 
         <receiver
-            android:name=".rebalancing.schedule.RebalancingReceiver"
+            android:name="com.vippygames.bianic.rebalancing.schedule.RebalancingReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name=".rebalancing.schedule.RebalancingCheckIntentService"
+            android:name="com.vippygames.bianic.rebalancing.schedule.RebalancingCheckIntentService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".rebalancing.schedule.RebalancingStartService"
+            android:name="com.vippygames.bianic.rebalancing.schedule.RebalancingStartService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.vippygames.bianic.MainActivity"
             android:label="Bianic"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -51,8 +51,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ExceptionsActivity" android:label="Exceptions" />
-        <activity android:name=".ConfigureActivity" android:label="Configure" />
+        <activity android:name="com.vippygames.bianic.ExceptionsActivity" android:label="Exceptions" />
+        <activity android:name="com.vippygames.bianic.ConfigureActivity" android:label="Configure" />
 
     </application>
 
