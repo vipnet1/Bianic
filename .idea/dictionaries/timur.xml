@@ -2,6 +2,7 @@
   <dictionary name="timur">
     <words>
       <w>apikey</w>
+      <w>bianic</w>
       <w>binance</w>
       <w>binancerebalancinghelper</w>
       <w>consts</w>
@@ -14,6 +15,7 @@
       <w>sqlite</w>
       <w>substructed</w>
       <w>usdt</w>
+      <w>vippygames</w>
     </words>
   </dictionary>
 </component>

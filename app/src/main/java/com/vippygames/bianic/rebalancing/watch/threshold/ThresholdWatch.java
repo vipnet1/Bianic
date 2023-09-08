@@ -18,6 +18,18 @@ public class ThresholdWatch {
     }
 
     public void check(List<CoinDetails> coinsDetails) {
+        CoinDetails coinDetails = getRebalancingCoinDetailsCause(coinsDetails);
+        if(coinDetails == null) {
+            return;
+        }
+
+        ReportGenerator reportGenerator = new ReportGenerator(context);
+        showCanRebalanceNotification("Coin " + coinDetails.getSymbol() + " reached threshold to rebalance.");
+        reportGenerator.generateReport(coinsDetails);
+    }
+
+    // if should rebalance get CoinDetails that is the reason, if not returns null
+    private CoinDetails getRebalancingCoinDetailsCause(List<CoinDetails> coinsDetails) {
         ReportGenerator reportGenerator = new ReportGenerator(context);
         double portfolioUsdValue = reportGenerator.getAllCoinsUsdValue(coinsDetails);
 
@@ -29,11 +41,11 @@ public class ThresholdWatch {
             double desiredPortfolioPercent = coinDetails.getDesiredPortfolioPercent();
 
             if (reportGenerator.shouldRebalance(thresholdRebalancingPercent, currentPortfolioPercent, desiredPortfolioPercent)) {
-                showCanRebalanceNotification("Coin " + coinDetails.getSymbol() + " reached threshold to rebalance.");
-                reportGenerator.generateReport(coinsDetails);
-                return;
+                return coinDetails;
             }
         }
+
+        return null;
     }
 
     private void showCanRebalanceNotification(String message) {
