@@ -11,12 +11,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.binancerebalancinghelper.consts.SharedPrefsConsts;
 import com.example.binancerebalancinghelper.db.ThresholdAllocation.ThresholdAllocationDb;
 import com.example.binancerebalancinghelper.db.ThresholdAllocation.ThresholdAllocationRecord;
+import com.example.binancerebalancinghelper.shared_preferences.SharedPreferencesHelper;
 import com.example.binancerebalancinghelper.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View editedRecordRoot = null;
     private String symbolBeforeEdit;
     private String allocationBeforeEdit;
+
+    private TextView tvValidateRecords;
 
     // Only for records of dynamic layout
     @Override
@@ -93,6 +98,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnRevert = findViewById(R.id.btn_revert);
         btnRevert.setOnClickListener(v -> handleRevert());
+
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
+        btnValidateRecords.setOnClickListener(v -> handleValidateRecords());
+
+        tvValidateRecords = findViewById(R.id.tv_validate_records);
 
         loadThresholdAllocationRecords();
     }
@@ -219,11 +229,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleRevert() {
-        if (!performRevertValidations()) {
+        if (editedRecordRoot != null) {
+            Toast.makeText(this, "Can't revert while editing record", Toast.LENGTH_SHORT).show();
             return;
         }
+
         revertRecords();
         Toast.makeText(this, "Restored previous records", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleValidateRecords() {
+        if (editedRecordRoot != null) {
+            Toast.makeText(this, "Can't validate records while editing record", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!validateRecordsBinance()) {
+            return;
+        }
+
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
+
+        setTvValidateRecords();
+        Toast.makeText(this, "Records are valid", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean validateRecordsBinance() {
+        return true;
+    }
+
+    private void setTvValidateRecords() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        int shouldValidateRecords = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
+
+        if (shouldValidateRecords == 1) {
+            tvValidateRecords.setVisibility(View.VISIBLE);
+        } else {
+            tvValidateRecords.setVisibility(View.GONE);
+        }
     }
 
     private boolean validateAllocationInput(String allocationInput) {
@@ -302,15 +346,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return validateSumRecords100();
     }
 
-    private boolean performRevertValidations() {
-        if (editedRecordRoot != null) {
-            Toast.makeText(this, "Can't revert while editing record", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
-    }
-
     private boolean validateSumRecords100() {
         float totalAllocationsSum = 0.0f;
         for (int i = 0; i < dynamicLinearLayout.getChildCount(); i++) {
@@ -373,6 +408,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void revertRecords() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
+
+        setTvValidateRecords();
+
         dynamicLinearLayout.removeAllViews();
         loadThresholdAllocationRecords();
     }

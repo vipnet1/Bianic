@@ -11,5 +11,7 @@ public abstract class SharedPrefsConsts {
     public static final String THRESHOLD_REBALANCING_PERCENT = "threshold_rebalancing_percent";
     public static final String IS_REBALANCING_ACTIVATED = "is_rebalancing_activated";
 
+    public static final String ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED = "are_threshold_validation_records_validated";
+
     public static final String NEXT_NOTIFICATION_TYPE_ID_PREFIX = "next_notification_id_";
 }

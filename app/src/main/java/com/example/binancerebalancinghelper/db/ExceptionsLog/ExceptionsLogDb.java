@@ -5,13 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.binancerebalancinghelper.consts.ExceptionHandleConsts;
-import com.example.binancerebalancinghelper.db.ThresholdAllocation.ThresholdAllocationRecord;
-import com.example.binancerebalancinghelper.exception_handle.CriticalExceptionHandler;
-import com.example.binancerebalancinghelper.exception_handle.exceptions.CriticalException;
 import com.example.binancerebalancinghelper.sqlite.SqliteDbHelper;
 import com.example.binancerebalancinghelper.sqlite.consts.ExceptionsLogTableConsts;
-import com.example.binancerebalancinghelper.sqlite.consts.ThresholdAllocationTableConsts;
 
 import java.util.ArrayList;
 import java.util.List;
