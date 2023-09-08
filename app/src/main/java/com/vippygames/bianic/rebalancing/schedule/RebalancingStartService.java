@@ -20,8 +20,8 @@ public class RebalancingStartService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         NotificationsHelper notificationsHelper = new NotificationsHelper(this);
-        Notification notification = notificationsHelper.getPersistentNotification("Rebalancing Check",
-                "Checking whether should rebalance");
+        Notification notification = notificationsHelper.getPersistentNotification(NotificationType.REBALANCING_RUNNING,
+                "Rebalancing Check", "Checking whether should rebalance");
 
         int notificationId = notificationsHelper.getNextNotificationId(NotificationType.REBALANCING_RUNNING);
         startForeground(notificationId, notification);

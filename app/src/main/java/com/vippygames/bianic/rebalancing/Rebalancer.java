@@ -2,7 +2,14 @@ package com.vippygames.bianic.rebalancing;
 
 import android.content.Context;
 
+import com.vippygames.bianic.consts.BinanceApiConsts;
+import com.vippygames.bianic.consts.ExceptionHandleConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
+import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationDb;
+import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationRecord;
+import com.vippygames.bianic.notifications.NotificationType;
+import com.vippygames.bianic.notifications.NotificationsHelper;
+import com.vippygames.bianic.rebalancing.common.ThresholdRecordsOperations;
 import com.vippygames.bianic.rebalancing.validation.exceptions.UnvalidatedRecordsException;
 import com.vippygames.bianic.rebalancing.api.BinanceApi;
 import com.vippygames.bianic.rebalancing.api.coins_amount.CoinAmount;
@@ -38,11 +45,24 @@ public class Rebalancer {
 
             BinanceApi binanceApi = new BinanceApi(context);
 
+            ThresholdAllocationDb db = new ThresholdAllocationDb(context);
+            List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecords());
+
             List<CoinAmount> coinsAmount = binanceApi.getCoinsAmount();
-            List<CoinPrice> coinsPrice = binanceApi.getCoinsPrice(getSymbolsFromCoinsAmount(coinsAmount));
+
+            CoinPrice usdtCoinPrice = new CoinPrice(BinanceApiConsts.USDT_SYMBOL, 1);
+
+            ThresholdRecordsOperations thresholdRecordsOperations = new ThresholdRecordsOperations();
+            boolean areRecordsContainUsdt = thresholdRecordsOperations.areRecordsContainUsdt(records);
+            String[] coinsSymbols = thresholdRecordsOperations.getCoinsSymbols(records, areRecordsContainUsdt);
+            List<CoinPrice> coinsPrice = binanceApi.getCoinsPrice(coinsSymbols);
+
+            if (areRecordsContainUsdt) {
+                coinsPrice.add(usdtCoinPrice);
+            }
 
             CoinsDetailsBuilder coinsDetailsBuilder = new CoinsDetailsBuilder();
-            List<CoinDetails> coinsDetails = coinsDetailsBuilder.getCoinsDetails(coinsAmount, coinsPrice);
+            List<CoinDetails> coinsDetails = coinsDetailsBuilder.getCoinsDetails(records, coinsAmount, coinsPrice);
 
             ThresholdWatch thresholdWatch = new ThresholdWatch(context);
             thresholdWatch.check(coinsDetails);
@@ -65,19 +85,8 @@ public class Rebalancer {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(context);
         int areRecordsValidated = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
-        if(areRecordsValidated != 1) {
+        if (areRecordsValidated != 1) {
             throw new UnvalidatedRecordsException();
         }
-    }
-
-    private String[] getSymbolsFromCoinsAmount(List<CoinAmount> coinsAmount) {
-        String[] results = new String[coinsAmount.size()];
-
-        int index = 0;
-        for (CoinAmount coinAmount : coinsAmount) {
-            results[index++] = coinAmount.getSymbol();
-        }
-
-        return results;
     }
 }

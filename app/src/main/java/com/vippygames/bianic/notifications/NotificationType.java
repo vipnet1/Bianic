@@ -5,8 +5,7 @@ public enum NotificationType {
     REGULAR_MESSAGE(2, 4),
     NORMAL_EXCEPTION(5, 6),
     CRITICAL_EXCEPTION(7, 8),
-    FATAL_EXCEPTION(9, 10),
-    LAST_TIME_REBALANCE_WAS_AVAILABLE(11, 11);
+    FATAL_EXCEPTION(9, 10);
 
     private final int minNotificationId;
     private final int maxNotificationId;

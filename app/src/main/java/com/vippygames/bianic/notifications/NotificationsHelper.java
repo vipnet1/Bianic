@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -22,17 +23,17 @@ public class NotificationsHelper {
         this.context = context;
     }
 
-    public void pushNotification(String title, String text, NotificationType notificationType) {
+    public void pushNotification(NotificationType notificationType, String title, String text) {
         createNotificationChannel();
-        Notification notification = getNotification(title, text, false);
+        Notification notification = getNotification(notificationType, title, text, false);
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
         manager.notify(getNextNotificationId(notificationType), notification);
     }
 
-    public Notification getPersistentNotification(String title, String text) {
+    public Notification getPersistentNotification(NotificationType notificationType, String title, String text) {
         createNotificationChannel();
-        return getNotification(title, text, true);
+        return getNotification(notificationType, title, text, true);
     }
 
     public int getNextNotificationId(NotificationType notificationType) {
@@ -60,7 +61,7 @@ public class NotificationsHelper {
         }
     }
 
-    private Notification getNotification(String title, String text, boolean setOngoing) {
+    private Notification getNotification(NotificationType notificationType, String title, String text, boolean setOngoing) {
         Intent intent = new Intent(context, NotificationsHelper.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 

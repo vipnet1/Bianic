@@ -29,8 +29,9 @@ public class CriticalExceptionHandler {
             ExceptionsLogRecord record = new ExceptionsLogRecord(ExceptionHandleConsts.SEVERITY_CRITICAL, exception.toString());
             db.saveRecord(record);
         } catch (Exception e) {
-            notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
-                    "While writing exception to db", NotificationType.FATAL_EXCEPTION);
+            notificationsHelper.pushNotification(NotificationType.FATAL_EXCEPTION,
+                    ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
+                    "While writing exception to db");
         }
     }
 
@@ -42,11 +43,13 @@ public class CriticalExceptionHandler {
             int lastDotIndex = exceptionClassName.lastIndexOf('.');
             String className = exceptionClassName.substring(lastDotIndex + 1);
 
-            notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_CRITICAL + " exception occurred",
-                    exception.getCriticalExceptionType() + ": " + className, NotificationType.CRITICAL_EXCEPTION);
+            notificationsHelper.pushNotification(NotificationType.CRITICAL_EXCEPTION,
+                    ExceptionHandleConsts.SEVERITY_CRITICAL + " exception occurred",
+                    exception.getCriticalExceptionType() + ": " + className);
         } catch (Exception e) {
-            notificationsHelper.pushNotification(ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
-                    "While trying to show exception", NotificationType.FATAL_EXCEPTION);
+            notificationsHelper.pushNotification(NotificationType.FATAL_EXCEPTION,
+                    ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
+                    "While trying to show exception");
         }
     }
 }
