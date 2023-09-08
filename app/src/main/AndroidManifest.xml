@@ -18,30 +18,29 @@
         android:theme="@style/Theme.BinanceRebalancingHelper">
 
         <receiver
-            android:name="com.vippygames.bianic.BootReceiver"
+            android:name=".BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver
-            android:name="com.vippygames.bianic.rebalancing.schedule.RebalancingReceiver"
+            android:name=".rebalancing.schedule.RebalancingReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name="com.vippygames.bianic.rebalancing.schedule.RebalancingCheckIntentService"
+            android:name=".rebalancing.schedule.RebalancingCheckIntentService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name="com.vippygames.bianic.rebalancing.schedule.RebalancingStartService"
+            android:name=".rebalancing.schedule.RebalancingStartService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name="com.vippygames.bianic.MainActivity"
+            android:name=".MainActivity"
             android:label="Bianic"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -50,10 +49,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ExceptionsActivity"
+            android:label="Exceptions" />
+        <activity
+            android:name=".ConfigureActivity"
+            android:label="Configure" />
 
-        <activity android:name="com.vippygames.bianic.ExceptionsActivity" android:label="Exceptions" />
-        <activity android:name="com.vippygames.bianic.ConfigureActivity" android:label="Configure" />
-
+        <activity
+            android:name=".ReportsActivity"
+            android:label="Reports" />
     </application>
 
 </manifest>

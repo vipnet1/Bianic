@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (itemId == R.id.redirect_configure) {
             handleActionRedirectConfigure();
             return true;
+        } else if (itemId == R.id.redirect_reports) {
+            handleActionRedirectReports();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -158,6 +161,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleActionRedirectExceptions() {
         Intent intent = new Intent(this, ExceptionsActivity.class);
+        this.startActivity(intent);
+    }
+
+    private void handleActionRedirectReports() {
+        Intent intent = new Intent(this, ReportsActivity.class);
         this.startActivity(intent);
     }
 

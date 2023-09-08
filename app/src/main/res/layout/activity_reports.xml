@@ -5,21 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ExceptionsActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
-        android:textAlignment="center"
-        android:text="* Exception times shown in UTC *"
-        android:textColor="#235C91"
-        />
+    tools:context=".ReportsActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,7 +13,7 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/layout_dynamic_exceptions"
+            android:id="@+id/layout_dynamic_reports"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

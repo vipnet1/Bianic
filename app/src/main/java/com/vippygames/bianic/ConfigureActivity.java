@@ -28,7 +28,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.configure_menu, menu);
+        inflater.inflate(R.menu.reports_menu, menu);
         return true;
     }
 
