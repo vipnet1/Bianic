@@ -66,7 +66,7 @@ public class NotificationsHelper {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationsConsts.CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(getNotificationIcon(notificationType))
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(pendingIntent)
@@ -74,5 +74,20 @@ public class NotificationsHelper {
                 .setOngoing(setOngoing);
 
         return builder.build();
+    }
+
+    private int getNotificationIcon(NotificationType notificationType) {
+        switch(notificationType) {
+            case REGULAR_MESSAGE:
+                return R.mipmap.ic_rebalancing_available;
+            case NORMAL_EXCEPTION:
+                return R.mipmap.ic_exception;
+            case CRITICAL_EXCEPTION:
+                return R.mipmap.ic_critical_exception;
+            case FATAL_EXCEPTION:
+                return R.mipmap.ic_fatal_exception;
+            default:
+                return R.mipmap.ic_launcher;
+        }
     }
 }
