@@ -1,4 +1,4 @@
-package com.vippygames.bianic.db.Reports;
+package com.vippygames.bianic.db.reports;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.vippygames.bianic.consts.ReportsConsts;
-import com.vippygames.bianic.db.DetailedReports.DetailedReportsDb;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
 import com.vippygames.bianic.sqlite.SqliteDbHelper;
 import com.vippygames.bianic.sqlite.consts.ReportsTableConsts;
 

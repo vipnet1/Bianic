@@ -1,4 +1,4 @@
-package com.vippygames.bianic.db.ThresholdAllocation;
+package com.vippygames.bianic.db.threshold_allocation;
 
 import android.content.ContentValues;
 import android.content.Context;

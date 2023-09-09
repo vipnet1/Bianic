@@ -4,8 +4,8 @@ import android.widget.Toast;
 
 import com.vippygames.bianic.MainActivity;
 import com.vippygames.bianic.consts.BinanceRecordsValidationConsts;
-import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationDb;
-import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationRecord;
+import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
+import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.exception_handle.exceptions.CriticalException;

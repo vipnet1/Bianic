@@ -1,5 +1,6 @@
 package com.vippygames.bianic.notifications;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.NotificationsConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
+import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 
 public class NotificationsHelper {
@@ -23,11 +25,18 @@ public class NotificationsHelper {
         this.context = context;
     }
 
+    @SuppressLint("MissingPermission")
     public void pushNotification(NotificationType notificationType, String title, String text) {
+        NotificationPermissions notificationPermissions = new NotificationPermissions();
+        if(!notificationPermissions.havePostNotificationsPermission(context)) {
+            return;
+        }
+
         createNotificationChannel();
         Notification notification = getNotification(notificationType, title, text, false);
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+
         manager.notify(getNextNotificationId(notificationType), notification);
     }
 
@@ -53,17 +62,15 @@ public class NotificationsHelper {
     }
 
     private void createNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(NotificationsConsts.CHANNEL_ID, NotificationsConsts.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription(NotificationsConsts.CHANNEL_DESCRIPTION);
-            NotificationManager manager = context.getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
+        NotificationChannel channel = new NotificationChannel(NotificationsConsts.CHANNEL_ID, NotificationsConsts.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(NotificationsConsts.CHANNEL_DESCRIPTION);
+        NotificationManager manager = context.getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
     }
 
     private Notification getNotification(NotificationType notificationType, String title, String text, boolean setOngoing) {
         Intent intent = new Intent(context, NotificationsHelper.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationsConsts.CHANNEL_ID)
                 .setSmallIcon(getNotificationIcon(notificationType))

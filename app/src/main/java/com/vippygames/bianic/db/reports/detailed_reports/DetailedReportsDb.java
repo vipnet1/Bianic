@@ -1,14 +1,12 @@
-package com.vippygames.bianic.db.DetailedReports;
+package com.vippygames.bianic.db.reports.detailed_reports;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.sqlite.SqliteDbHelper;
 import com.vippygames.bianic.sqlite.consts.DetailedReportsTableConsts;
-import com.vippygames.bianic.sqlite.consts.ReportsTableConsts;
 
 import java.util.ArrayList;
 import java.util.List;

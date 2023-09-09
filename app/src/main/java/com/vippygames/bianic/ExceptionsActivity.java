@@ -15,8 +15,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.consts.ExceptionHandleConsts;
-import com.vippygames.bianic.db.ExceptionsLog.ExceptionsLogDb;
-import com.vippygames.bianic.db.ExceptionsLog.ExceptionsLogRecord;
+import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;
+import com.vippygames.bianic.db.exceptions_log.ExceptionsLogRecord;
 import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.vippygames.bianic.db.ExceptionsLog;
+package com.vippygames.bianic.db.exceptions_log;
 
 public class ExceptionsLogRecord {
     private int id;

@@ -18,9 +18,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.consts.ReportsConsts;
-import com.vippygames.bianic.db.DetailedReports.DetailedReportsDb;
-import com.vippygames.bianic.db.Reports.ReportsDb;
-import com.vippygames.bianic.db.Reports.ReportsRecord;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
+import com.vippygames.bianic.db.reports.ReportsDb;
+import com.vippygames.bianic.db.reports.ReportsRecord;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.rebalancing.report.manual.ManualReportGenerationTask;
 import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;

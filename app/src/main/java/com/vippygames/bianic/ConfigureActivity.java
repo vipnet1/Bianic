@@ -1,7 +1,6 @@
 package com.vippygames.bianic;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -219,21 +218,17 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
     private void changeRebalancerIfNeeded(int previousValidationInterval, int previousIsRebalancingActivated, int newValidationInterval, int newIsRebalancingActivated) {
         if (newIsRebalancingActivated == previousIsRebalancingActivated) {
-            if (previousValidationInterval != newValidationInterval) {
+            if (newIsRebalancingActivated == 1 && previousValidationInterval != newValidationInterval) {
                 Intent startIntent = new Intent(getApplicationContext(), RebalancingStartService.class);
                 stopService(startIntent);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(startIntent);
-                }
+                startForegroundService(startIntent);
             }
         } else {
             Intent startIntent = new Intent(getApplicationContext(), RebalancingStartService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (newIsRebalancingActivated == 1) {
-                    startForegroundService(startIntent);
-                } else {
-                    stopService(startIntent);
-                }
+            if (newIsRebalancingActivated == 1) {
+                startForegroundService(startIntent);
+            } else {
+                stopService(startIntent);
             }
         }
     }

@@ -18,9 +18,7 @@ public class BootReceiver extends BroadcastReceiver {
             }
 
             Intent startIntent = new Intent(context.getApplicationContext(), RebalancingStartService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(startIntent);
-            }
+            context.startForegroundService(startIntent);
         }
     }
 }

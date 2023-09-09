@@ -3,8 +3,8 @@ package com.vippygames.bianic.rebalancing;
 import android.content.Context;
 
 import com.vippygames.bianic.consts.BinanceApiConsts;
-import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationDb;
-import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationRecord;
+import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
+import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.rebalancing.api.BinanceApi;
 import com.vippygames.bianic.rebalancing.api.coins_amount.CoinAmount;
 import com.vippygames.bianic.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;

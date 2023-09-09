@@ -3,10 +3,10 @@ package com.vippygames.bianic.rebalancing.report;
 import android.content.Context;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
-import com.vippygames.bianic.db.DetailedReports.DetailedReportsDb;
-import com.vippygames.bianic.db.DetailedReports.DetailedReportsRecord;
-import com.vippygames.bianic.db.Reports.ReportsDb;
-import com.vippygames.bianic.db.Reports.ReportsRecord;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsRecord;
+import com.vippygames.bianic.db.reports.ReportsDb;
+import com.vippygames.bianic.db.reports.ReportsRecord;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 
 import java.util.ArrayList;

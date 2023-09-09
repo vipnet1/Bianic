@@ -1,4 +1,4 @@
-package com.vippygames.bianic.db.Reports;
+package com.vippygames.bianic.db.reports;
 
 public class ReportsRecord {
     private String uuid;

@@ -2,6 +2,7 @@ package com.vippygames.bianic;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,8 +20,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
-import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationDb;
-import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationRecord;
+import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
+import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
+import com.vippygames.bianic.permissions.BatteryPermissions;
+import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.rebalancing.validation.BinanceRecordsValidationTask;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 import com.vippygames.bianic.utils.StringUtils;
@@ -109,8 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BatteryHelper batteryHelper = new BatteryHelper(this);
-        batteryHelper.requestIgnoreBatteryOptimizationsIfNeeded();
+        checkPermissions();
 
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dynamicLinearLayout = findViewById(R.id.layout_dynamic_main);
@@ -134,6 +136,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadThresholdAllocationRecords();
 
         initBinanceRecordsValidationDialog();
+    }
+
+    private void checkPermissions() {
+        BatteryPermissions batteryPermissions = new BatteryPermissions(this);
+        NotificationPermissions notificationPermissions = new NotificationPermissions();
+
+        boolean haveBatteryPermission = batteryPermissions.isIgnoringBatteryOptimizations();
+        boolean haveNotificationPermission = notificationPermissions.havePostNotificationsPermission(this);
+
+        if(!haveBatteryPermission || !haveNotificationPermission) {
+            showRequestPermissionsDialog();
+        }
+    }
+
+    private void showRequestPermissionsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Why Those Permissions Are Needed");
+        builder.setMessage("The permissions we will ask for are crucial for the normal operation of the app." +
+                "The battery one to continue doing our job in power saving mode.");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Sure Son", (dialog, which) -> {
+            dialog.dismiss();
+            requestNeededPermissions();
+        });
+
+        AlertDialog requestPermissionsDialog = builder.create();
+        requestPermissionsDialog.show();
+    }
+
+    private void requestNeededPermissions() {
+        BatteryPermissions batteryPermissions = new BatteryPermissions(this);
+        NotificationPermissions notificationPermissions = new NotificationPermissions();
+
+        if(!batteryPermissions.isIgnoringBatteryOptimizations()) {
+            batteryPermissions.requestIgnoreBatteryOptimizations();
+        }
+
+        if(!notificationPermissions.havePostNotificationsPermission(this)) {
+            notificationPermissions.requestPostNotificationsPermission(this);
+        }
     }
 
     private void addFirstThresholdRecordIfNeeded() {
@@ -397,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         StringUtils stringUtils = new StringUtils();
-        if(!stringUtils.isAlphanumeric(symbolInput)) {
+        if (!stringUtils.isAlphanumeric(symbolInput)) {
             Toast.makeText(this, "Symbol must contain only alphanumeric characters", Toast.LENGTH_SHORT).show();
             return false;
         }

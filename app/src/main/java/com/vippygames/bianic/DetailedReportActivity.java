@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vippygames.bianic.consts.DetailedReportsConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
-import com.vippygames.bianic.db.DetailedReports.DetailedReportsDb;
-import com.vippygames.bianic.db.DetailedReports.DetailedReportsRecord;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsRecord;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 import com.vippygames.bianic.utils.StringUtils;
 

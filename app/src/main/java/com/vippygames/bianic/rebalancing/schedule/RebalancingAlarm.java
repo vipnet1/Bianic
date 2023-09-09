@@ -16,7 +16,7 @@ public class RebalancingAlarm {
         this.context = context;
 
         Intent intent = new Intent(context, RebalancingReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 

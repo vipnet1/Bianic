@@ -1,4 +1,4 @@
-package com.vippygames.bianic.db.ThresholdAllocation;
+package com.vippygames.bianic.db.threshold_allocation;
 
 public class ThresholdAllocationRecord {
     private int id;

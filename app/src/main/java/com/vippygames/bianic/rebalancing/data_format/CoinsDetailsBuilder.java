@@ -1,6 +1,6 @@
 package com.vippygames.bianic.rebalancing.data_format;
 
-import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationRecord;
+import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.rebalancing.api.coins_amount.CoinAmount;
 import com.vippygames.bianic.rebalancing.api.coins_price.CoinPrice;
 import com.vippygames.bianic.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;

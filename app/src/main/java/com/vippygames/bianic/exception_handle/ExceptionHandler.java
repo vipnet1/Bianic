@@ -3,8 +3,8 @@ package com.vippygames.bianic.exception_handle;
 import android.content.Context;
 
 import com.vippygames.bianic.consts.ExceptionHandleConsts;
-import com.vippygames.bianic.db.ExceptionsLog.ExceptionsLogDb;
-import com.vippygames.bianic.db.ExceptionsLog.ExceptionsLogRecord;
+import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;
+import com.vippygames.bianic.db.exceptions_log.ExceptionsLogRecord;
 import com.vippygames.bianic.exception_handle.exceptions.CriticalException;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
