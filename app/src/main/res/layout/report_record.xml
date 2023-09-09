@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
+    android:background="#aabbcc"
     >
 
     <LinearLayout
@@ -112,7 +113,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_coins_count"
+            android:id="@+id/tv_threshold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"

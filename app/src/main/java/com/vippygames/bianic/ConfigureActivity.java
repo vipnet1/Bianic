@@ -213,6 +213,10 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(this, "Saved configuration", Toast.LENGTH_LONG).show();
     }
 
+    private void handleActionRedirectMain() {
+        finish();
+    }
+
     private void changeRebalancerIfNeeded(int previousValidationInterval, int previousIsRebalancingActivated, int newValidationInterval, int newIsRebalancingActivated) {
         if (newIsRebalancingActivated == previousIsRebalancingActivated) {
             if (previousValidationInterval != newValidationInterval) {
@@ -272,10 +276,5 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
             btnActivate.setVisibility(View.VISIBLE);
             btnDeactivate.setVisibility(View.GONE);
         }
-
-    }
-
-    private void handleActionRedirectMain() {
-        finish();
     }
 }

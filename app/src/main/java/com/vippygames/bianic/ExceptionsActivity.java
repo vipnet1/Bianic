@@ -31,7 +31,11 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         View recordRoot = getRecordRoot(view);
-        handleActionClearException(recordRoot);
+        int viewId = view.getId();
+
+        if (viewId == R.id.btn_clear_exception) {
+            handleActionClearException(recordRoot);
+        }
     }
 
     @Override
