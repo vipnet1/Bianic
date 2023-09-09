@@ -34,6 +34,37 @@
             />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_passed_threshold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Passed Threshold"
+        android:textColor="#4CAF50"
+        />
+
+    <TextView
+        android:id="@+id/tv_did_not_pass_threshold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:text="Didn't Pass Threshold"
+        android:textColor="#E91E63"
+        android:visibility="gone"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,18 +78,76 @@
             android:textSize="25sp"
             android:textAlignment="center"
             android:textStyle="bold"
-            android:text="Severity"
+            android:text="Total USD"
             android:textColor="#2F3E4C"
             />
 
         <TextView
-            android:id="@+id/tv_severity"
+            android:id="@+id/tv_total_usd"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:textSize="25sp"
             android:textAlignment="center"
-            android:text="Critical"
+            android:text="1000$"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:text="Threshold"
+            android:textColor="#2F3E4C"
+            />
+
+        <TextView
+            android:id="@+id/tv_coins_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:text="1.5\%"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:text="Coins"
+            android:textColor="#2F3E4C"
+            />
+
+        <TextView
+            android:id="@+id/tv_coins_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:text="6"
             android:textColor="@color/black"
             />
     </LinearLayout>
@@ -68,45 +157,78 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:textAlignment="center"
-        android:textStyle="bold"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="italic"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="0dp"
-        android:text="Message"
+        android:layout_marginBottom="5dp"
+        android:text="Highest Deviation"
         android:textColor="#2F3E4C"
         />
 
-    <TextView
-        android:id="@+id/tv_message"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_margin="10dp"
-        android:text="The message"
-        android:textColor="@color/black"
-        />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/record_db_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        />
+        <TextView
+            android:id="@+id/tv_highest_deviation_coin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:text="BTC"
+            android:textColor="#2F3E4C"
+            />
+
+        <TextView
+            android:id="@+id/tv_highest_deviation_percent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:text="+2.3\%"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/btn_clear_exception"
+        android:id="@+id/btn_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
+        android:backgroundTint="#9C27B0"
+        android:text="Details" />
+
+    <Button
+        android:id="@+id/btn_clear_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#2196F3"
         android:text="Clear" />
+
+    <TextView
+        android:id="@+id/record_db_uuid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="#E91E63"
+        android:background="#673AB7"
         />
 
 </LinearLayout>
