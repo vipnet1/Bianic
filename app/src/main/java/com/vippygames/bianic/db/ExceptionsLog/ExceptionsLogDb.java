@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.vippygames.bianic.consts.ExceptionsLogConsts;
 import com.vippygames.bianic.sqlite.SqliteDbHelper;
 import com.vippygames.bianic.sqlite.consts.ExceptionsLogTableConsts;
 
@@ -62,6 +63,10 @@ public class ExceptionsLogDb {
     }
 
     public void saveRecord(ExceptionsLogRecord record) {
+        if(getRecordsCount() >= ExceptionsLogConsts.MAX_STORED_EXCEPTION_COUNT) {
+            freeSpace();
+        }
+
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
 
         ContentValues contentValues = new ContentValues();
@@ -69,5 +74,29 @@ public class ExceptionsLogDb {
         contentValues.put(ExceptionsLogTableConsts.MESSAGE_COLUMN, record.getMessage());
 
         sqLiteDatabase.insert(ExceptionsLogTableConsts.TABLE_NAME, null, contentValues);
+    }
+
+    private int getRecordsCount() {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String[] columns = new String[]{"COUNT (*)"};
+
+        Cursor cursor = sqLiteDatabase.query(ExceptionsLogTableConsts.TABLE_NAME, columns,
+                null, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        int recordsCount = cursor.getInt(0);
+        cursor.close();
+
+        return recordsCount;
+    }
+
+    private void freeSpace() {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String whereClause = ExceptionsLogTableConsts.ID_COLUMN + " IN (SELECT "
+                + ExceptionsLogTableConsts.ID_COLUMN + " FROM "+ ExceptionsLogTableConsts.TABLE_NAME
+                + " ORDER BY " + ExceptionsLogTableConsts.CREATED_AT_COLUMN + " LIMIT "
+                + ExceptionsLogConsts.STORED_EXCEPTIONS_DELETE_PER_QUERY + ")";
+
+        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME, whereClause, null);
     }
 }

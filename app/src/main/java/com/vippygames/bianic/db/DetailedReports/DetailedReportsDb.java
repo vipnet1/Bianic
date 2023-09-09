@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.sqlite.SqliteDbHelper;
 import com.vippygames.bianic.sqlite.consts.DetailedReportsTableConsts;
+import com.vippygames.bianic.sqlite.consts.ReportsTableConsts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,5 +101,13 @@ public class DetailedReportsDb {
 
         sqLiteDatabase.setTransactionSuccessful();
         sqLiteDatabase.endTransaction();
+    }
+
+    // should be called only from ReportsDb
+    public void freeSpace(String uuidsToDeleteClause) {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String whereClause = DetailedReportsTableConsts.REPORTS_TABLE_UUID_COLUMN + " IN " + uuidsToDeleteClause;
+
+        sqLiteDatabase.delete(DetailedReportsTableConsts.TABLE_NAME, whereClause, null);
     }
 }

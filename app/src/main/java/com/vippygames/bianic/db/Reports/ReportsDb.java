@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.vippygames.bianic.consts.ReportsConsts;
+import com.vippygames.bianic.db.DetailedReports.DetailedReportsDb;
 import com.vippygames.bianic.sqlite.SqliteDbHelper;
 import com.vippygames.bianic.sqlite.consts.ReportsTableConsts;
 
@@ -72,6 +74,10 @@ public class ReportsDb {
     }
 
     public void saveRecord(ReportsRecord record) {
+        if (getRecordsCount() >= ReportsConsts.MAX_STORED_REPORTS_COUNT) {
+            freeSpace();
+        }
+
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
 
         ContentValues contentValues = new ContentValues();
@@ -84,5 +90,40 @@ public class ReportsDb {
         contentValues.put(ReportsTableConsts.HIGHEST_DEVIATION_PERCENT, record.getHighestDeviationPercent());
 
         sqLiteDatabase.insert(ReportsTableConsts.TABLE_NAME, null, contentValues);
+    }
+
+    private int getRecordsCount() {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String[] columns = new String[]{"COUNT (*)"};
+
+        Cursor cursor = sqLiteDatabase.query(ReportsTableConsts.TABLE_NAME, columns,
+                null, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        int recordsCount = cursor.getInt(0);
+        cursor.close();
+
+        return recordsCount;
+    }
+
+    private void freeSpace() {
+        String uuidsToDeleteClause = getUuidsToDeleteClause();
+        freeDetailedReportsSpace(uuidsToDeleteClause);
+
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String whereClause = ReportsTableConsts.UUID_COLUMN + " IN " + uuidsToDeleteClause;
+
+        sqLiteDatabase.delete(ReportsTableConsts.TABLE_NAME, whereClause, null);
+    }
+
+    private void freeDetailedReportsSpace(String uuidsToDeleteClause) {
+        DetailedReportsDb detailedReportsDb = new DetailedReportsDb(context);
+        detailedReportsDb.freeSpace(uuidsToDeleteClause);
+    }
+
+    private String getUuidsToDeleteClause() {
+        return "(SELECT " + ReportsTableConsts.UUID_COLUMN + " FROM " + ReportsTableConsts.TABLE_NAME
+                + " ORDER BY " + ReportsTableConsts.CREATED_AT_COLUMN + " LIMIT "
+                + ReportsConsts.STORED_REPORTS_DELETE_PER_QUERY + ")";
     }
 }
