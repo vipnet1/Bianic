@@ -28,7 +28,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.reports_menu, menu);
+        inflater.inflate(R.menu.configure_menu, menu);
         return true;
     }
 
@@ -145,8 +145,8 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
             return false;
         }
 
-        if (charsAfterDot.length() > 5) {
-            Toast.makeText(this, "Threshold rebalancing percent - up to 5 digits after dot", Toast.LENGTH_LONG).show();
+        if (charsAfterDot.length() > 3) {
+            Toast.makeText(this, "Threshold rebalancing percent - up to 3 digits after dot", Toast.LENGTH_LONG).show();
             return false;
         }
 

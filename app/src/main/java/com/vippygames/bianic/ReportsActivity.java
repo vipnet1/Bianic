@@ -66,12 +66,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         } else if (itemId == R.id.generate_report) {
             handleActionGenerateReport();
             return true;
-        }
-        else if(itemId == R.id.clear_all_reports) {
+        } else if (itemId == R.id.clear_all_reports) {
             handleActionClearAllReports();
             return true;
-        }
-        else if(itemId == R.id.refresh) {
+        } else if (itemId == R.id.refresh) {
             handleActionRefresh();
         }
 
@@ -79,13 +77,11 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void onManualReportGenerationTaskFinished(boolean result) {
-        manualReportGenerationDialog.dismiss();
-
-        if (!result) {
-            return;
+        if (result) {
+            refreshRecords();
+            Toast.makeText(this, "Report generated.", Toast.LENGTH_SHORT).show();
         }
-
-        Toast.makeText(this, "Report generated.", Toast.LENGTH_SHORT).show();
+        manualReportGenerationDialog.dismiss();
     }
 
     @Override
@@ -118,7 +114,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
                                      double highestDeviationPercent, String createdAt) {
         View recordRoot = addEmptyRecord();
 
-        TextView tvRecordDbId = recordRoot.findViewById(R.id.record_db_uuid);
+        TextView tvRecordDbUuid = recordRoot.findViewById(R.id.record_db_uuid);
         TextView tvCreatedAt = recordRoot.findViewById(R.id.tv_created_at);
         TextView tvPassedThreshold = recordRoot.findViewById(R.id.tv_passed_threshold);
         TextView tvDidNotPassThreshold = recordRoot.findViewById(R.id.tv_did_not_pass_threshold);
@@ -130,7 +126,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         Button btnDetails = recordRoot.findViewById(R.id.btn_details);
         Button btnClearReport = recordRoot.findViewById(R.id.btn_clear_report);
 
-        tvRecordDbId.setTag(uuid);
+        tvRecordDbUuid.setTag(uuid);
         tvCreatedAt.setText(createdAt);
 
         if (shouldRebalance) {
@@ -140,19 +136,19 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             tvPassedThreshold.setVisibility(View.GONE);
             tvDidNotPassThreshold.setVisibility(View.VISIBLE);
-            recordRoot.setBackgroundColor(Color.rgb(170, 187, 204));
+            recordRoot.setBackgroundColor(Color.rgb(209, 219, 230));
         }
 
-        tvTotalUsd.setText(String.valueOf(portfolioUsdValue));
-        tvThreshold.setText(String.valueOf(thresholdRebalancingPercent));
+        StringUtils stringUtils = new StringUtils();
+        tvTotalUsd.setText(stringUtils.convertDoubleToString(portfolioUsdValue, 1));
+        tvThreshold.setText(stringUtils.convertDoubleToString(thresholdRebalancingPercent, 3));
         tvCoins.setText(String.valueOf(coinsCount));
-        tvHighestDeviationCoin.setText(String.valueOf(highestDeviationCoin));
-        tvHighestDeviationPercent.setText(String.valueOf(highestDeviationPercent));
+        tvHighestDeviationCoin.setText(highestDeviationCoin);
+        tvHighestDeviationPercent.setText(stringUtils.convertDoubleToString(highestDeviationPercent, 3));
 
         btnDetails.setOnClickListener(this);
         btnClearReport.setOnClickListener(this);
 
-        StringUtils stringUtils = new StringUtils();
         String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
         String childrenTag = ROOT_TAG_PREFIX + recordTag;
 
@@ -212,12 +208,16 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleActionRefresh() {
-        dynamicLinearLayout.removeAllViews();
-        loadReports();
+        refreshRecords();
     }
 
     private void handleActionRedirectMain() {
         finish();
+    }
+
+    private void refreshRecords() {
+        dynamicLinearLayout.removeAllViews();
+        loadReports();
     }
 
     private View addEmptyRecord() {

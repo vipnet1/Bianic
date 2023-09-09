@@ -26,7 +26,7 @@ public class ReportsDb {
         int coinsCountColumnIndex = records.getColumnIndex(ReportsTableConsts.COINS_COUNT);
         int thresholdRebalancingPercentColumnIndex = records.getColumnIndex(ReportsTableConsts.THRESHOLD_REBALANCING_PERCENT);
         int highestDeviationCoinColumnIndex = records.getColumnIndex(ReportsTableConsts.HIGHEST_DEVIATION_COIN);
-        int highestDeviationPercentColumnIndex = records.getColumnIndex(ReportsTableConsts.HIGHEST_DEVIATION_COIN);
+        int highestDeviationPercentColumnIndex = records.getColumnIndex(ReportsTableConsts.HIGHEST_DEVIATION_PERCENT);
         int createdAtColumnIndex = records.getColumnIndex(ReportsTableConsts.CREATED_AT_COLUMN);
 
         List<ReportsRecord> results = new ArrayList<>();
@@ -58,7 +58,7 @@ public class ReportsDb {
 
     public void clearReportFromDb(String reportUuid) {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
-        sqLiteDatabase.delete(ReportsTableConsts.TABLE_NAME, "uuid=" + reportUuid, null);
+        sqLiteDatabase.delete(ReportsTableConsts.TABLE_NAME, "uuid='" + reportUuid + "'", null);
     }
 
     public Cursor getRecordsOrderedByCreatedAt() {
@@ -74,6 +74,7 @@ public class ReportsDb {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put(ReportsTableConsts.UUID_COLUMN, record.getUuid());
         contentValues.put(ReportsTableConsts.SHOULD_REBALANCE_COLUMN, record.shouldRebalance());
         contentValues.put(ReportsTableConsts.PORTFOLIO_USD_VALUE, record.getPortfolioUsdValue());
         contentValues.put(ReportsTableConsts.COINS_COUNT, record.getCoinsCount());
