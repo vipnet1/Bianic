@@ -79,11 +79,11 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         List<ExceptionsLogRecord> records = db.loadRecords(db.getRecordsOrderedByCreatedAt());
 
         for (ExceptionsLogRecord record : records) {
-            addExceptionRecordToUi(record.getId(), record.getCreatedAt(), record.getSeverity(), record.getMessage());
+            addExceptionRecordToUi(record);
         }
     }
 
-    private void addExceptionRecordToUi(int id, String createdAt, String severity, String message) {
+    private void addExceptionRecordToUi(ExceptionsLogRecord record) {
         View recordRoot = addEmptyRecord();
 
         TextView tvRecordDbId = recordRoot.findViewById(R.id.record_db_id);
@@ -92,6 +92,7 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         TextView tvMessage = recordRoot.findViewById(R.id.tv_message);
         Button btnClearException = recordRoot.findViewById(R.id.btn_clear_exception);
 
+        String severity = record.getSeverity();
         if (severity.equals(ExceptionHandleConsts.SEVERITY_NORMAL)) {
             recordRoot.setBackgroundColor(Color.rgb(244, 236, 102));
         } else if (severity.equals(ExceptionHandleConsts.SEVERITY_CRITICAL)) {
@@ -100,10 +101,10 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
             recordRoot.setBackgroundColor(Color.rgb(244, 107, 102));
         }
 
-        tvRecordDbId.setTag(id);
-        tvCreatedAt.setText(createdAt);
+        tvRecordDbId.setTag(record.getId());
+        tvCreatedAt.setText(record.getCreatedAt());
         tvSeverity.setText(severity);
-        tvMessage.setText(message);
+        tvMessage.setText(record.getMessage());
 
         btnClearException.setOnClickListener(this);
 

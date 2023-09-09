@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.db.Reports.ReportsDb;
 import com.vippygames.bianic.db.Reports.ReportsRecord;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
@@ -46,7 +47,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         if (viewId == R.id.btn_clear_report) {
             handleActionClearReport(recordRoot);
         } else if (viewId == R.id.btn_details) {
-            handleActionDetails();
+            handleActionDetails(recordRoot);
         }
     }
 
@@ -102,17 +103,11 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         List<ReportsRecord> records = db.loadRecords(db.getRecordsOrderedByCreatedAt());
 
         for (ReportsRecord record : records) {
-            addReportRecordToUi(
-                    record.getUuid(), record.shouldRebalance(), record.getPortfolioUsdValue(),
-                    record.getCoinsCount(), record.getThresholdRebalancingPercent(),
-                    record.getHighestDeviationCoin(), record.getHighestDeviationPercent(), record.getCreatedAt()
-            );
+            addReportRecordToUi(record);
         }
     }
 
-    private void addReportRecordToUi(String uuid, boolean shouldRebalance, double portfolioUsdValue,
-                                     int coinsCount, double thresholdRebalancingPercent, String highestDeviationCoin,
-                                     double highestDeviationPercent, String createdAt) {
+    private void addReportRecordToUi(ReportsRecord record) {
         View recordRoot = addEmptyRecord();
 
         TextView tvRecordDbUuid = recordRoot.findViewById(R.id.record_db_uuid);
@@ -127,10 +122,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         Button btnDetails = recordRoot.findViewById(R.id.btn_details);
         Button btnClearReport = recordRoot.findViewById(R.id.btn_clear_report);
 
-        tvRecordDbUuid.setTag(uuid);
-        tvCreatedAt.setText(createdAt);
+        tvRecordDbUuid.setTag(record.getUuid());
+        tvCreatedAt.setText(record.getCreatedAt());
 
-        if (shouldRebalance) {
+        if (record.shouldRebalance()) {
             tvPassedThreshold.setVisibility(View.VISIBLE);
             tvDidNotPassThreshold.setVisibility(View.GONE);
             recordRoot.setBackgroundColor(Color.rgb(162, 239, 165));
@@ -141,11 +136,11 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         StringUtils stringUtils = new StringUtils();
-        tvTotalUsd.setText(stringUtils.convertDoubleToString(portfolioUsdValue, 1));
-        tvThreshold.setText(stringUtils.convertDoubleToString(thresholdRebalancingPercent, 3));
-        tvCoins.setText(String.valueOf(coinsCount));
-        tvHighestDeviationCoin.setText(highestDeviationCoin);
-        tvHighestDeviationPercent.setText(stringUtils.convertDoubleToString(highestDeviationPercent, 3));
+        tvTotalUsd.setText(stringUtils.convertDoubleToString(record.getPortfolioUsdValue(), 1));
+        tvThreshold.setText(stringUtils.convertDoubleToString(record.getThresholdRebalancingPercent(), 3));
+        tvCoins.setText(String.valueOf(record.getCoinsCount()));
+        tvHighestDeviationCoin.setText(record.getHighestDeviationCoin());
+        tvHighestDeviationPercent.setText(stringUtils.convertDoubleToString(record.getHighestDeviationPercent(), 3));
 
         btnDetails.setOnClickListener(this);
         btnClearReport.setOnClickListener(this);
@@ -187,8 +182,12 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         // todo: detailed reports
     }
 
-    private void handleActionDetails() {
+    private void handleActionDetails(View recordRoot) {
         Intent intent = new Intent(this, DetailedReportActivity.class);
+
+        TextView recordDbUuid = recordRoot.findViewById(R.id.record_db_uuid);
+        intent.putExtra(ReportsConsts.REPORT_RECORD_UUID_INTENT_EXTRA, recordDbUuid.getTag().toString());
+
         this.startActivity(intent);
     }
 

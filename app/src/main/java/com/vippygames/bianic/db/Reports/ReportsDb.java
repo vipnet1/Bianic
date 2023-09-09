@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.vippygames.bianic.sqlite.SqliteDbHelper;
-import com.vippygames.bianic.sqlite.consts.ExceptionsLogTableConsts;
 import com.vippygames.bianic.sqlite.consts.ReportsTableConsts;
 
 import java.util.ArrayList;
