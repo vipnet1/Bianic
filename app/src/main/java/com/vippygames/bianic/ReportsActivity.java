@@ -2,6 +2,7 @@ package com.vippygames.bianic;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -45,7 +46,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         if (viewId == R.id.btn_clear_report) {
             handleActionClearReport(recordRoot);
         } else if (viewId == R.id.btn_details) {
-            handleActionDetails(recordRoot);
+            handleActionDetails();
         }
     }
 
@@ -186,8 +187,9 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         // todo: detailed reports
     }
 
-    private void handleActionDetails(View recordRoot) {
-
+    private void handleActionDetails() {
+        Intent intent = new Intent(this, DetailedReportActivity.class);
+        this.startActivity(intent);
     }
 
     private void handleActionGenerateReport() {

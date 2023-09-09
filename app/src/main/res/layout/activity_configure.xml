@@ -7,6 +7,20 @@
     android:orientation="vertical"
     tools:context=".ConfigureActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:textAlignment="center"
+        android:text="Please, configure the keys in Binance as READ ONLY!"
+        android:textColor="#F44336"
+        />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

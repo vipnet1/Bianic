@@ -55,10 +55,12 @@
         <activity
             android:name=".ConfigureActivity"
             android:label="Configure" />
-
         <activity
             android:name=".ReportsActivity"
             android:label="Reports" />
+        <activity
+            android:name=".DetailedReportActivity"
+            android:label="Detailed Report" />
     </application>
 
 </manifest>
