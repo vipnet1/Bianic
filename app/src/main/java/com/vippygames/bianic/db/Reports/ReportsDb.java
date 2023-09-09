@@ -57,17 +57,18 @@ public class ReportsDb {
 
     public void clearReportFromDb(String reportUuid) {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
-        sqLiteDatabase.delete(ReportsTableConsts.TABLE_NAME,
-                ReportsTableConsts.UUID_COLUMN + "='" + reportUuid + "'", null);
+        String whereClause = ReportsTableConsts.UUID_COLUMN + "=?";
+        String[] whereArgs = {reportUuid};
+
+        sqLiteDatabase.delete(ReportsTableConsts.TABLE_NAME, whereClause, whereArgs);
     }
 
     public Cursor getRecordsOrderedByCreatedAt() {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String orderBy = ReportsTableConsts.CREATED_AT_COLUMN + " DESC";
 
-        return sqLiteDatabase.rawQuery("" +
-                        "SELECT * FROM " + ReportsTableConsts.TABLE_NAME
-                        + " ORDER BY " + ReportsTableConsts.CREATED_AT_COLUMN + " DESC",
-                null);
+        return sqLiteDatabase.query(ReportsTableConsts.TABLE_NAME, null, null,
+                null, null, null, orderBy);
     }
 
     public void saveRecord(ReportsRecord record) {

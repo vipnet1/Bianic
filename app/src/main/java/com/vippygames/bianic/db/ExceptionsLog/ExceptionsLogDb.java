@@ -46,17 +46,19 @@ public class ExceptionsLogDb {
 
     public void clearExceptionFromDb(String exceptionId) {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
-        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME,
-                ExceptionsLogTableConsts.ID_COLUMN + "=" + exceptionId, null);
+
+        String whereClause = ExceptionsLogTableConsts.ID_COLUMN + "=?";
+        String[] whereArgs = {exceptionId};
+
+        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME, whereClause, whereArgs);
     }
 
     public Cursor getRecordsOrderedByCreatedAt() {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String orderBy = ExceptionsLogTableConsts.CREATED_AT_COLUMN + " DESC";
 
-        return sqLiteDatabase.rawQuery("" +
-                        "SELECT * FROM " + ExceptionsLogTableConsts.TABLE_NAME
-                        + " ORDER BY " + ExceptionsLogTableConsts.CREATED_AT_COLUMN + " DESC",
-                null);
+        return sqLiteDatabase.query(ExceptionsLogTableConsts.TABLE_NAME, null, null,
+                null, null, null, orderBy);
     }
 
     public void saveRecord(ExceptionsLogRecord record) {

@@ -184,8 +184,6 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
         DetailedReportsDb detailedReportsDb = new DetailedReportsDb(this);
         detailedReportsDb.clearDetailedReportsByReportUuid(uuid);
-
-        // todo: detailed reports
     }
 
     private void handleActionDetails(View recordRoot) {

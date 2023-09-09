@@ -41,20 +41,17 @@ public class ThresholdAllocationDb {
 
     public Cursor getRecordsOrderedByDesiredAllocationThenSymbol() {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        String orderBy = ThresholdAllocationTableConsts.DESIRED_ALLOCATION + " DESC, "
+                + ThresholdAllocationTableConsts.SYMBOL_COLUMN + " ASC";
 
-        return sqLiteDatabase.rawQuery("" +
-                        "SELECT * FROM " + ThresholdAllocationTableConsts.TABLE_NAME
-                        + " ORDER BY " + ThresholdAllocationTableConsts.DESIRED_ALLOCATION + " DESC"
-                        + ", " + ThresholdAllocationTableConsts.SYMBOL_COLUMN + " ASC",
-                null);
+        return sqLiteDatabase.query(ThresholdAllocationTableConsts.TABLE_NAME, null,
+                null, null, null, null, orderBy);
     }
 
     public Cursor getRecords() {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
-
-        return sqLiteDatabase.rawQuery(
-                "SELECT * FROM " + ThresholdAllocationTableConsts.TABLE_NAME,null
-        );
+        return sqLiteDatabase.query(ThresholdAllocationTableConsts.TABLE_NAME, null,
+                null, null, null, null, null);
     }
 
     public void clearAndSaveRecords(List<ThresholdAllocationRecord> records) {

@@ -59,12 +59,13 @@ public class DetailedReportsDb {
     public Cursor getRecordsOrderedByTargetAllocationThenCoin(String reportsTableUuid) {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
 
-        return sqLiteDatabase.rawQuery("" +
-                        "SELECT * FROM " + DetailedReportsTableConsts.TABLE_NAME
-                        + " WHERE " + DetailedReportsTableConsts.REPORTS_TABLE_UUID_COLUMN + "='" + reportsTableUuid
-                        + "' ORDER BY " + DetailedReportsTableConsts.TARGET_ALLOCATION_COLUMN + " DESC"
-                        + ", " + DetailedReportsTableConsts.COIN_COLUMN + " ASC",
-                null);
+        String whereClause = DetailedReportsTableConsts.REPORTS_TABLE_UUID_COLUMN + "=?";
+        String[] whereArgs = {reportsTableUuid};
+        String orderBy = DetailedReportsTableConsts.TARGET_ALLOCATION_COLUMN + " DESC, "
+                + DetailedReportsTableConsts.COIN_COLUMN + " ASC";
+
+        return sqLiteDatabase.query(DetailedReportsTableConsts.TABLE_NAME, null, whereClause, whereArgs,
+                null, null, orderBy);
     }
 
     public void clearAllDetailedReportsFromDb() {
