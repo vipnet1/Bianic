@@ -3,14 +3,13 @@ package com.vippygames.bianic.rebalancing.validation;
 import android.widget.Toast;
 
 import com.vippygames.bianic.MainActivity;
-import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.BinanceRecordsValidationConsts;
 import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.ThresholdAllocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.exception_handle.exceptions.CriticalException;
-import com.vippygames.bianic.rebalancing.api.BinanceApi;
+import com.vippygames.bianic.rebalancing.BinanceManager;
 import com.vippygames.bianic.rebalancing.api.coins_amount.CoinAmount;
 import com.vippygames.bianic.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
 import com.vippygames.bianic.rebalancing.api.coins_price.CoinPrice;
@@ -19,7 +18,6 @@ import com.vippygames.bianic.rebalancing.api.common.exceptions.EmptyResponseBody
 import com.vippygames.bianic.rebalancing.api.common.exceptions.FailedRequestStatusException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
-import com.vippygames.bianic.rebalancing.common.ThresholdRecordsOperations;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.data_format.CoinsDetailsBuilder;
 import com.vippygames.bianic.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
@@ -39,24 +37,15 @@ public class BinanceRecordsValidation {
 
     public boolean validateRecordsBinance() {
         try {
-            BinanceApi binanceApi = new BinanceApi(mainActivity);
+            BinanceManager binanceManager = new BinanceManager(mainActivity);
 
             ThresholdAllocationDb db = new ThresholdAllocationDb(mainActivity);
             List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecords());
 
-            List<CoinAmount> coinsAmount = binanceApi.getCoinsAmount();
+            List<CoinAmount> coinsAmount = binanceManager.getCoinsAmount();
             validateCoinsFoundInPortfolio(records, coinsAmount);
 
-            CoinPrice usdtCoinPrice = new CoinPrice(BinanceApiConsts.USDT_SYMBOL, 1);
-
-            ThresholdRecordsOperations thresholdRecordsOperations = new ThresholdRecordsOperations();
-            boolean areRecordsContainUsdt = thresholdRecordsOperations.areRecordsContainUsdt(records);
-            String[] coinsSymbols = thresholdRecordsOperations.getCoinsSymbols(records, areRecordsContainUsdt);
-            List<CoinPrice> coinsPrice = binanceApi.getCoinsPrice(coinsSymbols);
-
-            if (areRecordsContainUsdt) {
-                coinsPrice.add(usdtCoinPrice);
-            }
+            List<CoinPrice> coinsPrice = binanceManager.getCoinsPrice(records);
 
             CoinsDetailsBuilder coinsDetailsBuilder = new CoinsDetailsBuilder();
             List<CoinDetails> coinsDetails = coinsDetailsBuilder.getCoinsDetails(records, coinsAmount, coinsPrice);

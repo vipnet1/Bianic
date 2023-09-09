@@ -13,7 +13,6 @@ public class BinanceRecordsValidationTask implements Runnable {
     public void run() {
         BinanceRecordsValidation binanceRecordsValidation = new BinanceRecordsValidation(mainActivity);
         boolean result = binanceRecordsValidation.validateRecordsBinance();
-
         mainActivity.runOnUiThread(() -> mainActivity.onBinanceRecordsValidationTaskFinished(result));
     }
 }

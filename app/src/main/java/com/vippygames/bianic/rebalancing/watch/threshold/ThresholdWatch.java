@@ -6,6 +6,7 @@ import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
+import com.vippygames.bianic.rebalancing.report.ReportCalculations;
 import com.vippygames.bianic.rebalancing.report.ReportGenerator;
 
 import java.util.List;
@@ -30,17 +31,19 @@ public class ThresholdWatch {
 
     // if should rebalance get CoinDetails that is the reason, if not returns null
     private CoinDetails getRebalancingCoinDetailsCause(List<CoinDetails> coinsDetails) {
-        ReportGenerator reportGenerator = new ReportGenerator(context);
-        double portfolioUsdValue = reportGenerator.getAllCoinsUsdValue(coinsDetails);
+        ReportCalculations reportCalculations = new ReportCalculations();
+        double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
 
         ConfigurationManager configurationManager = new ConfigurationManager(context);
         float thresholdRebalancingPercent = configurationManager.getThresholdRebalancingPercent();
 
         for (CoinDetails coinDetails : coinsDetails) {
-            double currentPortfolioPercent = 100 * coinDetails.getTotalUsdValue() / portfolioUsdValue;
+            double currentPortfolioPercent = reportCalculations.getCurrentPortfolioPercent(
+                    coinDetails.getTotalUsdValue(), portfolioUsdValue
+            );
             double desiredPortfolioPercent = coinDetails.getDesiredPortfolioPercent();
 
-            if (reportGenerator.shouldRebalance(thresholdRebalancingPercent, currentPortfolioPercent, desiredPortfolioPercent)) {
+            if (reportCalculations.shouldRebalance(thresholdRebalancingPercent, currentPortfolioPercent, desiredPortfolioPercent)) {
                 return coinDetails;
             }
         }
