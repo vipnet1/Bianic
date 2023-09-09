@@ -396,6 +396,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return false;
         }
 
+        StringUtils stringUtils = new StringUtils();
+        if(!stringUtils.isAlphanumeric(symbolInput)) {
+            Toast.makeText(this, "Symbol must contain only alphanumeric characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 

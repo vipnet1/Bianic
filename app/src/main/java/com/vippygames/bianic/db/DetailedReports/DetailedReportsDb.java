@@ -67,6 +67,17 @@ public class DetailedReportsDb {
                 null);
     }
 
+    public void clearAllDetailedReportsFromDb() {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        sqLiteDatabase.delete(DetailedReportsTableConsts.TABLE_NAME, null, null);
+    }
+
+    public void clearDetailedReportsByReportUuid(String reportUuid) {
+        SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
+        sqLiteDatabase.delete(DetailedReportsTableConsts.TABLE_NAME,
+                DetailedReportsTableConsts.REPORTS_TABLE_UUID_COLUMN + "='" + reportUuid + "'", null);
+    }
+
     public void saveRecords(List<DetailedReportsRecord> records) {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
         sqLiteDatabase.beginTransaction();

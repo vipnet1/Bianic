@@ -173,10 +173,10 @@ public class DetailedReportActivity extends AppCompatActivity {
                 cell.setText(stringUtils.convertDoubleToString(record.getTargetAllocation(), 2) + "%");
                 break;
             case DetailedReportsConsts.QUANTITY_COLUMN_INDEX:
-                cell.setText(stringUtils.convertDoubleToString(record.getTargetAllocation(), 6));
+                cell.setText(stringUtils.convertDoubleToString(record.getQuantity(), 6));
                 break;
             case DetailedReportsConsts.PRICE_COLUMN_INDEX:
-                cell.setText(stringUtils.convertDoubleToString(record.getPrice(), 1) + "$");
+                cell.setText(stringUtils.convertDoubleToString(record.getPrice(), 4) + "$");
                 break;
             case DetailedReportsConsts.CURRENT_VALUE_COLUMN_INDEX:
                 cell.setText(stringUtils.convertDoubleToString(record.getCurrentUsdValue(), 1) + "$");

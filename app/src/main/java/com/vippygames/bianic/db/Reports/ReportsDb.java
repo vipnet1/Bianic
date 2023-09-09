@@ -57,7 +57,8 @@ public class ReportsDb {
 
     public void clearReportFromDb(String reportUuid) {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
-        sqLiteDatabase.delete(ReportsTableConsts.TABLE_NAME, "uuid='" + reportUuid + "'", null);
+        sqLiteDatabase.delete(ReportsTableConsts.TABLE_NAME,
+                ReportsTableConsts.UUID_COLUMN + "='" + reportUuid + "'", null);
     }
 
     public Cursor getRecordsOrderedByCreatedAt() {

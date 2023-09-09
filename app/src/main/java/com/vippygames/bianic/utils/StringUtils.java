@@ -16,6 +16,10 @@ public class StringUtils {
         return new String(text);
     }
 
+    public boolean isAlphanumeric(String text) {
+        return text.matches("^[a-zA-Z0-9]*$");
+    }
+
     public String convertDoubleToString(double number, int digitsAfterDot) {
         BigDecimal bigDecimal = new BigDecimal(String.format("%." + digitsAfterDot + "f", number));
 

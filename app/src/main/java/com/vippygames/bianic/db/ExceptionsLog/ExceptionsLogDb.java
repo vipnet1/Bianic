@@ -46,7 +46,8 @@ public class ExceptionsLogDb {
 
     public void clearExceptionFromDb(String exceptionId) {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
-        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME, "id=" + exceptionId, null);
+        sqLiteDatabase.delete(ExceptionsLogTableConsts.TABLE_NAME,
+                ExceptionsLogTableConsts.ID_COLUMN + "=" + exceptionId, null);
     }
 
     public Cursor getRecordsOrderedByCreatedAt() {

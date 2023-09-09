@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.consts.ReportsConsts;
+import com.vippygames.bianic.db.DetailedReports.DetailedReportsDb;
 import com.vippygames.bianic.db.Reports.ReportsDb;
 import com.vippygames.bianic.db.Reports.ReportsRecord;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
@@ -165,10 +166,11 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     private void handleActionClearAllReports() {
         dynamicLinearLayout.removeAllViews();
 
-        ReportsDb db = new ReportsDb(this);
-        db.clearAllReportsFromDb();
+        ReportsDb reportsDb = new ReportsDb(this);
+        reportsDb.clearAllReportsFromDb();
 
-        // todo: clear all detailed reports
+        DetailedReportsDb detailedReportsDb = new DetailedReportsDb(this);
+        detailedReportsDb.clearAllDetailedReportsFromDb();
     }
 
     private void handleActionClearReport(View recordRoot) {
@@ -176,8 +178,12 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         dynamicLinearLayout.removeView(recordRoot);
 
         String uuid = recordDbUuid.getTag().toString();
-        ReportsDb db = new ReportsDb(this);
-        db.clearReportFromDb(uuid);
+
+        ReportsDb reportsDb = new ReportsDb(this);
+        reportsDb.clearReportFromDb(uuid);
+
+        DetailedReportsDb detailedReportsDb = new DetailedReportsDb(this);
+        detailedReportsDb.clearDetailedReportsByReportUuid(uuid);
 
         // todo: detailed reports
     }

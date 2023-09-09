@@ -52,8 +52,9 @@ public class ThresholdAllocationDb {
     public Cursor getRecords() {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
 
-        return sqLiteDatabase.rawQuery("" +
-                        "SELECT * FROM " + ThresholdAllocationTableConsts.TABLE_NAME,null);
+        return sqLiteDatabase.rawQuery(
+                "SELECT * FROM " + ThresholdAllocationTableConsts.TABLE_NAME,null
+        );
     }
 
     public void clearAndSaveRecords(List<ThresholdAllocationRecord> records) {
