@@ -60,7 +60,6 @@
             android:label="Reports" />
         <activity
             android:name=".DetailedReportActivity"
-            android:screenOrientation="landscape"
             android:label="Detailed Report" />
     </application>
 

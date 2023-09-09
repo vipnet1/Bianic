@@ -14,6 +14,7 @@ public abstract class SharedPrefsConsts {
     public static final String ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED = "are_threshold_validation_records_validated";
     public static final String SHOULD_ADD_FIRST_THRESHOLD_RECORD = "should_add_first_threshold_record";
 
+    public static final String IS_DETAILED_REPORT_ROTATION_LANDSCAPE = "is_detailed_report_rotation_landscape";
 
     public static final String NEXT_NOTIFICATION_TYPE_ID_PREFIX = "next_notification_id_";
 }
