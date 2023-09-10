@@ -59,4 +59,14 @@ public class SharedPreferencesHelper {
 
         return usedPrefsRef.getString(key, "");
     }
+
+    public void deleteKeyIfExists(String key) {
+        if(!usedPrefsRef.contains(key)) {
+            return;
+        }
+
+        SharedPreferences.Editor editor = usedPrefsRef.edit();
+        editor.remove(key);
+        editor.apply();
+    }
 }

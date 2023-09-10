@@ -90,7 +90,7 @@ public class NotificationsHelper {
 
     private int getNotificationIcon(NotificationType notificationType) {
         switch(notificationType) {
-            case REGULAR_MESSAGE:
+            case REBALANCING_AVAILABLE:
                 return R.mipmap.ic_rebalancing_available;
             case NORMAL_EXCEPTION:
                 return R.mipmap.ic_exception;
@@ -106,8 +106,8 @@ public class NotificationsHelper {
     private Bitmap getLargeNotificationIcon(NotificationType notificationType) {
         int largeNotificationNumber = -1;
         switch(notificationType) {
-            case REGULAR_MESSAGE:
-                largeNotificationNumber = R.drawable.ic_launcher_round;
+            case REBALANCING_AVAILABLE:
+                largeNotificationNumber = R.drawable.ic_rebalancing_available_round;
                 break;
             case NORMAL_EXCEPTION:
                 largeNotificationNumber = R.drawable.ic_exception_round;

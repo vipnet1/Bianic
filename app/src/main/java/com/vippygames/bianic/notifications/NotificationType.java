@@ -2,10 +2,10 @@ package com.vippygames.bianic.notifications;
 
 public enum NotificationType {
     REBALANCING_RUNNING(1, 1),
-    REGULAR_MESSAGE(2, 4),
-    NORMAL_EXCEPTION(5, 6),
-    CRITICAL_EXCEPTION(7, 8),
-    FATAL_EXCEPTION(9, 10);
+    REBALANCING_AVAILABLE(2, 2),
+    NORMAL_EXCEPTION(3, 4),
+    CRITICAL_EXCEPTION(5, 6),
+    FATAL_EXCEPTION(7, 8);
 
     private final int minNotificationId;
     private final int maxNotificationId;
