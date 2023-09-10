@@ -7,7 +7,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -72,8 +73,12 @@ public class NotificationsHelper {
         Intent intent = new Intent(context, NotificationsHelper.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
+        int notificationIcon = getNotificationIcon(notificationType);
+        Bitmap largeNotificationIcon = getLargeNotificationIcon(notificationType);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationsConsts.CHANNEL_ID)
-                .setSmallIcon(getNotificationIcon(notificationType))
+                .setSmallIcon(notificationIcon)
+                .setLargeIcon(largeNotificationIcon)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(pendingIntent)
@@ -96,5 +101,28 @@ public class NotificationsHelper {
             default:
                 return R.mipmap.ic_launcher;
         }
+    }
+
+    private Bitmap getLargeNotificationIcon(NotificationType notificationType) {
+        int largeNotificationNumber = -1;
+        switch(notificationType) {
+            case REGULAR_MESSAGE:
+                largeNotificationNumber = R.drawable.ic_launcher_round;
+                break;
+            case NORMAL_EXCEPTION:
+                largeNotificationNumber = R.drawable.ic_exception_round;
+                break;
+            case CRITICAL_EXCEPTION:
+                largeNotificationNumber = R.drawable.ic_critical_exception_round;
+                break;
+            case FATAL_EXCEPTION:
+                largeNotificationNumber = R.drawable.ic_fatal_exception_round;
+                break;
+            default:
+                largeNotificationNumber = R.drawable.ic_launcher_round;
+                break;
+        }
+
+        return BitmapFactory.decodeResource(context.getResources() , largeNotificationNumber);
     }
 }
