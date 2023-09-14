@@ -138,10 +138,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
         StringUtils stringUtils = new StringUtils();
         tvTotalUsd.setText(stringUtils.convertDoubleToString(record.getPortfolioUsdValue(), 1));
-        tvThreshold.setText(stringUtils.convertDoubleToString(record.getThresholdRebalancingPercent(), 3));
+        tvThreshold.setText(stringUtils.convertDoubleToString(record.getThresholdRebalancingPercent(), 3) + "%");
         tvCoins.setText(String.valueOf(record.getCoinsCount()));
         tvHighestDeviationCoin.setText(record.getHighestDeviationCoin());
-        tvHighestDeviationPercent.setText(stringUtils.convertDoubleToString(record.getHighestDeviationPercent(), 3));
+        tvHighestDeviationPercent.setText(stringUtils.convertDoubleToString(record.getHighestDeviationPercent(), 3) + "%");
 
         btnDetails.setOnClickListener(this);
         btnClearReport.setOnClickListener(this);
