@@ -1,7 +1,11 @@
 package com.vippygames.bianic.utils;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
+import java.util.TimeZone;
 
 public class StringUtils {
     public String generateRandomString(int length) {
@@ -14,6 +18,22 @@ public class StringUtils {
         }
 
         return new String(text);
+    }
+
+    public String convertUtcToLocalTime(String utcTime) {
+        try {
+            String format = "yyyy-MM-dd HH:mm:ss";
+
+            SimpleDateFormat utcFormat = new SimpleDateFormat(format);
+            utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = utcFormat.parse(utcTime);
+
+            SimpleDateFormat localFormat = new SimpleDateFormat(format);
+            localFormat.setTimeZone(TimeZone.getDefault());
+            return localFormat.format(date);
+        } catch (Exception e) {
+            return "UTC TIME: " + utcTime;
+        }
     }
 
     public boolean isAlphanumeric(String text) {

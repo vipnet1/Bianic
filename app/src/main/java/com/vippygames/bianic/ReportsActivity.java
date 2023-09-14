@@ -123,8 +123,9 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         Button btnDetails = recordRoot.findViewById(R.id.btn_details);
         Button btnClearReport = recordRoot.findViewById(R.id.btn_clear_report);
 
+        StringUtils stringUtils = new StringUtils();
         tvRecordDbUuid.setTag(record.getUuid());
-        tvCreatedAt.setText(record.getCreatedAt());
+        tvCreatedAt.setText(stringUtils.convertUtcToLocalTime(record.getCreatedAt()));
 
         if (record.shouldRebalance()) {
             tvPassedThreshold.setVisibility(View.VISIBLE);
@@ -136,7 +137,6 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             recordRoot.setBackgroundColor(Color.rgb(209, 219, 230));
         }
 
-        StringUtils stringUtils = new StringUtils();
         tvTotalUsd.setText(stringUtils.convertDoubleToString(record.getPortfolioUsdValue(), 1));
         tvThreshold.setText(stringUtils.convertDoubleToString(record.getThresholdRebalancingPercent(), 3) + "%");
         tvCoins.setText(String.valueOf(record.getCoinsCount()));

@@ -101,14 +101,14 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
             recordRoot.setBackgroundColor(Color.rgb(244, 107, 102));
         }
 
+        StringUtils stringUtils = new StringUtils();
         tvRecordDbId.setTag(record.getId());
-        tvCreatedAt.setText(record.getCreatedAt());
+        tvCreatedAt.setText(stringUtils.convertUtcToLocalTime(record.getCreatedAt()));
         tvSeverity.setText(severity);
         tvMessage.setText(record.getMessage());
 
         btnClearException.setOnClickListener(this);
 
-        StringUtils stringUtils = new StringUtils();
         String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
         String childrenTag = ROOT_TAG_PREFIX + recordTag;
 
