@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
+import com.vippygames.bianic.notifications.NotificationsHelper;
+import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.rebalancing.schedule.RebalancingReceiver;
 import com.vippygames.bianic.rebalancing.schedule.RebalancingStartService;
 
@@ -174,16 +176,29 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
+    private boolean isShouldRebalanceInputValid(boolean shouldRebalance) {
+        NotificationPermissions notificationPermissions = new NotificationPermissions();
+        if (shouldRebalance && !notificationPermissions.havePostNotificationsPermission(this)) {
+            Toast.makeText(this, "Need notifications permission to run rebalancing check", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
     private void handleActionSave() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
 
         int previousValidationInterval = configurationManager.getValidationInterval();
         int previousIsRebalancingActivated = configurationManager.isRebalancingActivated();
+        boolean shouldRebalanceInput = btnDeactivate.getVisibility() == View.VISIBLE;
 
         String validationIntervalText = edtValidationInterval.getText().toString();
         String thresholdRebalancingPercentText = edtThresholdRebalancingPercent.getText().toString();
 
-        if (!isValidationIntervalInputValid(validationIntervalText) || !isThresholdRebalancingPercentInputValid(thresholdRebalancingPercentText)) {
+        if (!isValidationIntervalInputValid(validationIntervalText)
+                || !isThresholdRebalancingPercentInputValid(thresholdRebalancingPercentText)
+                || !isShouldRebalanceInputValid(shouldRebalanceInput)) {
             return;
         }
 
@@ -199,10 +214,10 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         float thresholdRebalancingPercent = Float.parseFloat(thresholdRebalancingPercentText);
         configurationManager.setThresholdRebalancingPercent(thresholdRebalancingPercent);
 
-        if (btnActivate.getVisibility() == View.VISIBLE) {
-            configurationManager.setIsRebalancingActivated(0);
-        } else {
+        if (shouldRebalanceInput) {
             configurationManager.setIsRebalancingActivated(1);
+        } else {
+            configurationManager.setIsRebalancingActivated(0);
         }
 
         int newValidationInterval = configurationManager.getValidationInterval();
