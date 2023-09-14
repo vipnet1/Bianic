@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
+import com.vippygames.bianic.rebalancing.schedule.RebalancingReceiver;
 import com.vippygames.bianic.rebalancing.schedule.RebalancingStartService;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
@@ -221,6 +222,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
             if (newIsRebalancingActivated == 1 && previousValidationInterval != newValidationInterval) {
                 Intent startIntent = new Intent(getApplicationContext(), RebalancingStartService.class);
                 stopService(startIntent);
+                sendCancelAlarmBroadcast();
                 startForegroundService(startIntent);
             }
         } else {
@@ -229,8 +231,15 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
                 startForegroundService(startIntent);
             } else {
                 stopService(startIntent);
+                sendCancelAlarmBroadcast();
             }
         }
+    }
+
+    private void sendCancelAlarmBroadcast() {
+        Intent intent = new Intent(this, RebalancingReceiver.class);
+        intent.putExtra(ConfigurationConsts.CANCEL_ALARM_EXTRA, true);
+        sendBroadcast(intent);
     }
 
     private void initOperations() {
