@@ -28,60 +28,37 @@ public class NotificationsHelper {
 
     // suppressed because checking for permission in NotificationPermission
     @SuppressLint("MissingPermission")
-    public NotificationInfo pushNotification(NotificationType notificationType, String title, String text) {
+    public NotificationInfo pushNotification(NotificationType notificationType, String title, String text, boolean isPersistent) {
         NotificationPermissions notificationPermissions = new NotificationPermissions();
-        if(!notificationPermissions.havePostNotificationsPermission(context)) {
+        if (!notificationPermissions.havePostNotificationsPermission(context)
+                || !notificationPermissions.isChannelEnabled(context, notificationType)) {
             return null;
         }
 
         createNotificationChannel(notificationType);
 
-        Notification notification = buildRegularNotification(notificationType, title, text).build();
-        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+        NotificationCompat.Builder notificationBuilder = buildRegularNotification(notificationType, title, text);
+        if(isPersistent) {
+            notificationBuilder = buildPersistentNotification(notificationBuilder);
+        }
+
+        Notification notification = notificationBuilder.build();
 
         int notificationId = getNextNotificationId(notificationType);
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
         manager.notify(notificationId, notification);
 
         return new NotificationInfo(notification, notificationId);
     }
 
-    @SuppressLint("MissingPermission")
-    public NotificationInfo getRebalancingCheckNotification(String title, String text) {
-        NotificationPermissions notificationPermissions = new NotificationPermissions();
-        if(!notificationPermissions.havePostNotificationsPermission(context)) {
-            return null;
-        }
-
-        createNotificationChannel(NotificationType.REBALANCING_RUNNING);
-
-        NotificationCompat.Builder notificationBuilder = buildRegularNotification(NotificationType.REBALANCING_RUNNING, title, text);
-        Notification notification = buildPersistentNotification(notificationBuilder).build();
-
-        // for some reason foreground service with notification id 0 not shown causes error
-        return new NotificationInfo(notification, 1);
-    }
-
-    // as called after notification check in receiver not need here to check again
-    @SuppressLint("MissingPermission")
-    public void updateRebalancingCheckNotification(String title, String text) {
-        createNotificationChannel(NotificationType.REBALANCING_RUNNING);
-
-        NotificationCompat.Builder notificationBuilder = buildRegularNotification(NotificationType.REBALANCING_RUNNING, title, text);
-        Notification notification = buildPersistentNotification(notificationBuilder).build();
-
-        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-        manager.notify(1, notification);
-    }
-
     private int getNextNotificationId(NotificationType notificationType) {
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
         String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.getChannelId();
-        int notificationId = sharedPreferencesHelper.getInt(sp_key, 0);
+        int notificationId = sharedPreferencesHelper.getInt(sp_key, notificationType.getMinNotificationId());
 
-        if(notificationId > notificationType.getMaxNotificationsCount()) {
-            sharedPreferencesHelper.setInt(sp_key, 0);
-        }
-        else {
+        if (notificationId >= notificationType.getMaxNotificationId()) {
+            sharedPreferencesHelper.setInt(sp_key, notificationType.getMinNotificationId());
+        } else {
             sharedPreferencesHelper.setInt(sp_key, notificationId + 1);
         }
 
@@ -89,6 +66,11 @@ public class NotificationsHelper {
     }
 
     private void createNotificationChannel(NotificationType notificationType) {
+        NotificationPermissions notificationPermissions = new NotificationPermissions();
+        if(notificationPermissions.isChannelExists(context, notificationType)) {
+            return;
+        }
+
         NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription(notificationType.getChannelDescription());
         NotificationManager manager = context.getSystemService(NotificationManager.class);
@@ -109,11 +91,11 @@ public class NotificationsHelper {
     }
 
     private NotificationCompat.Builder buildPersistentNotification(NotificationCompat.Builder builder) {
-        return builder.setOngoing(true).setSilent(true);
+        return builder.setOngoing(true).setOnlyAlertOnce(true);
     }
 
     private int getNotificationIcon(NotificationType notificationType) {
-        switch(notificationType) {
+        switch (notificationType) {
             case REBALANCING_AVAILABLE:
                 return R.mipmap.ic_rebalancing_available;
             case NORMAL_EXCEPTION:
@@ -129,7 +111,7 @@ public class NotificationsHelper {
 
     private Bitmap getLargeNotificationIcon(NotificationType notificationType) {
         int largeNotificationNumber = -1;
-        switch(notificationType) {
+        switch (notificationType) {
             case REBALANCING_AVAILABLE:
                 largeNotificationNumber = R.drawable.ic_rebalancing_available_round;
                 break;
@@ -147,6 +129,6 @@ public class NotificationsHelper {
                 break;
         }
 
-        return BitmapFactory.decodeResource(context.getResources() , largeNotificationNumber);
+        return BitmapFactory.decodeResource(context.getResources(), largeNotificationNumber);
     }
 }

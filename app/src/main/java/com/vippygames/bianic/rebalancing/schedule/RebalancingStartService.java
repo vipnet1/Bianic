@@ -24,8 +24,8 @@ public class RebalancingStartService extends Service {
         super.onCreate();
 
         NotificationsHelper notificationsHelper = new NotificationsHelper(this);
-        NotificationInfo notificationInfo = notificationsHelper.getRebalancingCheckNotification("Rebalancing Check",
-                "Checking whether should rebalance");
+        NotificationInfo notificationInfo = notificationsHelper.pushNotification(NotificationType.REBALANCING_RUNNING,
+                "Rebalancing Check", "Checking whether should rebalance", true);
         startForeground(notificationInfo.getNotificationId(), notificationInfo.getNotification());
     }
 

@@ -36,6 +36,11 @@ public class NotificationPermissions {
         return channel == null ||  channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
     }
 
+    public boolean isChannelExists(Context context, NotificationType notificationType) {
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+         return manager.getNotificationChannel(notificationType.getChannelId()) != null;
+    }
+
     public void requestPostNotificationsPermission(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
