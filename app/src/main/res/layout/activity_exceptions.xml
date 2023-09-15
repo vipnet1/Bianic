@@ -7,19 +7,6 @@
     android:orientation="vertical"
     tools:context=".ExceptionsActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
-        android:text="* Exception times shown in UTC *"
-        android:textAlignment="center"
-        android:textColor="#235C91"
-        android:textSize="15sp"
-        android:textStyle="bold" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

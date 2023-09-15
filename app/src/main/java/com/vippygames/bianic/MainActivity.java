@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binanceRecordsValidationDialog.dismiss();
 
         if (!result) {
+            Toast.makeText(this, "Failed validating records. View exception for details."
+                    , Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -255,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        symbolBeforeEdit = symbol;
+        symbolBeforeEdit = symbol.toUpperCase();
         allocationBeforeEdit = allocation;
 
         handleActionCancel();

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -49,7 +50,7 @@ public class StringUtils {
     }
 
     public String convertDoubleToString(double number, int digitsAfterDot) {
-        BigDecimal bigDecimal = new BigDecimal(String.format("%." + digitsAfterDot + "f", number));
+        BigDecimal bigDecimal = new BigDecimal(String.format(Locale.ENGLISH, "%." + digitsAfterDot + "f", number));
 
         // Added because there is a bug when number is zero trailing zero's aren't removed
         BigDecimal zero = BigDecimal.ZERO;
