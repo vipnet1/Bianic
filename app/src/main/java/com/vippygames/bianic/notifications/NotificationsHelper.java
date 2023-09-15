@@ -14,7 +14,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.vippygames.bianic.R;
-import com.vippygames.bianic.consts.NotificationsConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
@@ -33,7 +32,7 @@ public class NotificationsHelper {
             return;
         }
 
-        createNotificationChannel();
+        createNotificationChannel(notificationType);
         Notification notification = getNotification(notificationType, title, text, false);
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
@@ -42,18 +41,18 @@ public class NotificationsHelper {
     }
 
     public Notification getPersistentNotification(NotificationType notificationType, String title, String text) {
-        createNotificationChannel();
+        createNotificationChannel(notificationType);
         return getNotification(notificationType, title, text, true);
     }
 
     public int getNextNotificationId(NotificationType notificationType) {
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
-        String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.toString();
+        String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.getChannelId();
 
-        int notificationId = sharedPreferencesHelper.getInt(sp_key, notificationType.getMinNotificationId());
+        int notificationId = sharedPreferencesHelper.getInt(sp_key, 0);
 
-        if(notificationId >= notificationType.getMaxNotificationId()) {
-            sharedPreferencesHelper.setInt(sp_key, notificationType.getMinNotificationId());
+        if(notificationId >= notificationType.getMaxNotificationsCount()) {
+            sharedPreferencesHelper.setInt(sp_key, 0);
         }
         else {
             sharedPreferencesHelper.setInt(sp_key, notificationId + 1);
@@ -62,9 +61,9 @@ public class NotificationsHelper {
         return notificationId;
     }
 
-    private void createNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(NotificationsConsts.CHANNEL_ID, NotificationsConsts.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription(NotificationsConsts.CHANNEL_DESCRIPTION);
+    private void createNotificationChannel(NotificationType notificationType) {
+        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(notificationType.getChannelDescription());
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
     }
@@ -76,7 +75,7 @@ public class NotificationsHelper {
         int notificationIcon = getNotificationIcon(notificationType);
         Bitmap largeNotificationIcon = getLargeNotificationIcon(notificationType);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationsConsts.CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationType.getChannelId())
                 .setSmallIcon(notificationIcon)
                 .setLargeIcon(largeNotificationIcon)
                 .setContentTitle(title)

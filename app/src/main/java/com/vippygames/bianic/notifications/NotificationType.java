@@ -29,7 +29,7 @@ public enum NotificationType {
         return channelDescription;
     }
 
-    public int maxNotificationsCount() {
+    public int getMaxNotificationsCount() {
         return maxNotificationsCount;
     }
 
