@@ -62,16 +62,13 @@ public class NotificationsHelper {
     }
 
     private void createNotificationChannel(NotificationType notificationType) {
-        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_HIGH);
         channel.setDescription(notificationType.getChannelDescription());
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
     }
 
     private Notification getNotification(NotificationType notificationType, String title, String text, boolean setOngoing) {
-        Intent intent = new Intent(context, NotificationsHelper.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
         int notificationIcon = getNotificationIcon(notificationType);
         Bitmap largeNotificationIcon = getLargeNotificationIcon(notificationType);
 
@@ -80,7 +77,7 @@ public class NotificationsHelper {
                 .setLargeIcon(largeNotificationIcon)
                 .setContentTitle(title)
                 .setContentText(text)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(null)
                 .setAutoCancel(false)
                 .setOngoing(setOngoing);
 
