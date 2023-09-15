@@ -17,6 +17,7 @@ public class BatteryPermissions {
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         return powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
     }
+
     public void requestIgnoreBatteryOptimizations() {
         Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
         intent.setData(Uri.parse("package:" + context.getPackageName()));

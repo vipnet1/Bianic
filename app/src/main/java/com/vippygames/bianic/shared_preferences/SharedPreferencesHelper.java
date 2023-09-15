@@ -41,7 +41,7 @@ public class SharedPreferencesHelper {
     }
 
     public int getInt(String key) throws KeyNotFoundException {
-        if(!usedPrefsRef.contains(key)) {
+        if (!usedPrefsRef.contains(key)) {
             throw new KeyNotFoundException(key);
         }
 
@@ -61,7 +61,7 @@ public class SharedPreferencesHelper {
     }
 
     public String getString(String key) throws KeyNotFoundException {
-        if(!usedPrefsRef.contains(key)) {
+        if (!usedPrefsRef.contains(key)) {
             throw new KeyNotFoundException(key);
         }
 
@@ -69,7 +69,7 @@ public class SharedPreferencesHelper {
     }
 
     public void deleteKeyIfExists(String key) {
-        if(!usedPrefsRef.contains(key)) {
+        if (!usedPrefsRef.contains(key)) {
             return;
         }
 

@@ -51,7 +51,7 @@ public class ConfigurationManager {
 
     public void setApiKey(String apiKey) {
         // if key empty delete it so we get exception before starting binance data retrieval logic
-        if(apiKey.isEmpty()) {
+        if (apiKey.isEmpty()) {
             encryptedSharedPreferencesHelper.deleteKeyIfExists(SharedPrefsConsts.BINANCE_API_KEY);
             return;
         }
@@ -61,7 +61,7 @@ public class ConfigurationManager {
 
     public void setSecretKey(String secretKey) {
         // if key empty delete it so we get exception before starting binance data retrieval logic
-        if(secretKey.isEmpty()) {
+        if (secretKey.isEmpty()) {
             encryptedSharedPreferencesHelper.deleteKeyIfExists(SharedPrefsConsts.BINANCE_SECRET_KEY);
             return;
         }

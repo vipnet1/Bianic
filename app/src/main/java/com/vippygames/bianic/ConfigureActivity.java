@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
 import com.vippygames.bianic.notifications.NotificationType;
-import com.vippygames.bianic.notifications.NotificationsHelper;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.rebalancing.schedule.RebalancingReceiver;
 import com.vippygames.bianic.rebalancing.schedule.RebalancingStartService;
@@ -180,13 +179,13 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
     private boolean isShouldRebalanceInputValid(boolean shouldRebalance) {
         NotificationPermissions notificationPermissions = new NotificationPermissions();
 
-        if(shouldRebalance) {
+        if (shouldRebalance) {
             if (!notificationPermissions.havePostNotificationsPermission(this)) {
                 Toast.makeText(this, "Need notifications permission to run rebalancing check", Toast.LENGTH_LONG).show();
                 return false;
             }
 
-            if(!notificationPermissions.isChannelEnabled(this, NotificationType.REBALANCING_RUNNING)) {
+            if (!notificationPermissions.isChannelEnabled(this, NotificationType.REBALANCING_RUNNING)) {
                 Toast.makeText(this, "Enable rebalancing check notification channel.", Toast.LENGTH_LONG).show();
                 return false;
             }

@@ -14,14 +14,14 @@ public abstract class SqlCommonQueries {
             ThresholdAllocationTableConsts.CREATED_AT_COLUMN + " TEXT DEFAULT CURRENT_TIMESTAMP);";
 
     public static final String CREATE_EXCEPTIONS_LOG_TABLE = "" +
-            "CREATE TABLE "+ ExceptionsLogTableConsts.TABLE_NAME +"(" +
+            "CREATE TABLE " + ExceptionsLogTableConsts.TABLE_NAME + "(" +
             ExceptionsLogTableConsts.ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             ExceptionsLogTableConsts.SEVERITY_COLUMN + " TEXT NOT NULL," +
             ExceptionsLogTableConsts.MESSAGE_COLUMN + " TEXT," +
             ExceptionsLogTableConsts.CREATED_AT_COLUMN + " TEXT DEFAULT CURRENT_TIMESTAMP);";
 
     public static final String CREATE_REPORTS_TABLE = "" +
-            "CREATE TABLE "+ ReportsTableConsts.TABLE_NAME +"(" +
+            "CREATE TABLE " + ReportsTableConsts.TABLE_NAME + "(" +
             ReportsTableConsts.UUID_COLUMN + " TEXT PRIMARY KEY," +
             ReportsTableConsts.SHOULD_REBALANCE_COLUMN + " BOOLEAN," +
             ReportsTableConsts.PORTFOLIO_USD_VALUE + " REAL," +
@@ -32,7 +32,7 @@ public abstract class SqlCommonQueries {
             ReportsTableConsts.CREATED_AT_COLUMN + " TEXT DEFAULT CURRENT_TIMESTAMP);";
 
     public static final String CREATE_DETAILED_REPORTS_TABLE = "" +
-            "CREATE TABLE "+ DetailedReportsTableConsts.TABLE_NAME +"(" +
+            "CREATE TABLE " + DetailedReportsTableConsts.TABLE_NAME + "(" +
             DetailedReportsTableConsts.UUID_COLUMN + " TEXT PRIMARY KEY," +
             DetailedReportsTableConsts.REPORTS_TABLE_UUID_COLUMN + " TEXT NOT NULL," +
             DetailedReportsTableConsts.COIN_COLUMN + " TEXT," +

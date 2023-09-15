@@ -18,11 +18,11 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     }
 
     public static SQLiteDatabase getWriteableDatabaseInstance(Context context) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new SqliteDbHelper(context);
         }
 
-        if(writeableDatabaseInstance == null) {
+        if (writeableDatabaseInstance == null) {
             writeableDatabaseInstance = instance.getWritableDatabase();
         }
 

@@ -63,7 +63,7 @@ public class ExceptionsLogDb {
     }
 
     public void saveRecord(ExceptionsLogRecord record) {
-        if(getRecordsCount() >= ExceptionsLogConsts.MAX_STORED_EXCEPTION_COUNT) {
+        if (getRecordsCount() >= ExceptionsLogConsts.MAX_STORED_EXCEPTION_COUNT) {
             freeSpace();
         }
 
@@ -93,7 +93,7 @@ public class ExceptionsLogDb {
     private void freeSpace() {
         SQLiteDatabase sqLiteDatabase = SqliteDbHelper.getWriteableDatabaseInstance(context);
         String whereClause = ExceptionsLogTableConsts.ID_COLUMN + " IN (SELECT "
-                + ExceptionsLogTableConsts.ID_COLUMN + " FROM "+ ExceptionsLogTableConsts.TABLE_NAME
+                + ExceptionsLogTableConsts.ID_COLUMN + " FROM " + ExceptionsLogTableConsts.TABLE_NAME
                 + " ORDER BY " + ExceptionsLogTableConsts.CREATED_AT_COLUMN + " LIMIT "
                 + ExceptionsLogConsts.STORED_EXCEPTIONS_DELETE_PER_QUERY + ")";
 

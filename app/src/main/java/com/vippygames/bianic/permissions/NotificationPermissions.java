@@ -5,18 +5,12 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.PowerManager;
-import android.provider.Settings;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.vippygames.bianic.MainActivity;
 import com.vippygames.bianic.notifications.NotificationType;
 
 public class NotificationPermissions {
@@ -33,12 +27,12 @@ public class NotificationPermissions {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel channel = manager.getNotificationChannel(notificationType.getChannelId());
 
-        return channel == null ||  channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
+        return channel == null || channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
     }
 
     public boolean isChannelExists(Context context, NotificationType notificationType) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-         return manager.getNotificationChannel(notificationType.getChannelId()) != null;
+        return manager.getNotificationChannel(notificationType.getChannelId()) != null;
     }
 
     public void requestPostNotificationsPermission(Activity activity) {

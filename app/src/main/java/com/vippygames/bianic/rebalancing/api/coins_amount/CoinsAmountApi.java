@@ -15,7 +15,6 @@ import okhttp3.ResponseBody;
 
 public class CoinsAmountApi {
     /**
-     *
      * @param responseBody The response body
      * @return The coins amount I have for each coin. If none doesn't count that record
      * @throws CoinsAmountParseException Exception occurred in this function

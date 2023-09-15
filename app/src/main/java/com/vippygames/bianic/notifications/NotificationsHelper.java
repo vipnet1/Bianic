@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -17,7 +15,6 @@ import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
-import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 public class NotificationsHelper {
     private final Context context;
@@ -38,7 +35,7 @@ public class NotificationsHelper {
         createNotificationChannel(notificationType);
 
         NotificationCompat.Builder notificationBuilder = buildRegularNotification(notificationType, title, text);
-        if(isPersistent) {
+        if (isPersistent) {
             notificationBuilder = buildPersistentNotification(notificationBuilder);
         }
 
@@ -67,7 +64,7 @@ public class NotificationsHelper {
 
     private void createNotificationChannel(NotificationType notificationType) {
         NotificationPermissions notificationPermissions = new NotificationPermissions();
-        if(notificationPermissions.isChannelExists(context, notificationType)) {
+        if (notificationPermissions.isChannelExists(context, notificationType)) {
             return;
         }
 

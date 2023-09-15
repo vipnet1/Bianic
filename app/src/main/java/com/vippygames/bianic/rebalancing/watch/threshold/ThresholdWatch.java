@@ -20,7 +20,7 @@ public class ThresholdWatch {
 
     public void check(List<CoinDetails> coinsDetails) {
         CoinDetails coinDetails = getRebalancingCoinDetailsCause(coinsDetails);
-        if(coinDetails == null) {
+        if (coinDetails == null) {
             return;
         }
 

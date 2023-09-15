@@ -10,16 +10,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textStyle="bold"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
-        android:textAlignment="center"
         android:text="Please, configure the keys in Binance as READ ONLY!"
+        android:textAlignment="center"
         android:textColor="#F44336"
-        />
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,233 +29,223 @@
             android:id="@+id/layout_dynamic_configure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="Api Key"
+                android:textAlignment="center"
                 android:textColor="#2F3E4C"
-                />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edt_api_key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:inputType="textPassword"
                 android:enabled="true"
-                android:hint="Api Key" />
+                android:hint="Api Key"
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/btn_show_beginning_api"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#9C27B0"
                 android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
-                android:layout_marginTop="5dp"
-                android:visibility="visible"
-                android:text="Show Beginning Of Api" />
+                android:backgroundTint="#9C27B0"
+                android:text="Show Beginning Of Api"
+                android:visibility="visible" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="Secret Key"
+                android:textAlignment="center"
                 android:textColor="#2F3E4C"
-                />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edt_secret_key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:inputType="textPassword"
                 android:enabled="true"
-                android:hint="Secret Key" />
+                android:hint="Secret Key"
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/btn_show_beginning_secret"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#9C27B0"
                 android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
-                android:layout_marginTop="5dp"
-                android:visibility="visible"
-                android:text="Show Beginning Of Secret" />
+                android:backgroundTint="#9C27B0"
+                android:text="Show Beginning Of Secret"
+                android:visibility="visible" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="Validation Interval"
+                android:textAlignment="center"
                 android:textColor="#2F3E4C"
-                />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="Every how many MINUTES check whether should rebalance. Doing it often may drain your battery faster."
                 android:textColor="#2F3E4C"
-                />
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edt_validation_interval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:inputType="number"
                 android:enabled="true"
-                android:maxLength="6"
-                android:hint="Validation interval in minutes" />
+                android:hint="Validation interval in minutes"
+                android:inputType="number"
+                android:maxLength="6" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="Threshold Rebalancing Percent"
+                android:textAlignment="center"
                 android:textColor="#2F3E4C"
-                />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="By what percent ANY COIN INITIAL ALLOCATION have to go up/down for you to get notified. We threat the coins that you added in the main page as your whole portfolio even if you have other coins."
                 android:textColor="#2F3E4C"
-                />
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="Suppose you have 30% BTC and 70% ETH of your total portfolio, and you put 10 in the setting below. Some day BTC went up and now above 33% of your whole portfolio. BTC went up by more than 10% of it's initial allocation so you will get notified."
                 android:textColor="#275581"
-                />
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edt_threshold_rebalancing_percent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:inputType="numberDecimal"
                 android:enabled="true"
-                android:maxLength="9"
-                android:hint="Threshold rebalancing percent" />
+                android:hint="Threshold rebalancing percent"
+                android:inputType="numberDecimal"
+                android:maxLength="9" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="Rebalancing Check Activation"
+                android:textAlignment="center"
                 android:textColor="#2F3E4C"
-                />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btn_activate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#4CAF50"
                 android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
-                android:visibility="visible"
-                android:text="Activate" />
+                android:backgroundTint="#4CAF50"
+                android:text="Activate"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btn_deactivate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#E91E63"
                 android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
-                android:visibility="gone"
-                android:text="Deactivate" />
+                android:backgroundTint="#E91E63"
+                android:text="Deactivate"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:background="#03A9F4"
-                />
+                android:background="#03A9F4" />
 
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#4CAF50"
                 android:layout_marginStart="40dp"
+                android:layout_marginTop="60dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="60dp"
-                android:visibility="visible"
-                android:text="Save" />
+                android:backgroundTint="#4CAF50"
+                android:text="Save"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btn_revert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#9C27B0"
                 android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
-                android:layout_marginTop="5dp"
-                android:visibility="visible"
-                android:text="Revert" />
+                android:backgroundTint="#9C27B0"
+                android:text="Revert"
+                android:visibility="visible" />
 
         </LinearLayout>
     </ScrollView>

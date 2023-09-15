@@ -38,9 +38,9 @@ public class ManualReportGeneration {
             return true;
 
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
-                | SignatureGenerationException | CoinsPriceParseException
-                | CoinsAmountParseException | CoinsDetailsBuilderException
-                | KeyNotFoundException e) {
+                 | SignatureGenerationException | CoinsPriceParseException
+                 | CoinsAmountParseException | CoinsDetailsBuilderException
+                 | KeyNotFoundException e) {
             showToast("Exception occurred. View exceptions for more details.");
 
             ExceptionHandler exceptionHandler = new ExceptionHandler(reportsActivity);

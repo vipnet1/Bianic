@@ -44,7 +44,7 @@ public class ReportGenerator {
             double deviationPercent = reportCalculations.getDeviationPercent(currentPortfolioPercent, desiredPortfolioPercent);
             double absDeviationPercent = Math.abs(deviationPercent);
 
-            if(absDeviationPercent > absHighestDeviationPercent) {
+            if (absDeviationPercent > absHighestDeviationPercent) {
                 absHighestDeviationPercent = absDeviationPercent;
                 highestDeviationPercent = deviationPercent;
                 highestDeviationSymbol = coinDetails.getSymbol();

@@ -59,7 +59,7 @@ public class BinanceApi {
             FailedRequestStatusException, EmptyResponseBodyException,
             CoinsPriceParseException {
 
-        if(symbols.length == 0) {
+        if (symbols.length == 0) {
             return new ArrayList<>();
         }
 

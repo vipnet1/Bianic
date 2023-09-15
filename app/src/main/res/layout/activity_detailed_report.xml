@@ -6,8 +6,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_margin="5dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -22,77 +22,77 @@
                 <TableRow
                     android:id="@+id/columns_table_row"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="#FFC107"
+                        android:gravity="center"
+                        android:padding="16dp"
                         android:text="Coin"
-                        android:textSize="18sp"
                         android:textColor="#FFFFFF"
-                        android:background="#FFC107"
-                        android:padding="16dp"
-                        android:gravity="center" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="#4CAF50"
+                        android:gravity="center"
+                        android:padding="16dp"
                         android:text="Target Allocation"
-                        android:textSize="18sp"
                         android:textColor="#FFFFFF"
-                        android:background="#4CAF50"
-                        android:padding="16dp"
-                        android:gravity="center" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="#F44336"
+                        android:gravity="center"
+                        android:padding="16dp"
                         android:text="Quantity"
-                        android:textSize="18sp"
                         android:textColor="#FFFFFF"
-                        android:background="#F44336"
-                        android:padding="16dp"
-                        android:gravity="center" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="#FFC107"
+                        android:gravity="center"
+                        android:padding="16dp"
                         android:text="Price"
-                        android:textSize="18sp"
                         android:textColor="#FFFFFF"
-                        android:background="#FFC107"
-                        android:padding="16dp"
-                        android:gravity="center" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Current Value"
-                        android:textSize="18sp"
-                        android:textColor="#FFFFFF"
                         android:background="#4CAF50"
+                        android:gravity="center"
                         android:padding="16dp"
-                        android:gravity="center" />
+                        android:text="Current Value"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Current Allocation"
-                        android:textSize="18sp"
-                        android:textColor="#FFFFFF"
                         android:background="#F44336"
+                        android:gravity="center"
                         android:padding="16dp"
-                        android:gravity="center" />
+                        android:text="Current Allocation"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Target Quantity"
-                        android:textSize="18sp"
-                        android:textColor="#FFFFFF"
                         android:background="#FFC107"
+                        android:gravity="center"
                         android:padding="16dp"
-                        android:gravity="center" />
+                        android:text="Target Quantity"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
                 </TableRow>
 
                 <TextView

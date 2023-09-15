@@ -2,7 +2,6 @@ package com.vippygames.bianic;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean haveBatteryPermission = batteryPermissions.isIgnoringBatteryOptimizations();
         boolean haveNotificationPermission = notificationPermissions.havePostNotificationsPermission(this);
 
-        if(!haveBatteryPermission || !haveNotificationPermission) {
+        if (!haveBatteryPermission || !haveNotificationPermission) {
             showRequestPermissionsDialog();
         }
     }
@@ -169,11 +168,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BatteryPermissions batteryPermissions = new BatteryPermissions(this);
         NotificationPermissions notificationPermissions = new NotificationPermissions();
 
-        if(!batteryPermissions.isIgnoringBatteryOptimizations()) {
+        if (!batteryPermissions.isIgnoringBatteryOptimizations()) {
             batteryPermissions.requestIgnoreBatteryOptimizations();
         }
 
-        if(!notificationPermissions.havePostNotificationsPermission(this)) {
+        if (!notificationPermissions.havePostNotificationsPermission(this)) {
             notificationPermissions.requestPostNotificationsPermission(this);
         }
     }

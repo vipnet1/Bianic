@@ -55,9 +55,9 @@ public class BinanceRecordsValidation {
             return true;
 
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
-                | SignatureGenerationException | CoinsPriceParseException
-                | CoinsAmountParseException | CoinsDetailsBuilderException
-                | KeyNotFoundException | FailedValidateRecordsException e) {
+                 | SignatureGenerationException | CoinsPriceParseException
+                 | CoinsAmountParseException | CoinsDetailsBuilderException
+                 | KeyNotFoundException | FailedValidateRecordsException e) {
             ExceptionHandler exceptionHandler = new ExceptionHandler(mainActivity);
             exceptionHandler.handleException(e);
         } catch (Exception e) {

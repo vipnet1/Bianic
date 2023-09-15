@@ -39,9 +39,9 @@ public class Rebalancer {
             thresholdWatch.check(coinsDetails);
 
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
-                | SignatureGenerationException | CoinsPriceParseException
-                | CoinsAmountParseException | CoinsDetailsBuilderException
-                | KeyNotFoundException | UnvalidatedRecordsException e) {
+                 | SignatureGenerationException | CoinsPriceParseException
+                 | CoinsAmountParseException | CoinsDetailsBuilderException
+                 | KeyNotFoundException | UnvalidatedRecordsException e) {
             ExceptionHandler exceptionHandler = new ExceptionHandler(context);
             exceptionHandler.handleException(e);
         } catch (Exception e) {

@@ -9,7 +9,7 @@ import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 public class RecordsValidationCheck {
     private final Context context;
 
-    public RecordsValidationCheck(Context context ){
+    public RecordsValidationCheck(Context context) {
         this.context = context;
     }
 

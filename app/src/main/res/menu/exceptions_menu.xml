@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/redirect_main"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/redirect_main"
         android:title="Main Page"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/refresh"
+    <item
+        android:id="@+id/refresh"
         android:title="Refresh"
         app:showAsAction="never" />
 
-    <item android:id="@+id/clear_all_exceptions"
+    <item
+        android:id="@+id/clear_all_exceptions"
         android:title="Clear All Exceptions"
         app:showAsAction="never" />
 </menu>

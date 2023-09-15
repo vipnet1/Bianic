@@ -16,21 +16,20 @@
             android:id="@+id/layout_dynamic_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
+            android:orientation="vertical"></LinearLayout>
     </ScrollView>
 
     <TextView
         android:id="@+id/tv_validate_records"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
         android:layout_margin="10dp"
-        android:padding="10dp"
         android:background="#F44336"
-        android:text="Periodic rebalancing check won't occur until you validate records!" />
+        android:padding="10dp"
+        android:text="Periodic rebalancing check won't occur until you validate records!"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btn_add_record"
