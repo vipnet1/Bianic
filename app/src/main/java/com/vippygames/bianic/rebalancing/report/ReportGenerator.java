@@ -30,6 +30,7 @@ public class ReportGenerator {
         ReportCalculations reportCalculations = new ReportCalculations();
 
         double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
+        double absHighestDeviationPercent = 1;
         double highestDeviationPercent = -1;
         String highestDeviationSymbol = "";
         boolean shouldRebalance = false;
@@ -41,8 +42,10 @@ public class ReportGenerator {
             );
             double desiredPortfolioPercent = coinDetails.getDesiredPortfolioPercent();
             double deviationPercent = reportCalculations.getDeviationPercent(currentPortfolioPercent, desiredPortfolioPercent);
+            double absDeviationPercent = Math.abs(deviationPercent);
 
-            if(deviationPercent > highestDeviationPercent) {
+            if(absDeviationPercent > absHighestDeviationPercent) {
+                absHighestDeviationPercent = absDeviationPercent;
                 highestDeviationPercent = deviationPercent;
                 highestDeviationSymbol = coinDetails.getSymbol();
             }

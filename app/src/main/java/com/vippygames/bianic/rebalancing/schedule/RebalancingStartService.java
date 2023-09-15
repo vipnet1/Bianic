@@ -19,6 +19,7 @@ public class RebalancingStartService extends Service {
         return null;
     }
 
+    // no need to check notification permission here as called from ConfigureActivity and permission checked there
     @Override
     public void onCreate() {
         super.onCreate();

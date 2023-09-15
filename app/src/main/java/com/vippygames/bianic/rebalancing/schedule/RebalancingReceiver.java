@@ -11,7 +11,6 @@ import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 
 public class RebalancingReceiver extends BroadcastReceiver {
-
     @Override
     public void onReceive(Context context, Intent intent) {
         boolean cancelAlarm = intent.getBooleanExtra(ConfigurationConsts.CANCEL_ALARM_EXTRA, false);
