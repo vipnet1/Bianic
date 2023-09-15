@@ -17,6 +17,7 @@ import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
+import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 public class NotificationsHelper {
     private final Context context;
@@ -55,7 +56,21 @@ public class NotificationsHelper {
 
         NotificationCompat.Builder notificationBuilder = buildRegularNotification(NotificationType.REBALANCING_RUNNING, title, text);
         Notification notification = buildPersistentNotification(notificationBuilder).build();
+
+        // for some reason foreground service with notification id 0 not shown causes error
         return new NotificationInfo(notification, 1);
+    }
+
+    // as called after notification check in receiver not need here to check again
+    @SuppressLint("MissingPermission")
+    public void updateRebalancingCheckNotification(String title, String text) {
+        createNotificationChannel(NotificationType.REBALANCING_RUNNING);
+
+        NotificationCompat.Builder notificationBuilder = buildRegularNotification(NotificationType.REBALANCING_RUNNING, title, text);
+        Notification notification = buildPersistentNotification(notificationBuilder).build();
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+        manager.notify(1, notification);
     }
 
     private int getNextNotificationId(NotificationType notificationType) {

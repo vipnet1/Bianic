@@ -3,6 +3,7 @@ package com.vippygames.bianic.utils;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
@@ -18,6 +19,14 @@ public class StringUtils {
         }
 
         return new String(text);
+    }
+
+    public String getCurrentTime() {
+        String dateFormatNow = "yyyy-MM-dd HH:mm:ss";
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormatNow);
+        return sdf.format(cal.getTime());
     }
 
     public String convertUtcToLocalTime(String utcTime) {
