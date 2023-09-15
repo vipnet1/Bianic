@@ -15,8 +15,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="Created At"
-            android:textAlignment="center"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -26,8 +26,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="2023-02-05"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </LinearLayout>
@@ -42,8 +42,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="Severity"
-            android:textAlignment="center"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -53,8 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="Critical"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </LinearLayout>
@@ -66,8 +66,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="0dp"
+        android:gravity="center"
         android:text="Message"
-        android:textAlignment="center"
         android:textColor="#2F3E4C"
         android:textSize="25sp"
         android:textStyle="bold" />

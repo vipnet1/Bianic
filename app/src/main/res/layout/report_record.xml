@@ -15,8 +15,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="Created At"
-            android:textAlignment="center"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -26,8 +26,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="2023-02-05"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </LinearLayout>
@@ -40,8 +40,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:gravity="center"
         android:text="Passed Threshold"
-        android:textAlignment="center"
         android:textColor="#4CAF50"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -54,8 +54,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="0dp"
+        android:gravity="center"
         android:text="Didn't Pass Threshold"
-        android:textAlignment="center"
         android:textColor="#E91E63"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -71,8 +71,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="Total USD"
-            android:textAlignment="center"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -82,8 +82,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="1000$"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </LinearLayout>
@@ -98,8 +98,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="Threshold"
-            android:textAlignment="center"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -109,8 +109,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="1.5\%"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </LinearLayout>
@@ -125,8 +125,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="Coins"
-            android:textAlignment="center"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -136,8 +136,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="6"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </LinearLayout>
@@ -149,8 +149,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
+        android:gravity="center"
         android:text="Highest Deviation"
-        android:textAlignment="center"
         android:textColor="#2F3E4C"
         android:textSize="25sp"
         android:textStyle="italic" />
@@ -169,8 +169,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="BTC"
-            android:textAlignment="center"
             android:textColor="#2F3E4C"
             android:textSize="25sp" />
 
@@ -179,8 +179,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:text="+2.3\%"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </LinearLayout>
