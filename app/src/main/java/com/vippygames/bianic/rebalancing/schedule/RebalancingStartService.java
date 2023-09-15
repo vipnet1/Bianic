@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.vippygames.bianic.notifications.NotificationInfo;
 import com.vippygames.bianic.notifications.NotificationType;
@@ -23,7 +24,7 @@ public class RebalancingStartService extends Service {
         super.onCreate();
 
         NotificationsHelper notificationsHelper = new NotificationsHelper(this);
-        NotificationInfo notificationInfo = notificationsHelper.pushRebalancingCheckNotification("Rebalancing Check",
+        NotificationInfo notificationInfo = notificationsHelper.getRebalancingCheckNotification("Rebalancing Check",
                 "Checking whether should rebalance");
         startForeground(notificationInfo.getNotificationId(), notificationInfo.getNotification());
     }

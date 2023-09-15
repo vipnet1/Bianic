@@ -45,7 +45,7 @@ public class NotificationsHelper {
     }
 
     @SuppressLint("MissingPermission")
-    public NotificationInfo pushRebalancingCheckNotification(String title, String text) {
+    public NotificationInfo getRebalancingCheckNotification(String title, String text) {
         NotificationPermissions notificationPermissions = new NotificationPermissions();
         if(!notificationPermissions.havePostNotificationsPermission(context)) {
             return null;
@@ -55,10 +55,6 @@ public class NotificationsHelper {
 
         NotificationCompat.Builder notificationBuilder = buildRegularNotification(NotificationType.REBALANCING_RUNNING, title, text);
         Notification notification = buildPersistentNotification(notificationBuilder).build();
-
-        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-        // for some reason foreground service works only with notification id 1
-        manager.notify(1, notification);
         return new NotificationInfo(notification, 1);
     }
 
@@ -98,7 +94,7 @@ public class NotificationsHelper {
     }
 
     private NotificationCompat.Builder buildPersistentNotification(NotificationCompat.Builder builder) {
-        return builder.setOngoing(true).setOnlyAlertOnce(true);
+        return builder.setOngoing(true).setSilent(true);
     }
 
     private int getNotificationIcon(NotificationType notificationType) {
