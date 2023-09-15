@@ -25,33 +25,49 @@ public class NotificationsHelper {
         this.context = context;
     }
 
+    // suppressed because checking for permission in NotificationPermission
     @SuppressLint("MissingPermission")
-    public void pushNotification(NotificationType notificationType, String title, String text) {
+    public NotificationInfo pushNotification(NotificationType notificationType, String title, String text) {
         NotificationPermissions notificationPermissions = new NotificationPermissions();
         if(!notificationPermissions.havePostNotificationsPermission(context)) {
-            return;
+            return null;
         }
 
         createNotificationChannel(notificationType);
-        Notification notification = getNotification(notificationType, title, text, false);
 
+        Notification notification = buildRegularNotification(notificationType, title, text).build();
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
 
-        manager.notify(getNextNotificationId(notificationType), notification);
+        int notificationId = getNextNotificationId(notificationType);
+        manager.notify(notificationId, notification);
+
+        return new NotificationInfo(notification, notificationId);
     }
 
-    public Notification getPersistentNotification(NotificationType notificationType, String title, String text) {
-        createNotificationChannel(notificationType);
-        return getNotification(notificationType, title, text, true);
+    @SuppressLint("MissingPermission")
+    public NotificationInfo pushRebalancingCheckNotification(String title, String text) {
+        NotificationPermissions notificationPermissions = new NotificationPermissions();
+        if(!notificationPermissions.havePostNotificationsPermission(context)) {
+            return null;
+        }
+
+        createNotificationChannel(NotificationType.REBALANCING_RUNNING);
+
+        NotificationCompat.Builder notificationBuilder = buildRegularNotification(NotificationType.REBALANCING_RUNNING, title, text);
+        Notification notification = buildPersistentNotification(notificationBuilder).build();
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+        // for some reason foreground service works only with notification id 1
+        manager.notify(1, notification);
+        return new NotificationInfo(notification, 1);
     }
 
-    public int getNextNotificationId(NotificationType notificationType) {
+    private int getNextNotificationId(NotificationType notificationType) {
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
         String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.getChannelId();
-
         int notificationId = sharedPreferencesHelper.getInt(sp_key, 0);
 
-        if(notificationId >= notificationType.getMaxNotificationsCount()) {
+        if(notificationId > notificationType.getMaxNotificationsCount()) {
             sharedPreferencesHelper.setInt(sp_key, 0);
         }
         else {
@@ -62,26 +78,27 @@ public class NotificationsHelper {
     }
 
     private void createNotificationChannel(NotificationType notificationType) {
-        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription(notificationType.getChannelDescription());
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
     }
 
-    private Notification getNotification(NotificationType notificationType, String title, String text, boolean setOngoing) {
+    private NotificationCompat.Builder buildRegularNotification(NotificationType notificationType, String title, String text) {
         int notificationIcon = getNotificationIcon(notificationType);
         Bitmap largeNotificationIcon = getLargeNotificationIcon(notificationType);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationType.getChannelId())
+        return new NotificationCompat.Builder(context, notificationType.getChannelId())
                 .setSmallIcon(notificationIcon)
                 .setLargeIcon(largeNotificationIcon)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(null)
-                .setAutoCancel(false)
-                .setOngoing(setOngoing);
+                .setAutoCancel(false);
+    }
 
-        return builder.build();
+    private NotificationCompat.Builder buildPersistentNotification(NotificationCompat.Builder builder) {
+        return builder.setOngoing(true).setOnlyAlertOnce(true);
     }
 
     private int getNotificationIcon(NotificationType notificationType) {
