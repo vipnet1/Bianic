@@ -14,10 +14,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.vippygames.bianic.R;
-import com.vippygames.bianic.consts.NotificationsConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
+import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 public class NotificationsHelper {
     private final Context context;
@@ -26,70 +26,76 @@ public class NotificationsHelper {
         this.context = context;
     }
 
+    // suppressed because checking for permission in NotificationPermission
     @SuppressLint("MissingPermission")
-    public void pushNotification(NotificationType notificationType, String title, String text) {
+    public NotificationInfo pushNotification(NotificationType notificationType, String title, String text, boolean isPersistent) {
         NotificationPermissions notificationPermissions = new NotificationPermissions();
-        if(!notificationPermissions.havePostNotificationsPermission(context)) {
-            return;
+        if (!notificationPermissions.havePostNotificationsPermission(context)
+                || !notificationPermissions.isChannelEnabled(context, notificationType)) {
+            return null;
         }
 
-        createNotificationChannel();
-        Notification notification = getNotification(notificationType, title, text, false);
+        createNotificationChannel(notificationType);
 
+        NotificationCompat.Builder notificationBuilder = buildRegularNotification(notificationType, title, text);
+        if(isPersistent) {
+            notificationBuilder = buildPersistentNotification(notificationBuilder);
+        }
+
+        Notification notification = notificationBuilder.build();
+
+        int notificationId = getNextNotificationId(notificationType);
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+        manager.notify(notificationId, notification);
 
-        manager.notify(getNextNotificationId(notificationType), notification);
+        return new NotificationInfo(notification, notificationId);
     }
 
-    public Notification getPersistentNotification(NotificationType notificationType, String title, String text) {
-        createNotificationChannel();
-        return getNotification(notificationType, title, text, true);
-    }
-
-    public int getNextNotificationId(NotificationType notificationType) {
+    private int getNextNotificationId(NotificationType notificationType) {
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
-        String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.toString();
-
+        String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.getChannelId();
         int notificationId = sharedPreferencesHelper.getInt(sp_key, notificationType.getMinNotificationId());
 
-        if(notificationId >= notificationType.getMaxNotificationId()) {
+        if (notificationId >= notificationType.getMaxNotificationId()) {
             sharedPreferencesHelper.setInt(sp_key, notificationType.getMinNotificationId());
-        }
-        else {
+        } else {
             sharedPreferencesHelper.setInt(sp_key, notificationId + 1);
         }
 
         return notificationId;
     }
 
-    private void createNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(NotificationsConsts.CHANNEL_ID, NotificationsConsts.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription(NotificationsConsts.CHANNEL_DESCRIPTION);
+    private void createNotificationChannel(NotificationType notificationType) {
+        NotificationPermissions notificationPermissions = new NotificationPermissions();
+        if(notificationPermissions.isChannelExists(context, notificationType)) {
+            return;
+        }
+
+        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(notificationType.getChannelDescription());
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
     }
 
-    private Notification getNotification(NotificationType notificationType, String title, String text, boolean setOngoing) {
-        Intent intent = new Intent(context, NotificationsHelper.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
+    private NotificationCompat.Builder buildRegularNotification(NotificationType notificationType, String title, String text) {
         int notificationIcon = getNotificationIcon(notificationType);
         Bitmap largeNotificationIcon = getLargeNotificationIcon(notificationType);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationsConsts.CHANNEL_ID)
+        return new NotificationCompat.Builder(context, notificationType.getChannelId())
                 .setSmallIcon(notificationIcon)
                 .setLargeIcon(largeNotificationIcon)
                 .setContentTitle(title)
                 .setContentText(text)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(false)
-                .setOngoing(setOngoing);
+                .setContentIntent(null)
+                .setAutoCancel(false);
+    }
 
-        return builder.build();
+    private NotificationCompat.Builder buildPersistentNotification(NotificationCompat.Builder builder) {
+        return builder.setOngoing(true).setOnlyAlertOnce(true);
     }
 
     private int getNotificationIcon(NotificationType notificationType) {
-        switch(notificationType) {
+        switch (notificationType) {
             case REBALANCING_AVAILABLE:
                 return R.mipmap.ic_rebalancing_available;
             case NORMAL_EXCEPTION:
@@ -105,7 +111,7 @@ public class NotificationsHelper {
 
     private Bitmap getLargeNotificationIcon(NotificationType notificationType) {
         int largeNotificationNumber = -1;
-        switch(notificationType) {
+        switch (notificationType) {
             case REBALANCING_AVAILABLE:
                 largeNotificationNumber = R.drawable.ic_rebalancing_available_round;
                 break;
@@ -123,6 +129,6 @@ public class NotificationsHelper {
                 break;
         }
 
-        return BitmapFactory.decodeResource(context.getResources() , largeNotificationNumber);
+        return BitmapFactory.decodeResource(context.getResources(), largeNotificationNumber);
     }
 }

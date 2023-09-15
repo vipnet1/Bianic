@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String allocationBeforeEdit;
 
     private AlertDialog binanceRecordsValidationDialog;
-
     private TextView tvValidateRecords;
     private Button btnValidateRecords;
 
@@ -154,7 +153,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Why Those Permissions Are Needed");
         builder.setMessage("The permissions we will ask for are crucial for the normal operation of the app." +
-                "The battery one to continue doing our job in power saving mode.");
+                "The battery one to continue doing our job in power saving mode. The notifications to run " +
+                "in background & communicate with you.");
         builder.setCancelable(false);
         builder.setPositiveButton("Sure Son", (dialog, which) -> {
             dialog.dismiss();

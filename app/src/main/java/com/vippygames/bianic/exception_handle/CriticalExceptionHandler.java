@@ -31,7 +31,7 @@ public class CriticalExceptionHandler {
         } catch (Exception e) {
             notificationsHelper.pushNotification(NotificationType.FATAL_EXCEPTION,
                     ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
-                    "While writing exception to db");
+                    "While writing exception to db", false);
         }
     }
 
@@ -45,11 +45,11 @@ public class CriticalExceptionHandler {
 
             notificationsHelper.pushNotification(NotificationType.CRITICAL_EXCEPTION,
                     ExceptionHandleConsts.SEVERITY_CRITICAL + " exception occurred",
-                    exception.getCriticalExceptionType() + ": " + className);
+                    exception.getCriticalExceptionType() + ": " + className, false);
         } catch (Exception e) {
             notificationsHelper.pushNotification(NotificationType.FATAL_EXCEPTION,
                     ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",
-                    "While trying to show exception");
+                    "While trying to show exception", false);
         }
     }
 }

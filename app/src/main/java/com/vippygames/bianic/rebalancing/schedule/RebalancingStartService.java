@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 
+import com.vippygames.bianic.notifications.NotificationInfo;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
 
@@ -17,15 +19,19 @@ public class RebalancingStartService extends Service {
         return null;
     }
 
+    // no need to check notification permission here as called from ConfigureActivity and permission checked there
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        NotificationsHelper notificationsHelper = new NotificationsHelper(this);
+        NotificationInfo notificationInfo = notificationsHelper.pushNotification(NotificationType.REBALANCING_RUNNING,
+                "Rebalancing Check", "Checking whether should rebalance", true);
+        startForeground(notificationInfo.getNotificationId(), notificationInfo.getNotification());
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        NotificationsHelper notificationsHelper = new NotificationsHelper(this);
-        Notification notification = notificationsHelper.getPersistentNotification(NotificationType.REBALANCING_RUNNING,
-                "Rebalancing Check", "Checking whether should rebalance");
-
-        int notificationId = notificationsHelper.getNextNotificationId(NotificationType.REBALANCING_RUNNING);
-        startForeground(notificationId, notification);
-
         RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(this);
         rebalancingAlarm.start();
 

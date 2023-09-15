@@ -43,7 +43,7 @@ public class ExceptionHandler {
             String className = exceptionClassName.substring(lastDotIndex + 1);
 
             notificationsHelper.pushNotification(NotificationType.NORMAL_EXCEPTION,
-                    ExceptionHandleConsts.SEVERITY_NORMAL + " exception occurred", className);
+                    ExceptionHandleConsts.SEVERITY_NORMAL + " exception occurred", className, false);
         } catch (Exception e) {
             CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
             criticalExceptionHandler.handleException(

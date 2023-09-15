@@ -40,6 +40,14 @@ public class SharedPreferencesHelper {
         editor.apply();
     }
 
+    public int getInt(String key) throws KeyNotFoundException {
+        if(!usedPrefsRef.contains(key)) {
+            throw new KeyNotFoundException(key);
+        }
+
+        return usedPrefsRef.getInt(key, 0);
+    }
+
     public int getInt(String key, int defaultValue) {
         return usedPrefsRef.getInt(key, defaultValue);
     }

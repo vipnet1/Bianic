@@ -54,6 +54,6 @@ public class ThresholdWatch {
     private void showCanRebalanceNotification(String message) {
         NotificationsHelper notificationsHelper = new NotificationsHelper(context);
         notificationsHelper.pushNotification(NotificationType.REBALANCING_AVAILABLE,
-                "Rebalancing available, report generated.", message);
+                "Rebalancing available, report generated.", message, false);
     }
 }

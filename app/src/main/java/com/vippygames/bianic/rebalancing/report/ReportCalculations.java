@@ -14,7 +14,7 @@ public class ReportCalculations {
     }
 
     public double getDeviationPercent(double currentPortfolioPercent, double desiredPortfolioPercent) {
-        return Math.abs(100 * (currentPortfolioPercent / desiredPortfolioPercent) - 100);
+        return 100 * (currentPortfolioPercent / desiredPortfolioPercent) - 100;
     }
 
     public double calculateTargetQuantity(double currentPortfolioPercent,
