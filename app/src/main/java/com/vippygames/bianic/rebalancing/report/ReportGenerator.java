@@ -30,7 +30,7 @@ public class ReportGenerator {
         ReportCalculations reportCalculations = new ReportCalculations();
 
         double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
-        double absHighestDeviationPercent = 1;
+        double absHighestDeviationPercent = -1;
         double highestDeviationPercent = -1;
         String highestDeviationSymbol = "";
         boolean shouldRebalance = false;
