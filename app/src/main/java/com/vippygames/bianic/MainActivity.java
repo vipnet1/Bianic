@@ -2,7 +2,9 @@ package com.vippygames.bianic;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.consts.BinanceApiConsts;
+import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
@@ -86,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (itemId == R.id.redirect_reports) {
             handleActionRedirectReports();
             return true;
+        } else if (itemId == R.id.about) {
+            handleActionAbout();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -95,8 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binanceRecordsValidationDialog.dismiss();
 
         if (!result) {
-            Toast.makeText(this, "Failed validating records. View exception for details."
-                    , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed validating records. View exception for details.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -153,11 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showRequestPermissionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Why Those Permissions Are Needed");
-        builder.setMessage("The permissions we will ask for are crucial for the normal operation of the app." +
-                "The battery one to continue doing our job in power saving mode. The notifications to run " +
-                "in background & communicate with you.");
+        builder.setMessage("The permissions we will ask for are crucial for the normal operation of the app." + "The battery one to continue doing our job in power saving mode. The notifications to run " + "in background & communicate with you.");
         builder.setCancelable(false);
-        builder.setPositiveButton("Sure Son", (dialog, which) -> {
+        builder.setPositiveButton("Sure", (dialog, which) -> {
             dialog.dismiss();
             requestNeededPermissions();
         });
@@ -200,6 +203,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setCancelable(false);
 
         binanceRecordsValidationDialog = builder.create();
+    }
+
+    private void handleActionAbout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("About");
+        builder.setMessage("App version: " + BuildConfig.VERSION_NAME);
+        builder.setPositiveButton("Get Help", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:" + ContactConsts.CONTACT_EMAIL));
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void handleActionRedirectExceptions() {

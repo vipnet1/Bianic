@@ -4,13 +4,16 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.vippygames.bianic.MainActivity;
 import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.permissions.NotificationPermissions;
@@ -78,12 +81,17 @@ public class NotificationsHelper {
         int notificationIcon = getNotificationIcon(notificationType);
         Bitmap largeNotificationIcon = getLargeNotificationIcon(notificationType);
 
+        // to redirect to main page when notification clicked
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_IMMUTABLE);
+
         return new NotificationCompat.Builder(context, notificationType.getChannelId())
                 .setSmallIcon(notificationIcon)
                 .setLargeIcon(largeNotificationIcon)
                 .setContentTitle(title)
                 .setContentText(text)
-                .setContentIntent(null)
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(false);
     }
 

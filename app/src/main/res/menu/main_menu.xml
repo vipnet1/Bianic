@@ -6,6 +6,10 @@
         android:title="Exceptions"
         app:showAsAction="never" />
     <item
+        android:id="@+id/about"
+        android:title="About"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/redirect_configure"
         android:title="Configure"
         app:showAsAction="ifRoom" />
