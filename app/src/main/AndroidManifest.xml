@@ -36,7 +36,7 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".rebalancing.schedule.RebalancingStartService"
+            android:name=".rebalancing.schedule.RebalancingForegroundService"
             android:enabled="true"
             android:exported="false" />
 

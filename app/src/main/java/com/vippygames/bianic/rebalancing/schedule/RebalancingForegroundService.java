@@ -10,7 +10,7 @@ import com.vippygames.bianic.notifications.NotificationInfo;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
 
-public class RebalancingStartService extends Service {
+public class RebalancingForegroundService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -30,9 +30,6 @@ public class RebalancingStartService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(this);
-        rebalancingAlarm.start();
-
         return START_STICKY;
     }
 }

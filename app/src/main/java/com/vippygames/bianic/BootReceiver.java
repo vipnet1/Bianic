@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
-import com.vippygames.bianic.rebalancing.schedule.RebalancingStartService;
+import com.vippygames.bianic.rebalancing.schedule.RebalancingAlarm;
 
 public class BootReceiver extends BroadcastReceiver {
     @Override
@@ -16,8 +16,9 @@ public class BootReceiver extends BroadcastReceiver {
                 return;
             }
 
-            Intent startIntent = new Intent(context.getApplicationContext(), RebalancingStartService.class);
-            context.startForegroundService(startIntent);
+            RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(context);
+            rebalancingAlarm.startAlarm(configurationManager.getValidationInterval());
+            rebalancingAlarm.startRebalancingService();
         }
     }
 }
