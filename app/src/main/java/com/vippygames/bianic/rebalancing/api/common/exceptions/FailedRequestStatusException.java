@@ -1,12 +1,10 @@
 package com.vippygames.bianic.rebalancing.api.common.exceptions;
 
 import com.vippygames.bianic.exception_handle.exceptions.NormalException;
-import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponseParser;
 
 public class FailedRequestStatusException extends NormalException {
     private final int status;
     private final String message;
-
     private final String customMessage;
 
     public FailedRequestStatusException(int status, String message) {
@@ -16,7 +14,7 @@ public class FailedRequestStatusException extends NormalException {
     }
 
     private String generateCustomMessage() {
-        if(message.contains("\"code\":-1022")) {
+        if (message.contains("\"code\":-1022")) {
             return "Likely wrong Secret Key. ";
         }
 

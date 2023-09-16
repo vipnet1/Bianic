@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public class NetworkRequestException extends NormalException {
     private final String customMessage;
+
     public NetworkRequestException(IOException e) {
         super(e);
         this.customMessage = generateCustomMessage();
@@ -18,11 +19,11 @@ public class NetworkRequestException extends NormalException {
 
     private String generateCustomMessage() {
         String message = super.getMessage();
-        if(message == null) {
+        if (message == null) {
             return "";
         }
 
-        if(message.contains("No address associated with hostname")) {
+        if (message.contains("No address associated with hostname")) {
             return "Likely no internet connection. ";
         }
 
