@@ -1,7 +1,14 @@
 package com.vippygames.bianic.rebalancing.api.coins_price.exceptions;
 
-public class CoinsPriceParseException extends Exception {
+import com.vippygames.bianic.exception_handle.exceptions.NormalException;
+
+public class CoinsPriceParseException extends NormalException {
     public CoinsPriceParseException(Exception e) {
         super(e);
+    }
+
+    @Override
+    public String getExceptionName() {
+        return "CoinsPriceParseException";
     }
 }

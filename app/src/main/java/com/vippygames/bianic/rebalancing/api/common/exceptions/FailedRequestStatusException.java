@@ -1,6 +1,8 @@
 package com.vippygames.bianic.rebalancing.api.common.exceptions;
 
-public class FailedRequestStatusException extends Exception {
+import com.vippygames.bianic.exception_handle.exceptions.NormalException;
+
+public class FailedRequestStatusException extends NormalException {
     private final int status;
     private final String message;
 
@@ -12,5 +14,10 @@ public class FailedRequestStatusException extends Exception {
     @Override
     public String getMessage() {
         return "Failed status code - " + status + ". The message - " + this.message;
+    }
+
+    @Override
+    public String getExceptionName() {
+        return "FailedRequestStatusException";
     }
 }

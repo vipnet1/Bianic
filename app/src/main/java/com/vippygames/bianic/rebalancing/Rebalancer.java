@@ -5,6 +5,7 @@ import android.content.Context;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.exception_handle.exceptions.CriticalException;
+import com.vippygames.bianic.exception_handle.exceptions.NormalException;
 import com.vippygames.bianic.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
 import com.vippygames.bianic.rebalancing.api.coins_price.exceptions.CoinsPriceParseException;
 import com.vippygames.bianic.rebalancing.api.common.exceptions.EmptyResponseBodyException;
