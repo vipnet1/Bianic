@@ -1,6 +1,5 @@
 package com.vippygames.bianic;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +15,7 @@ import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.permissions.NotificationPermissions;
-import com.vippygames.bianic.rebalancing.schedule.RebalancingReceiver;
-import com.vippygames.bianic.rebalancing.schedule.RebalancingStartService;
+import com.vippygames.bianic.rebalancing.schedule.RebalancingAlarm;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
@@ -222,19 +220,14 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         float thresholdRebalancingPercent = Float.parseFloat(thresholdRebalancingPercentText);
         configurationManager.setThresholdRebalancingPercent(thresholdRebalancingPercent);
 
+        int newIsRebalancingActivated = 0;
         if (shouldRebalanceInput) {
-            configurationManager.setIsRebalancingActivated(1);
-        } else {
-            configurationManager.setIsRebalancingActivated(0);
+            newIsRebalancingActivated = 1;
         }
+        configurationManager.setIsRebalancingActivated(newIsRebalancingActivated);
 
-        int newValidationInterval = configurationManager.getValidationInterval();
-        int newIsRebalancingActivated = configurationManager.isRebalancingActivated();
-
-        changeRebalancerIfNeeded(previousValidationInterval, previousIsRebalancingActivated, newValidationInterval, newIsRebalancingActivated);
-
+        changeRebalancerIfNeeded(previousValidationInterval, previousIsRebalancingActivated, validationInterval, newIsRebalancingActivated);
         Toast.makeText(this, "Saved configuration", Toast.LENGTH_SHORT).show();
-
         redirectMain();
     }
 
@@ -247,28 +240,22 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void changeRebalancerIfNeeded(int previousValidationInterval, int previousIsRebalancingActivated, int newValidationInterval, int newIsRebalancingActivated) {
+        RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(this);
+
         if (newIsRebalancingActivated == previousIsRebalancingActivated) {
             if (newIsRebalancingActivated == 1 && previousValidationInterval != newValidationInterval) {
-                Intent startIntent = new Intent(getApplicationContext(), RebalancingStartService.class);
-                stopService(startIntent);
-                sendCancelAlarmBroadcast();
-                startForegroundService(startIntent);
+                rebalancingAlarm.cancelAlarm();
+                rebalancingAlarm.startAlarm(newValidationInterval);
             }
         } else {
-            Intent startIntent = new Intent(getApplicationContext(), RebalancingStartService.class);
             if (newIsRebalancingActivated == 1) {
-                startForegroundService(startIntent);
+                rebalancingAlarm.startAlarm(newValidationInterval);
+                rebalancingAlarm.startRebalancingService();
             } else {
-                stopService(startIntent);
-                sendCancelAlarmBroadcast();
+                rebalancingAlarm.cancelAlarm();
+                rebalancingAlarm.stopRebalancingService();
             }
         }
-    }
-
-    private void sendCancelAlarmBroadcast() {
-        Intent intent = new Intent(this, RebalancingReceiver.class);
-        intent.putExtra(ConfigurationConsts.CANCEL_ALARM_EXTRA, true);
-        sendBroadcast(intent);
     }
 
     private void initOperations() {
