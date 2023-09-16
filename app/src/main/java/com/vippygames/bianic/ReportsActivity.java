@@ -207,7 +207,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             executor.execute(new ManualReportGenerationTask(this));
 
         } catch (UnvalidatedRecordsException e) {
-            Toast.makeText(this, "Click on 'Validate Records' button in main page", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Click on 'Validate Records' button in main page", Toast.LENGTH_SHORT).show();
             ExceptionHandler exceptionHandler = new ExceptionHandler(this);
             exceptionHandler.handleException(e);
         }

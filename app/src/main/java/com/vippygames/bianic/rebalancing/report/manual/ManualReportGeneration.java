@@ -59,6 +59,6 @@ public class ManualReportGeneration {
     }
 
     public void showToast(String message) {
-        reportsActivity.runOnUiThread(() -> Toast.makeText(reportsActivity, message, Toast.LENGTH_LONG).show());
+        reportsActivity.runOnUiThread(() -> Toast.makeText(reportsActivity, message, Toast.LENGTH_SHORT).show());
     }
 }
