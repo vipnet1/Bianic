@@ -1,6 +1,8 @@
 package com.vippygames.bianic.shared_preferences.exceptions;
 
-public class KeyNotFoundException extends Exception {
+import com.vippygames.bianic.exception_handle.exceptions.NormalException;
+
+public class KeyNotFoundException extends NormalException {
     private final String key;
 
     public KeyNotFoundException(String key) {
@@ -10,5 +12,10 @@ public class KeyNotFoundException extends Exception {
     @Override
     public String getMessage() {
         return "SharedPreferences key '" + this.key + "' not found";
+    }
+
+    @Override
+    public String getExceptionName() {
+        return "KeyNotFoundException";
     }
 }

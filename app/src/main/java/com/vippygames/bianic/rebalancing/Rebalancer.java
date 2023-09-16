@@ -11,9 +11,9 @@ import com.vippygames.bianic.rebalancing.api.common.exceptions.EmptyResponseBody
 import com.vippygames.bianic.rebalancing.api.common.exceptions.FailedRequestStatusException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
-import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
+import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;
 import com.vippygames.bianic.rebalancing.validation.exceptions.UnvalidatedRecordsException;
 import com.vippygames.bianic.rebalancing.watch.threshold.ThresholdWatch;
 import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;

@@ -25,6 +25,6 @@ public class CriticalException extends Exception {
 
     @Override
     public String getMessage() {
-        return "--- " + this.criticalExceptionType.toString() + " ---" + super.getMessage();
+        return "--- " + criticalExceptionType + " --- " + originalException.getMessage();
     }
 }

@@ -26,7 +26,8 @@ public class CriticalExceptionHandler {
 
         try {
             ExceptionsLogDb db = new ExceptionsLogDb(context);
-            ExceptionsLogRecord record = new ExceptionsLogRecord(ExceptionHandleConsts.SEVERITY_CRITICAL, exception.toString());
+            ExceptionsLogRecord record = new ExceptionsLogRecord(ExceptionHandleConsts.SEVERITY_CRITICAL,
+                    exception.getMessage());
             db.saveRecord(record);
         } catch (Exception e) {
             notificationsHelper.pushNotification(NotificationType.FATAL_EXCEPTION,
@@ -39,13 +40,9 @@ public class CriticalExceptionHandler {
         NotificationsHelper notificationsHelper = new NotificationsHelper(context);
 
         try {
-            String exceptionClassName = exception.getOriginalException().getClass().toString();
-            int lastDotIndex = exceptionClassName.lastIndexOf('.');
-            String className = exceptionClassName.substring(lastDotIndex + 1);
-
             notificationsHelper.pushNotification(NotificationType.CRITICAL_EXCEPTION,
                     ExceptionHandleConsts.SEVERITY_CRITICAL + " exception occurred",
-                    exception.getCriticalExceptionType() + ": " + className, false);
+                    exception.getCriticalExceptionType().toString(), false);
         } catch (Exception e) {
             notificationsHelper.pushNotification(NotificationType.FATAL_EXCEPTION,
                     ExceptionHandleConsts.SEVERITY_FATAL + " exception occurred",

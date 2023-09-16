@@ -22,6 +22,7 @@ import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
 import com.vippygames.bianic.db.reports.ReportsDb;
 import com.vippygames.bianic.db.reports.ReportsRecord;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
+import com.vippygames.bianic.exception_handle.exceptions.NormalException;
 import com.vippygames.bianic.rebalancing.report.manual.ManualReportGenerationTask;
 import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;
 import com.vippygames.bianic.rebalancing.validation.exceptions.UnvalidatedRecordsException;
@@ -206,7 +207,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             executor.execute(new ManualReportGenerationTask(this));
 
         } catch (UnvalidatedRecordsException e) {
-            Toast.makeText(this, "Click on 'Validate Records' button in main page", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Click on 'Validate Records' button in main page", Toast.LENGTH_SHORT).show();
             ExceptionHandler exceptionHandler = new ExceptionHandler(this);
             exceptionHandler.handleException(e);
         }

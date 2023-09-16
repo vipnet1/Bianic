@@ -8,8 +8,6 @@ import com.vippygames.bianic.notifications.NotificationsHelper;
 import com.vippygames.bianic.rebalancing.Rebalancer;
 import com.vippygames.bianic.utils.StringUtils;
 
-import java.util.Date;
-
 public class RebalancingCheckIntentService extends IntentService {
 
     public RebalancingCheckIntentService() {

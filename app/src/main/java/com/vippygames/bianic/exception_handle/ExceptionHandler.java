@@ -6,6 +6,7 @@ import com.vippygames.bianic.consts.ExceptionHandleConsts;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogRecord;
 import com.vippygames.bianic.exception_handle.exceptions.CriticalException;
+import com.vippygames.bianic.exception_handle.exceptions.NormalException;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
 
@@ -16,15 +17,16 @@ public class ExceptionHandler {
         this.context = context;
     }
 
-    public void handleException(Exception exception) {
+    public void handleException(NormalException exception) {
         writeExceptionToDatabase(exception);
         showExceptionNotification(exception);
     }
 
-    private void writeExceptionToDatabase(Exception exception) {
+    private void writeExceptionToDatabase(NormalException exception) {
         try {
             ExceptionsLogDb db = new ExceptionsLogDb(context);
-            ExceptionsLogRecord record = new ExceptionsLogRecord(ExceptionHandleConsts.SEVERITY_NORMAL, exception.toString());
+            ExceptionsLogRecord record = new ExceptionsLogRecord(ExceptionHandleConsts.SEVERITY_NORMAL,
+                    exception.getExceptionName() + ": " + exception.getMessage());
             db.saveRecord(record);
         } catch (Exception e) {
             CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
@@ -34,16 +36,12 @@ public class ExceptionHandler {
         }
     }
 
-    private void showExceptionNotification(Exception exception) {
+    private void showExceptionNotification(NormalException exception) {
         NotificationsHelper notificationsHelper = new NotificationsHelper(context);
 
         try {
-            String exceptionClassName = exception.getClass().toString();
-            int lastDotIndex = exceptionClassName.lastIndexOf('.');
-            String className = exceptionClassName.substring(lastDotIndex + 1);
-
             notificationsHelper.pushNotification(NotificationType.NORMAL_EXCEPTION,
-                    ExceptionHandleConsts.SEVERITY_NORMAL + " exception occurred", className, false);
+                    ExceptionHandleConsts.SEVERITY_NORMAL + " exception occurred", exception.getExceptionName(), false);
         } catch (Exception e) {
             CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
             criticalExceptionHandler.handleException(

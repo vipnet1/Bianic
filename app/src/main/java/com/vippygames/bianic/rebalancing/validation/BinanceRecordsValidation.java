@@ -80,7 +80,7 @@ public class BinanceRecordsValidation {
             String coinSymbol = record.getSymbol();
             if (!foundSymbols.contains(record.getSymbol())) {
                 String message = "You don't have the coin '" + coinSymbol + "' in your portfolio";
-                showToast(message);
+                showToast(message, Toast.LENGTH_SHORT);
                 throw new FailedValidateRecordsException(message);
             }
         }
@@ -89,17 +89,20 @@ public class BinanceRecordsValidation {
     private void validateCoinsAboveMinUsd(List<CoinDetails> coinsDetails) throws FailedValidateRecordsException {
         for (CoinDetails coinDetails : coinsDetails) {
             if (coinDetails.getTotalUsdValue() < BinanceRecordsValidationConsts.MIN_COIN_VALUE_USDT) {
-                String message = "Coin value in USD in your portfolio is too small - min is "
-                        + BinanceRecordsValidationConsts.MIN_COIN_VALUE_USDT + " but your is "
-                        + coinDetails.getTotalUsdValue();
-                showToast(message);
-                throw new FailedValidateRecordsException(message);
+                showToast("Low on '" + coinDetails.getSymbol() + "'. Min is "
+                        + BinanceRecordsValidationConsts.MIN_COIN_VALUE_USDT + "$ but you have "
+                        + coinDetails.getTotalUsdValue() + "$.", Toast.LENGTH_LONG);
+
+                throw new FailedValidateRecordsException("Value of '" + coinDetails.getSymbol()
+                        + "' in USD in your portfolio is too small - min is "
+                        + BinanceRecordsValidationConsts.MIN_COIN_VALUE_USDT + "$ but you have "
+                        + coinDetails.getTotalUsdValue() + "$.");
             }
 
         }
     }
 
-    public void showToast(String message) {
-        mainActivity.runOnUiThread(() -> Toast.makeText(mainActivity, message, Toast.LENGTH_LONG).show());
+    public void showToast(String message, int toastLength) {
+        mainActivity.runOnUiThread(() -> Toast.makeText(mainActivity, message, toastLength).show());
     }
 }
