@@ -234,9 +234,15 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         changeRebalancerIfNeeded(previousValidationInterval, previousIsRebalancingActivated, newValidationInterval, newIsRebalancingActivated);
 
         Toast.makeText(this, "Saved configuration", Toast.LENGTH_LONG).show();
+
+        redirectMain();
     }
 
     private void handleActionRedirectMain() {
+        redirectMain();
+    }
+
+    private void redirectMain() {
         finish();
     }
 

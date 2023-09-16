@@ -11,4 +11,9 @@ public class SignatureGenerationException extends NormalException {
     public String getExceptionName() {
         return "SignatureGenerationException";
     }
+
+    @Override
+    public String getMessage() {
+        return "Likely wrong secret key. " + super.getMessage();
+    }
 }
