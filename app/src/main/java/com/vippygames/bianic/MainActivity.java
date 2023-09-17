@@ -22,8 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewException;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
 import com.google.android.play.core.review.model.ReviewErrorCode;
-import com.google.android.play.core.review.testing.FakeReviewManager;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
@@ -229,8 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startInAppReview() {
-//        ReviewManager manager = ReviewManagerFactory.create(this);
-        ReviewManager manager = new FakeReviewManager(this);
+        ReviewManager manager = ReviewManagerFactory.create(this);
         Task<ReviewInfo> request = manager.requestReviewFlow();
         request.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
