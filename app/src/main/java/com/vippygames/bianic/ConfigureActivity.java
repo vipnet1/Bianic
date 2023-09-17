@@ -1,31 +1,26 @@
 package com.vippygames.bianic;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ClickableSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
-import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.permissions.NotificationPermissions;
-import com.vippygames.bianic.rebalancing.schedule.RebalancingAlarm;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
+import com.vippygames.bianic.utils.RebalanceActivationUtils;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
@@ -248,8 +243,8 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         String secretKey = edtSecretKey.getText().toString();
         configurationManager.setSecretKey(secretKey);
 
-        int validationInterval = Integer.parseInt(validationIntervalText);
-        configurationManager.setValidationInterval(validationInterval);
+        int newValidationInterval = Integer.parseInt(validationIntervalText);
+        configurationManager.setValidationInterval(newValidationInterval);
 
         float thresholdRebalancingPercent = Float.parseFloat(thresholdRebalancingPercentText);
         configurationManager.setThresholdRebalancingPercent(thresholdRebalancingPercent);
@@ -260,7 +255,9 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         }
         configurationManager.setIsRebalancingActivated(newIsRebalancingActivated);
 
-        changeRebalancerIfNeeded(previousValidationInterval, previousIsRebalancingActivated, validationInterval, newIsRebalancingActivated);
+        RebalanceActivationUtils rebalanceActivationUtils = new RebalanceActivationUtils(this);
+        rebalanceActivationUtils.changeRebalancerIfNeeded(previousValidationInterval,
+                previousIsRebalancingActivated, newValidationInterval, newIsRebalancingActivated);
         Toast.makeText(this, "Saved configuration", Toast.LENGTH_SHORT).show();
         redirectMain();
     }
@@ -271,25 +268,6 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
     private void redirectMain() {
         finish();
-    }
-
-    private void changeRebalancerIfNeeded(int previousValidationInterval, int previousIsRebalancingActivated, int newValidationInterval, int newIsRebalancingActivated) {
-        RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(this);
-
-        if (newIsRebalancingActivated == previousIsRebalancingActivated) {
-            if (newIsRebalancingActivated == 1 && previousValidationInterval != newValidationInterval) {
-                rebalancingAlarm.cancelAlarm();
-                rebalancingAlarm.startAlarm(newValidationInterval);
-            }
-        } else {
-            if (newIsRebalancingActivated == 1) {
-                rebalancingAlarm.startAlarm(newValidationInterval);
-                rebalancingAlarm.startRebalancingService();
-            } else {
-                rebalancingAlarm.cancelAlarm();
-                rebalancingAlarm.stopRebalancingService();
-            }
-        }
     }
 
     private void initOperations() {

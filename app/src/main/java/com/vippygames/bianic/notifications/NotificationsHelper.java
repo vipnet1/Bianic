@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.service.notification.StatusBarNotification;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -52,6 +53,17 @@ public class NotificationsHelper {
         manager.notify(notificationId, notification);
 
         return new NotificationInfo(notification, notificationId);
+    }
+
+    public boolean isNotificationActive(int notificationId) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
+        for (StatusBarNotification notification : notifications) {
+            if (notification.getId() == notificationId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private int getNextNotificationId(NotificationType notificationType) {

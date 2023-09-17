@@ -4,15 +4,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.vippygames.bianic.notifications.NotificationType;
-import com.vippygames.bianic.permissions.NotificationPermissions;
+import com.vippygames.bianic.configuration.ConfigurationManager;
+import com.vippygames.bianic.utils.RebalanceActivationUtils;
+import com.vippygames.bianic.utils.RebalanceTestUtils;
 
 public class RebalancingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!haveNeededNotificationPermissions(context)) {
-            RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(context);
-            rebalancingAlarm.cancelAlarm();
+        if (!shouldRebalanceCheck(context)) {
+            RebalanceActivationUtils rebalanceActivationUtils = new RebalanceActivationUtils(context);
+            rebalanceActivationUtils.stopServiceAndAlarm();
+
+            ConfigurationManager configurationManager = new ConfigurationManager(context);
+            configurationManager.setIsRebalancingActivated(0);
             return;
         }
 
@@ -20,9 +24,11 @@ public class RebalancingReceiver extends BroadcastReceiver {
         context.startService(serviceIntent);
     }
 
-    private boolean haveNeededNotificationPermissions(Context context) {
-        NotificationPermissions notificationPermissions = new NotificationPermissions();
-        return notificationPermissions.havePostNotificationsPermission(context)
-                && notificationPermissions.isChannelEnabled(context, NotificationType.REBALANCING_RUNNING);
+    private boolean shouldRebalanceCheck(Context context) {
+        RebalanceTestUtils rebalanceTestUtils = new RebalanceTestUtils(context);
+
+        return rebalanceTestUtils.testIsRebalancingSettingOn() // setting activated
+                && rebalanceTestUtils.testRebalanceCheckNotificationsPermissionsOn() // have permissions
+                && rebalanceTestUtils.testRebalanceCheckNotificationActive(); // Showing indication that running
     }
 }
