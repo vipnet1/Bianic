@@ -1,31 +1,27 @@
 package com.vippygames.bianic;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ClickableSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
-import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.rebalancing.schedule.RebalancingAlarm;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
+import com.vippygames.bianic.utils.BootUtils;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
@@ -275,19 +271,35 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
     private void changeRebalancerIfNeeded(int previousValidationInterval, int previousIsRebalancingActivated, int newValidationInterval, int newIsRebalancingActivated) {
         RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(this);
+        BootUtils bootUtils = new BootUtils(this);
 
         if (newIsRebalancingActivated == previousIsRebalancingActivated) {
+            // changed validation interval only
             if (newIsRebalancingActivated == 1 && previousValidationInterval != newValidationInterval) {
                 rebalancingAlarm.cancelAlarm();
                 rebalancingAlarm.startAlarm(newValidationInterval);
+
+                // if didn't start foreground service yet, do it.
+                if (!bootUtils.haveCurrentBootTime()) {
+                    rebalancingAlarm.startRebalancingService();
+                }
+                bootUtils.setCurrentBootTime();
             }
+
+            /*
+            We get here if changed setting not related to rebalance check or validation interval.
+            if we changed configuration not related to rebalance check or validation interval, we still want
+            the boot receiver to start the rebalance check if needed. That's why didn't call setCurrentBootTime() here.
+             */
         } else {
-            if (newIsRebalancingActivated == 1) {
+            if (newIsRebalancingActivated == 1) { // activated
                 rebalancingAlarm.startAlarm(newValidationInterval);
                 rebalancingAlarm.startRebalancingService();
-            } else {
+                bootUtils.setCurrentBootTime();
+            } else { // deactivated
                 rebalancingAlarm.cancelAlarm();
                 rebalancingAlarm.stopRebalancingService();
+                bootUtils.setCurrentBootTime();
             }
         }
     }

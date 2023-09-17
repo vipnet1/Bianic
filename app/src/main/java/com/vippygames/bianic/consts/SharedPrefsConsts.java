@@ -13,4 +13,5 @@ public abstract class SharedPrefsConsts {
     public static final String IS_DETAILED_REPORT_ROTATION_LANDSCAPE = "is_detailed_report_rotation_landscape";
     public static final String NEXT_NOTIFICATION_TYPE_ID_PREFIX = "next_notification_id_";
     public static final String SHOULD_SHOW_CONTRACT = "should_show_contract";
+    public static final String LAST_BOOT_TIME = "last_boot_time";
 }

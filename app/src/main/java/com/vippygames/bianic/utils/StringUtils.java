@@ -9,6 +9,8 @@ import java.util.Random;
 import java.util.TimeZone;
 
 public class StringUtils {
+    private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
+
     public String generateRandomString(int length) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random rng = new Random();
@@ -22,22 +24,18 @@ public class StringUtils {
     }
 
     public String getCurrentTime() {
-        String dateFormatNow = "yyyy-MM-dd HH:mm:ss";
-
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormatNow);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
         return sdf.format(cal.getTime());
     }
 
     public String convertUtcToLocalTime(String utcTime) {
         try {
-            String format = "yyyy-MM-dd HH:mm:ss";
-
-            SimpleDateFormat utcFormat = new SimpleDateFormat(format);
+            SimpleDateFormat utcFormat = new SimpleDateFormat(DATE_FORMAT_NOW);
             utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = utcFormat.parse(utcTime);
 
-            SimpleDateFormat localFormat = new SimpleDateFormat(format);
+            SimpleDateFormat localFormat = new SimpleDateFormat(DATE_FORMAT_NOW);
             localFormat.setTimeZone(TimeZone.getDefault());
             return localFormat.format(date);
         } catch (Exception e) {
