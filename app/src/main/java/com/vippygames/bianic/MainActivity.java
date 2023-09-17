@@ -2,7 +2,6 @@ package com.vippygames.bianic;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +18,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.review.ReviewException;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.model.ReviewErrorCode;
+import com.google.android.play.core.review.testing.FakeReviewManager;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
@@ -209,17 +214,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("About");
         builder.setMessage("App version: " + BuildConfig.VERSION_NAME);
-        builder.setPositiveButton("Get Help", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:" + ContactConsts.CONTACT_EMAIL));
-                startActivity(intent);
+        builder.setPositiveButton("Get Help", (dialog, which) -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:" + ContactConsts.CONTACT_EMAIL));
+            startActivity(intent);
+        });
+        builder.setNegativeButton("Review", (dialog, which) -> {
+            startInAppReview();
+        });
+        builder.setNeutralButton("Cancel", null);
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    private void startInAppReview() {
+//        ReviewManager manager = ReviewManagerFactory.create(this);
+        ReviewManager manager = new FakeReviewManager(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = task.getResult();
+                Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
+                flow.addOnCompleteListener(reviewTask -> {
+                    Toast.makeText(this, "Thank you for your feedback!", Toast.LENGTH_LONG).show();
+                });
+            } else {
+                // There was some problem, log or handle the error code.
+                @ReviewErrorCode int reviewErrorCode = ((ReviewException) task.getException()).getErrorCode();
+                Toast.makeText(this, "Couldn't review. Error code " + reviewErrorCode, Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setNegativeButton("Cancel", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void handleActionRedirectExceptions() {
