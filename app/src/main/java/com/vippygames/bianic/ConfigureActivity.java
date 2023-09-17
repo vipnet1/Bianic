@@ -19,9 +19,8 @@ import com.vippygames.bianic.consts.ConfigurationConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.permissions.NotificationPermissions;
-import com.vippygames.bianic.rebalancing.schedule.RebalancingAlarm;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
-import com.vippygames.bianic.utils.BootUtils;
+import com.vippygames.bianic.utils.RebalanceActivationUtils;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
@@ -244,8 +243,8 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         String secretKey = edtSecretKey.getText().toString();
         configurationManager.setSecretKey(secretKey);
 
-        int validationInterval = Integer.parseInt(validationIntervalText);
-        configurationManager.setValidationInterval(validationInterval);
+        int newValidationInterval = Integer.parseInt(validationIntervalText);
+        configurationManager.setValidationInterval(newValidationInterval);
 
         float thresholdRebalancingPercent = Float.parseFloat(thresholdRebalancingPercentText);
         configurationManager.setThresholdRebalancingPercent(thresholdRebalancingPercent);
@@ -256,7 +255,9 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         }
         configurationManager.setIsRebalancingActivated(newIsRebalancingActivated);
 
-        changeRebalancerIfNeeded(previousValidationInterval, previousIsRebalancingActivated, validationInterval, newIsRebalancingActivated);
+        RebalanceActivationUtils rebalanceActivationUtils = new RebalanceActivationUtils(this);
+        rebalanceActivationUtils.changeRebalancerIfNeeded(previousValidationInterval,
+                previousIsRebalancingActivated, newValidationInterval, newIsRebalancingActivated);
         Toast.makeText(this, "Saved configuration", Toast.LENGTH_SHORT).show();
         redirectMain();
     }
@@ -267,41 +268,6 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
     private void redirectMain() {
         finish();
-    }
-
-    private void changeRebalancerIfNeeded(int previousValidationInterval, int previousIsRebalancingActivated, int newValidationInterval, int newIsRebalancingActivated) {
-        RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(this);
-        BootUtils bootUtils = new BootUtils(this);
-
-        if (newIsRebalancingActivated == previousIsRebalancingActivated) {
-            // changed validation interval only
-            if (newIsRebalancingActivated == 1 && previousValidationInterval != newValidationInterval) {
-                rebalancingAlarm.cancelAlarm();
-                rebalancingAlarm.startAlarm(newValidationInterval);
-
-                // if didn't start foreground service yet, do it.
-                if (!bootUtils.haveCurrentBootTime()) {
-                    rebalancingAlarm.startRebalancingService();
-                }
-                bootUtils.setCurrentBootTime();
-            }
-
-            /*
-            We get here if changed setting not related to rebalance check or validation interval.
-            if we changed configuration not related to rebalance check or validation interval, we still want
-            the boot receiver to start the rebalance check if needed. That's why didn't call setCurrentBootTime() here.
-             */
-        } else {
-            if (newIsRebalancingActivated == 1) { // activated
-                rebalancingAlarm.startAlarm(newValidationInterval);
-                rebalancingAlarm.startRebalancingService();
-                bootUtils.setCurrentBootTime();
-            } else { // deactivated
-                rebalancingAlarm.cancelAlarm();
-                rebalancingAlarm.stopRebalancingService();
-                bootUtils.setCurrentBootTime();
-            }
-        }
     }
 
     private void initOperations() {

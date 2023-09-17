@@ -8,8 +8,8 @@ import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
 import com.vippygames.bianic.permissions.NotificationPermissions;
-import com.vippygames.bianic.rebalancing.schedule.RebalancingAlarm;
 import com.vippygames.bianic.utils.BootUtils;
+import com.vippygames.bianic.utils.RebalanceActivationUtils;
 
 public class BootReceiver extends BroadcastReceiver {
     @Override
@@ -23,9 +23,9 @@ public class BootReceiver extends BroadcastReceiver {
             bootUtils.setCurrentBootTime();
 
             ConfigurationManager configurationManager = new ConfigurationManager(context);
-            RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(context);
-            rebalancingAlarm.startAlarm(configurationManager.getValidationInterval());
-            rebalancingAlarm.startRebalancingService();
+            RebalanceActivationUtils rebalanceActivationUtils = new RebalanceActivationUtils(context);
+            // if passed shouldStartRebalanceCheck means newIsRebalancingActivated is 1
+            rebalanceActivationUtils.changeRebalancerAfterBoot(configurationManager.getValidationInterval(), 1);
         }
     }
 
