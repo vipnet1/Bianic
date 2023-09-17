@@ -43,6 +43,15 @@ public class RebalanceActivationUtils {
     }
 
     /*
+    For public call only from RebalancingReceiver.
+    */
+    public void stopServiceAndAlarm() {
+        RebalancingAlarm rebalancingAlarm = new RebalancingAlarm(context);
+        rebalancingAlarm.cancelAlarm();
+        rebalancingAlarm.stopRebalancingService();
+    }
+
+    /*
     Was handled before, so alarm may run or not run according to settings.
     If changed just the validation interval restart alarm with new value. If activated start alarm and service.
     If deactivated cancel alarm and service.
@@ -62,8 +71,7 @@ public class RebalanceActivationUtils {
                 rebalancingAlarm.startAlarm(newValidationInterval);
                 rebalancingAlarm.startRebalancingService();
             } else { // deactivated
-                rebalancingAlarm.cancelAlarm();
-                rebalancingAlarm.stopRebalancingService();
+                stopServiceAndAlarm();
             }
         }
     }
