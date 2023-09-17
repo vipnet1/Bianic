@@ -31,6 +31,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <Button
+                android:id="@+id/guide_create_keys"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Guide how to create keys"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#9093F3"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="#03A9F4" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

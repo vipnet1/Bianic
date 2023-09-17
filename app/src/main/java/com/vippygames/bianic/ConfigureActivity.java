@@ -1,21 +1,31 @@
 package com.vippygames.bianic;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ClickableSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
+import com.vippygames.bianic.consts.ContactConsts;
+import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.rebalancing.schedule.RebalancingAlarm;
+import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
@@ -69,6 +79,30 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_configure);
 
         initOperations();
+        showContractIfNeeded();
+    }
+
+    private void showContractIfNeeded() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        if (sp.getInt(SharedPrefsConsts.SHOULD_SHOW_CONTRACT, 1) == 0) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Important");
+        builder.setCancelable(false);
+        builder.setMessage("Storing the keys on your device in Bianic is safe because you should configure them as READ ONLY" +
+                " in Binance. Don't ever change the fact that they are read-only after showing it to Bianic. We are not responsible for" +
+                " any issues, trades or losses occurred because of not following this simple rule. We are not responsible for your losses " +
+                " in general - Bianic is a tool to help you and make your adventure easier, not an investment/trading advisor.");
+
+        builder.setPositiveButton("Accept", (dialog, which) -> {
+            SharedPreferencesHelper sp2 = new SharedPreferencesHelper(ConfigureActivity.this);
+            sp2.setInt(SharedPrefsConsts.SHOULD_SHOW_CONTRACT, 0);
+            dialog.dismiss();
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void handleActionActivate() {
@@ -278,7 +312,17 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         btnActivate.setOnClickListener(this);
         btnDeactivate.setOnClickListener(this);
 
+        initGuideToCreateKeys();
         setConfigurationData();
+    }
+
+    private void initGuideToCreateKeys() {
+        Button btnGuide = findViewById(R.id.guide_create_keys);
+        btnGuide.setOnClickListener(view -> {
+            Uri uri = Uri.parse(ConfigurationConsts.GUIDE_CREATE_KEYS_URL);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        });
     }
 
     private void setConfigurationData() {
