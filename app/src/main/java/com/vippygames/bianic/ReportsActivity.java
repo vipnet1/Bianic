@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.db.reports.ReportsDb;
 import com.vippygames.bianic.db.reports.ReportsRecord;
@@ -217,7 +218,14 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleActionRedirectMain() {
-        finish();
+        if (!getIntent().getBooleanExtra(NotificationConsts.LAUNCHED_FROM_NOTIFICATION_EXTRA, false)) {
+            finish();
+            return;
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        this.startActivity(intent);
     }
 
     private void refreshRecords() {

@@ -13,8 +13,11 @@ import android.graphics.BitmapFactory;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.vippygames.bianic.ExceptionsActivity;
 import com.vippygames.bianic.MainActivity;
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.ReportsActivity;
+import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
@@ -82,8 +85,9 @@ public class NotificationsHelper {
         Bitmap largeNotificationIcon = getLargeNotificationIcon(notificationType);
 
         // to redirect to main page when notification clicked
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = new Intent(context, getNotificatonPendingClass(notificationType));
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.putExtra(NotificationConsts.LAUNCHED_FROM_NOTIFICATION_EXTRA, true);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_IMMUTABLE);
 
         return new NotificationCompat.Builder(context, notificationType.getChannelId())
@@ -98,6 +102,20 @@ public class NotificationsHelper {
     private NotificationCompat.Builder buildPersistentNotification(NotificationCompat.Builder builder) {
         return builder.setOngoing(true).setOnlyAlertOnce(true);
     }
+
+    private Class<?> getNotificatonPendingClass(NotificationType notificationType) {
+        switch (notificationType) {
+            case REBALANCING_AVAILABLE:
+                return ReportsActivity.class;
+            case NORMAL_EXCEPTION:
+            case CRITICAL_EXCEPTION:
+            case FATAL_EXCEPTION:
+                return ExceptionsActivity.class;
+            default:
+                return MainActivity.class;
+        }
+    }
+
 
     private int getNotificationIcon(NotificationType notificationType) {
         switch (notificationType) {

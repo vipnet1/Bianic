@@ -1,6 +1,7 @@
 package com.vippygames.bianic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.consts.ExceptionHandleConsts;
+import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogRecord;
 import com.vippygames.bianic.utils.StringUtils;
@@ -128,7 +130,14 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void handleActionRedirectMain() {
-        finish();
+        if (!getIntent().getBooleanExtra(NotificationConsts.LAUNCHED_FROM_NOTIFICATION_EXTRA, false)) {
+            finish();
+            return;
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        this.startActivity(intent);
     }
 
     private void handleActionRefresh() {
