@@ -1,10 +1,12 @@
 package com.vippygames.bianic;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -97,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (itemId == R.id.about) {
             handleActionAbout();
             return true;
-        }
-        else if (itemId == R.id.guide) {
+        } else if (itemId == R.id.guide) {
             handleActionRedirectGuide();
             return true;
         }
@@ -150,6 +151,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadThresholdAllocationRecords();
 
         initBinanceRecordsValidationDialog();
+        redirectToGuideIfNeeded();
+    }
+
+    private void redirectToGuideIfNeeded() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        if (sp.getInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 1) == 1) {
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(MainActivity.this, GuideActivity.class);
+                startActivity(intent);
+            }, 1000);
+        }
     }
 
     private void checkPermissions() {
@@ -245,10 +257,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
             } else {
                 // There was some problem, log or handle the error code.
-                @ReviewErrorCode int reviewErrorCode = ((ReviewException) task.getException()).getErrorCode();
-                Toast.makeText(this, "Couldn't review. Error code " + reviewErrorCode, Toast.LENGTH_SHORT).show();
+                //  @ReviewErrorCode int reviewErrorCode = ((ReviewException) task.getException()).getErrorCode();
+                //  Toast.makeText(this, "Couldn't review. Error code " + reviewErrorCode, Toast.LENGTH_SHORT).show();
+                openAppInPlayStore();
             }
         });
+    }
+
+    private void openAppInPlayStore() {
+        final String appPackageName = getPackageName();
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ContactConsts.PLAY_STORE_MARKET_BASE_URI + appPackageName)));
+        } catch (android.content.ActivityNotFoundException ignored) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ContactConsts.PLAY_STORE_WEBSITE_BASE_URI + appPackageName)));
+        }
     }
 
     private void handleActionRedirectExceptions() {
