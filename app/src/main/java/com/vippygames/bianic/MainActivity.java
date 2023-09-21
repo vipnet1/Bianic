@@ -98,6 +98,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             handleActionAbout();
             return true;
         }
+        else if (itemId == R.id.guide) {
+            handleActionRedirectGuide();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -254,6 +258,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleActionRedirectReports() {
         Intent intent = new Intent(this, ReportsActivity.class);
+        this.startActivity(intent);
+    }
+
+    private void handleActionRedirectGuide() {
+        Intent intent = new Intent(this, GuideActivity.class);
         this.startActivity(intent);
     }
 

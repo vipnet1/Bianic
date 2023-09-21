@@ -18,6 +18,10 @@ public class FailedRequestStatusException extends NormalException {
             return "Likely wrong Secret Key. ";
         }
 
+        if (message.contains("\"code\":-1021")) {
+            return "Likely too bad/slow internet connection. ";
+        }
+
         return "";
     }
 
