@@ -17,9 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/Theme.BinanceRebalancingHelper">
-        <activity
-            android:name=".GuideActivity"
-            android:exported="false" />
 
         <receiver
             android:name=".BootReceiver"
@@ -54,6 +51,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".GuideActivity"
+            android:label="Guide" />
         <activity
             android:name=".ExceptionsActivity"
             android:label="Exceptions" />
