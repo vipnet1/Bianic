@@ -23,8 +23,16 @@ public class NetworkRequestException extends NormalException {
             return "";
         }
 
-        if (message.contains("No address associated with hostname")) {
+        if (message.contains("java.net.SocketTimeoutException")) {
+            return "Likely too bad/slow internet connection. ";
+        }
+
+        if (message.contains("No address associated with hostname") || message.contains("Failed to connect to")) {
             return "Likely no internet connection. ";
+        }
+
+        if (message.contains("java.net.")) {
+            return "Likely or slow network connection or no network at all. ";
         }
 
         return "";

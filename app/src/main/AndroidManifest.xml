@@ -52,6 +52,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".GuideActivity"
+            android:label="Guide" />
+        <activity
             android:name=".ExceptionsActivity"
             android:label="Exceptions" />
         <activity

@@ -4,17 +4,26 @@
     <item
         android:id="@+id/redirect_exceptions"
         android:title="Exceptions"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/guide"
+        android:title="Guide"
+        android:orderInCategory="4"
         app:showAsAction="never" />
     <item
         android:id="@+id/about"
         android:title="About"
+        android:orderInCategory="5"
         app:showAsAction="never" />
     <item
         android:id="@+id/redirect_configure"
         android:title="Configure"
+        android:orderInCategory="1"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/redirect_reports"
         android:title="Reports"
+        android:orderInCategory="2"
         app:showAsAction="ifRoom" />
 </menu>

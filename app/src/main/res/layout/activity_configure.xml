@@ -144,6 +144,18 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:text="To have no impact on your battery the interval won't be exact, but close to the value you select. So IT IS NORMAL if the real check is performed some minutes after or before the selected interval."
+                android:textColor="#275581"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/edt_validation_interval"
                 android:layout_width="match_parent"
