@@ -92,7 +92,7 @@ public class BinanceApi {
         NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper();
         ExchangeInfoApi exchangeInfoApi = new ExchangeInfoApi();
 
-        Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_EXCHANGE_INFO_ENDPOINT, "");
+        Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_EXCHANGE_INFO_ENDPOINT, "?permissions=SPOT");
 
         ResponseBody responseBody = response.body();
         if (responseBody == null) {

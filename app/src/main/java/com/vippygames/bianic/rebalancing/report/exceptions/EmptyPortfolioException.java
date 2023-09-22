@@ -7,7 +7,7 @@ public class EmptyPortfolioException extends NormalException {
     @Override
     public String getMessage() {
         return "Total value of selected coins is less than " + ReportsConsts.MIN_PORTFOLIO_VALUE_USDT
-                + "$. Add some value to them to generate reports.";
+                + "$. Add some value to them.";
     }
 
     @Override

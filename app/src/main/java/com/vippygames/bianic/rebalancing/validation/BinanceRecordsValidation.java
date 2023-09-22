@@ -57,7 +57,7 @@ public class BinanceRecordsValidation {
         for (ThresholdAllocationRecord record : records) {
             String coinSymbol = record.getSymbol();
             if (!exchangeInfo.containsKey(record.getSymbol())) {
-                String message = "Coin '" + coinSymbol + "' not found on Binance exchange";
+                String message = "Coin '" + coinSymbol + "' not found on Binance exchange.";
                 showToast(message, Toast.LENGTH_SHORT);
                 throw new FailedValidateRecordsException(message);
             }
