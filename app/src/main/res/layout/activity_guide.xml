@@ -73,7 +73,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
-                android:text="Go to the configuration page. The only required thing here is to paste your Binance API and Secret keys. You can also read there how to generate them in Binance. After Pasting the keys scroll down and click on the Save button."
+                android:text="Go to the configuration page. The only required thing here is to paste your Binance API and Secret keys. You can also read there how to generate them in Binance."
                 android:textColor="#2F3E4C"
                 android:textSize="18sp" />
 
@@ -84,7 +84,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
-                android:text="Please configure the keys in Binance as Read Only - we don't need any other permission and it's in your interests to secure your account."
+                android:text="Please configure the keys in Binance as Read Only. We don't need any other permission and it's in your interests to secure your account."
                 android:textColor="#E91E63"
                 android:textSize="18sp"
                 android:textStyle="bold" />
