@@ -459,8 +459,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="There are 3 types of exceptions:"
                 android:textColor="#3F51B5"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -471,8 +471,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="Normal Exception: Fixable issue that we predicted that may occur to you. For example no internet connection while Live Coin Watch is trying to retrieve information from Binance."
                 android:textColor="#9C27B0"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -483,8 +483,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="Critical Exception: Problem that we didn't expect to ever happen."
                 android:textColor="#9C27B0"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -495,8 +495,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="Fatal Exception: Problem saving other exceptions."
                 android:textColor="#9C27B0"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -507,8 +507,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="Usually, you encounter Normal Exceptions. They will often come with an indicative message about what was the cause. Their aim is to basically ask you to do some action, or fix something so Bianic can continue doing it's job."
                 android:textColor="#3F51B5"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -519,8 +519,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="If you encounter an issue that you can't fix or don't understand what happened, please contact us using the About and then Get Help buttons in the Main Page."
                 android:textColor="#673AB7"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -531,8 +531,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="We ask you to write us once you encounter any Critical or Fatal exceptions, as you shouldn't see them at all. That way we can keep improving Bianic."
                 android:textColor="#9C27B0"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -555,8 +555,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="Pro Tip #1: Different exception types have different colors. In the Exceptions page they can be yellow-orange-red. Also they have different orange-red types of color's in the notifications."
                 android:textColor="#9C27B0"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -567,8 +567,8 @@
                 android:layout_marginBottom="0dp"
                 android:text="Pro Tip #2: 99% of Exceptions occur because you have no network, slow network, wrong Binance keys or didn't setup the cryptos in the Main Page correctly."
                 android:textColor="#9C27B0"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"

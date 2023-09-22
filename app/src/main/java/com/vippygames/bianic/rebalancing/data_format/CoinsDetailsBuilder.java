@@ -40,15 +40,14 @@ public class CoinsDetailsBuilder {
 
         for (ThresholdAllocationRecord record : records) {
             String symbol = record.getSymbol();
+
+            CoinPrice coinPrice = coinPriceMap.get(symbol);
             CoinAmount coinAmount = null;
-            CoinPrice coinPrice = null;
 
             if (coinAmountMap.containsKey(symbol)) {
                 coinAmount = coinAmountMap.get(symbol);
-                coinPrice = coinPriceMap.get(symbol);
             } else {
                 coinAmount = new CoinAmount(symbol, 0);
-                coinPrice = new CoinPrice(symbol, 0);
             }
 
             CoinDetails coinDetails = new CoinDetails(coinAmount, coinPrice, record);

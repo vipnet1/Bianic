@@ -17,10 +17,10 @@ public class ReportCalculations {
         return 100 * (currentPortfolioPercent / desiredPortfolioPercent) - 100;
     }
 
-    public double calculateTargetQuantity(double currentPortfolioPercent,
-                                          double desiredPortfolioPercent, double coinAmount) {
-        double coinAmountAtDesiredPercent = (desiredPortfolioPercent / currentPortfolioPercent) * coinAmount;
-        return coinAmountAtDesiredPercent - coinAmount;
+    public double calculateTargetQuantity(double currentPortfolioPercent, double desiredPortfolioPercent,
+                                          double coinPrice, double portfolioUsdValue) {
+        double neededUsd = portfolioUsdValue * (desiredPortfolioPercent - currentPortfolioPercent) / 100.0;
+        return neededUsd / coinPrice;
     }
 
     public double getCurrentPortfolioPercent(double coinTotalUsdValue, double portfolioUsdValue) {
