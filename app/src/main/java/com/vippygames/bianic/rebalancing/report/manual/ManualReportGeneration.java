@@ -16,6 +16,7 @@ import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.S
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
 import com.vippygames.bianic.rebalancing.report.ReportGenerator;
+import com.vippygames.bianic.rebalancing.report.exceptions.EmptyPortfolioException;
 import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 import java.util.List;
@@ -37,10 +38,10 @@ public class ManualReportGeneration {
 
             return true;
 
-        } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
-                 | SignatureGenerationException | CoinsPriceParseException
-                 | CoinsAmountParseException | CoinsDetailsBuilderException
-                 | KeyNotFoundException e) {
+        } catch (NetworkRequestException | FailedRequestStatusException |
+                 EmptyResponseBodyException | SignatureGenerationException |
+                 CoinsPriceParseException | CoinsAmountParseException |
+                 CoinsDetailsBuilderException | KeyNotFoundException | EmptyPortfolioException e) {
             showToast("Exception occurred. View exceptions for more details.");
 
             ExceptionHandler exceptionHandler = new ExceptionHandler(reportsActivity);

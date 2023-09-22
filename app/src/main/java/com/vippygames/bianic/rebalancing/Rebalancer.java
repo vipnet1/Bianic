@@ -13,6 +13,7 @@ import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.N
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
+import com.vippygames.bianic.rebalancing.report.exceptions.EmptyPortfolioException;
 import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;
 import com.vippygames.bianic.rebalancing.validation.exceptions.UnvalidatedRecordsException;
 import com.vippygames.bianic.rebalancing.watch.threshold.ThresholdWatch;
@@ -38,10 +39,11 @@ public class Rebalancer {
             ThresholdWatch thresholdWatch = new ThresholdWatch(context);
             thresholdWatch.check(coinsDetails);
 
-        } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
-                 | SignatureGenerationException | CoinsPriceParseException
-                 | CoinsAmountParseException | CoinsDetailsBuilderException
-                 | KeyNotFoundException | UnvalidatedRecordsException e) {
+        } catch (NetworkRequestException | FailedRequestStatusException |
+                 EmptyResponseBodyException | SignatureGenerationException |
+                 CoinsPriceParseException | CoinsAmountParseException |
+                 CoinsDetailsBuilderException | KeyNotFoundException | UnvalidatedRecordsException |
+                 EmptyPortfolioException e) {
             ExceptionHandler exceptionHandler = new ExceptionHandler(context);
             exceptionHandler.handleException(e);
         } catch (Exception e) {

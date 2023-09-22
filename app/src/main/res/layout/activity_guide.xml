@@ -130,6 +130,18 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
+                android:text="Bianic works only with cryptos in the Spot Wallet. It won't recognize or use coins outside of your Spot Wallet."
+                android:textColor="#9C27B0"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
                 android:text="After selecting click on Save button. Then click on Validate Records, to check whether Bianic can work with the coins you inserted. When records are valid you may continue."
                 android:textColor="#2F3E4C"
                 android:textSize="18sp" />

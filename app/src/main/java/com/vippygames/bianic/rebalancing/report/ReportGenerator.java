@@ -3,11 +3,13 @@ package com.vippygames.bianic.rebalancing.report;
 import android.content.Context;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
+import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
 import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsRecord;
 import com.vippygames.bianic.db.reports.ReportsDb;
 import com.vippygames.bianic.db.reports.ReportsRecord;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
+import com.vippygames.bianic.rebalancing.report.exceptions.EmptyPortfolioException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +22,19 @@ public class ReportGenerator {
         this.context = context;
     }
 
-    public void generateReport(List<CoinDetails> coinsDetails) {
+    public void generateReport(List<CoinDetails> coinsDetails) throws EmptyPortfolioException {
+        ReportCalculations reportCalculations = new ReportCalculations();
+        double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
+        if (portfolioUsdValue < ReportsConsts.MIN_PORTFOLIO_VALUE_USDT) {
+            throw new EmptyPortfolioException();
+        }
+
         String uuid = generateUuid();
         int coinsCount = coinsDetails.size();
 
         ConfigurationManager configurationManager = new ConfigurationManager(context);
         float thresholdRebalancingPercent = configurationManager.getThresholdRebalancingPercent();
 
-        ReportCalculations reportCalculations = new ReportCalculations();
-
-        double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
         double absHighestDeviationPercent = -1;
         double highestDeviationPercent = -1;
         String highestDeviationSymbol = "";

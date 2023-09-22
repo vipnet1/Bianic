@@ -108,11 +108,12 @@ public class NotificationsHelper {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(false);
+                .setAutoCancel(false)
+                .setOnlyAlertOnce(true);
     }
 
     private NotificationCompat.Builder buildPersistentNotification(NotificationCompat.Builder builder) {
-        return builder.setOngoing(true).setOnlyAlertOnce(true);
+        return builder.setOngoing(true);
     }
 
     private Class<?> getNotificatonPendingClass(NotificationType notificationType) {
