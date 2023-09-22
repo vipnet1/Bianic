@@ -17,10 +17,14 @@ import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.N
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponseParser;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
+import com.vippygames.bianic.rebalancing.api.exchange_info.ExchangeInfo;
+import com.vippygames.bianic.rebalancing.api.exchange_info.ExchangeInfoApi;
+import com.vippygames.bianic.rebalancing.api.exchange_info.exceptions.ExchangeInfoParseException;
 import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -79,6 +83,27 @@ public class BinanceApi {
         }
 
         List<CoinPrice> result = coinsPriceApi.parseCoinsPrice(responseBody);
+        networkRequestHelper.closeResponseBody(responseBody);
+        return result;
+    }
+
+    public Map<String, ExchangeInfo> getExchangeInfo() throws NetworkRequestException,
+            EmptyResponseBodyException, FailedRequestStatusException, ExchangeInfoParseException {
+        NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper();
+        ExchangeInfoApi exchangeInfoApi = new ExchangeInfoApi();
+
+        Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_EXCHANGE_INFO_ENDPOINT, "");
+
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            throw new EmptyResponseBodyException();
+        }
+
+        if (!response.isSuccessful()) {
+            throw new FailedRequestStatusException(response.code(), tryGetFailedRequestMessage(responseBody));
+        }
+
+        Map<String, ExchangeInfo> result = exchangeInfoApi.parseExchangeInfo(responseBody);
         networkRequestHelper.closeResponseBody(responseBody);
         return result;
     }

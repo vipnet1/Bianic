@@ -18,6 +18,8 @@ import com.vippygames.bianic.rebalancing.api.common.exceptions.EmptyResponseBody
 import com.vippygames.bianic.rebalancing.api.common.exceptions.FailedRequestStatusException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
+import com.vippygames.bianic.rebalancing.api.exchange_info.ExchangeInfo;
+import com.vippygames.bianic.rebalancing.api.exchange_info.exceptions.ExchangeInfoParseException;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.data_format.CoinsDetailsBuilder;
 import com.vippygames.bianic.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
@@ -26,6 +28,7 @@ import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class BinanceRecordsValidation {
@@ -38,6 +41,8 @@ public class BinanceRecordsValidation {
     public boolean validateRecordsBinance() {
         try {
             BinanceManager binanceManager = new BinanceManager(mainActivity);
+
+            Map<String, ExchangeInfo> exchangeInfo = binanceManager.getExchangeInfo();
 
             ThresholdAllocationDb db = new ThresholdAllocationDb(mainActivity);
             List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecords());
@@ -57,7 +62,8 @@ public class BinanceRecordsValidation {
         } catch (NetworkRequestException | FailedRequestStatusException | EmptyResponseBodyException
                  | SignatureGenerationException | CoinsPriceParseException
                  | CoinsAmountParseException | CoinsDetailsBuilderException
-                 | KeyNotFoundException | FailedValidateRecordsException e) {
+                 | KeyNotFoundException | FailedValidateRecordsException |
+                 ExchangeInfoParseException e) {
             ExceptionHandler exceptionHandler = new ExceptionHandler(mainActivity);
             exceptionHandler.handleException(e);
         } catch (Exception e) {

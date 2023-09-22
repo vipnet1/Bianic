@@ -14,12 +14,15 @@ import com.vippygames.bianic.rebalancing.api.common.exceptions.EmptyResponseBody
 import com.vippygames.bianic.rebalancing.api.common.exceptions.FailedRequestStatusException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.SignatureGenerationException;
+import com.vippygames.bianic.rebalancing.api.exchange_info.ExchangeInfo;
+import com.vippygames.bianic.rebalancing.api.exchange_info.exceptions.ExchangeInfoParseException;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.data_format.CoinsDetailsBuilder;
 import com.vippygames.bianic.rebalancing.data_format.exceptions.CoinsDetailsBuilderException;
 import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 import java.util.List;
+import java.util.Map;
 
 public class BinanceManager {
     private final Context context;
@@ -62,6 +65,12 @@ public class BinanceManager {
         }
 
         return coinsPrice;
+    }
+
+    public Map<String, ExchangeInfo> getExchangeInfo() throws NetworkRequestException,
+            FailedRequestStatusException, EmptyResponseBodyException, ExchangeInfoParseException {
+        BinanceApi binanceApi = new BinanceApi(context);
+        return binanceApi.getExchangeInfo();
     }
 
     private boolean areRecordsContainUsdt(List<ThresholdAllocationRecord> records) {
