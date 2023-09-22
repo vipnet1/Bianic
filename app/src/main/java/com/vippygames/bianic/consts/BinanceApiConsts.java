@@ -4,6 +4,7 @@ public abstract class BinanceApiConsts {
     public static final String MAIN_ENDPOINT = "https://api.binance.com";
     public static final String ACCOUNT_ENDPOINT = "/api/v3/account";
     public static final String TICKER_PRICE_ENDPOINT = "/api/v3/ticker/price";
+    public static final String TICKER_EXCHANGE_INFO_ENDPOINT = "/api/v3/exchangeInfo";
 
     // take 30 seconds from timestamp, and give 30 seconds to complete request
     public static final String RECEIVE_WINDOW = "60000";

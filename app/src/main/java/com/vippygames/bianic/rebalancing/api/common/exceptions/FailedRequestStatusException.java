@@ -22,6 +22,10 @@ public class FailedRequestStatusException extends NormalException {
             return "Likely too bad/slow internet connection. ";
         }
 
+        if (message.contains("\"code\":-1121")) {
+            return "Likely Binance removed one of your coins from the exchange. Please validate the records again. ";
+        }
+
         return "";
     }
 

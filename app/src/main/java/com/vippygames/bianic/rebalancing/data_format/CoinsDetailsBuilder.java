@@ -33,17 +33,25 @@ public class CoinsDetailsBuilder {
             coinAmountMap.put(coinAmount.getSymbol(), coinAmount);
         }
 
-        Map<String, ThresholdAllocationRecord> symbolsToRecords = getSymbolToThresholdAllocationRecordMap(records);
-
+        Map<String, CoinPrice> coinPriceMap = new HashMap<>();
         for (CoinPrice coinPrice : coinsPrice) {
-            String symbol = coinPrice.getSymbol();
-            CoinAmount coinAmount = coinAmountMap.get(symbol);
-            if (coinAmount == null) {
-                throw new CoinsDetailsBuilderException("Likely you sold entirely a coin you " +
-                        "declared you have in coin selection page. ");
+            coinPriceMap.put(coinPrice.getSymbol(), coinPrice);
+        }
+
+        for (ThresholdAllocationRecord record : records) {
+            String symbol = record.getSymbol();
+            CoinAmount coinAmount = null;
+            CoinPrice coinPrice = null;
+
+            if (coinAmountMap.containsKey(symbol)) {
+                coinAmount = coinAmountMap.get(symbol);
+                coinPrice = coinPriceMap.get(symbol);
+            } else {
+                coinAmount = new CoinAmount(symbol, 0);
+                coinPrice = new CoinPrice(symbol, 0);
             }
 
-            CoinDetails coinDetails = new CoinDetails(coinAmount, coinPrice, symbolsToRecords.get(symbol));
+            CoinDetails coinDetails = new CoinDetails(coinAmount, coinPrice, record);
             coinsDetails.add(coinDetails);
         }
 

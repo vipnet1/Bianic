@@ -3,11 +3,13 @@ package com.vippygames.bianic.rebalancing.watch.threshold;
 import android.content.Context;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
+import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.report.ReportCalculations;
 import com.vippygames.bianic.rebalancing.report.ReportGenerator;
+import com.vippygames.bianic.rebalancing.report.exceptions.EmptyPortfolioException;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class ThresholdWatch {
         this.context = context;
     }
 
-    public void check(List<CoinDetails> coinsDetails) {
+    public void check(List<CoinDetails> coinsDetails) throws EmptyPortfolioException {
         CoinDetails coinDetails = getRebalancingCoinDetailsCause(coinsDetails);
         if (coinDetails == null) {
             return;
@@ -30,9 +32,12 @@ public class ThresholdWatch {
     }
 
     // if should rebalance get CoinDetails that is the reason, if not returns null
-    private CoinDetails getRebalancingCoinDetailsCause(List<CoinDetails> coinsDetails) {
+    private CoinDetails getRebalancingCoinDetailsCause(List<CoinDetails> coinsDetails) throws EmptyPortfolioException {
         ReportCalculations reportCalculations = new ReportCalculations();
         double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
+        if (portfolioUsdValue < ReportsConsts.MIN_PORTFOLIO_VALUE_USDT) {
+            throw new EmptyPortfolioException();
+        }
 
         ConfigurationManager configurationManager = new ConfigurationManager(context);
         float thresholdRebalancingPercent = configurationManager.getThresholdRebalancingPercent();
