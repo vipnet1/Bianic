@@ -1,13 +1,11 @@
 package com.vippygames.bianic;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;

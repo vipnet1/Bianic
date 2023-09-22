@@ -1,7 +1,6 @@
 package com.vippygames.bianic;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,11 +20,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
-import com.google.android.play.core.review.ReviewException;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.review.model.ReviewErrorCode;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;

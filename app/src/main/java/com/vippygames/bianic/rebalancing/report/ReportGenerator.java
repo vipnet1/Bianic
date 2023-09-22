@@ -59,13 +59,13 @@ public class ReportGenerator {
                 shouldRebalance = true;
             }
 
-            double coinAmount = coinDetails.getAmount();
+            double coinPrice = coinDetails.getPrice();
             double targetQuantity = reportCalculations.calculateTargetQuantity(currentPortfolioPercent,
-                    desiredPortfolioPercent, coinAmount);
+                    desiredPortfolioPercent, coinPrice, portfolioUsdValue);
 
             DetailedReportsRecord detailedReportsRecord = new DetailedReportsRecord(
                     generateUuid(), uuid, coinDetails.getSymbol(), coinDetails.getDesiredPortfolioPercent(),
-                    coinAmount, coinDetails.getPrice(), coinDetails.getTotalUsdValue(),
+                    coinDetails.getAmount(), coinPrice, coinDetails.getTotalUsdValue(),
                     currentPortfolioPercent, targetQuantity);
             detailedReportsRecords.add(detailedReportsRecord);
         }

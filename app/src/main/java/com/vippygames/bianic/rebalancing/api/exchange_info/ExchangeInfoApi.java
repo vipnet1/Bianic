@@ -32,8 +32,7 @@ public class ExchangeInfoApi {
                 if (coinPair.endsWith(BinanceApiConsts.USDT_SYMBOL)) {
                     String coinSymbol = coinPair.substring(0, coinPair.length() - BinanceApiConsts.USDT_SYMBOL.length());
                     exchangeInfos.put(coinSymbol, new ExchangeInfo(coinSymbol));
-                }
-                else if (coinPair.startsWith(BinanceApiConsts.USDT_SYMBOL)) {
+                } else if (coinPair.startsWith(BinanceApiConsts.USDT_SYMBOL)) {
                     String coinSymbol = coinPair.substring(BinanceApiConsts.USDT_SYMBOL.length());
                     exchangeInfos.put(coinSymbol, new ExchangeInfo(coinSymbol));
                 }
