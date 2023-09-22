@@ -138,7 +138,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             recordRoot.setBackgroundColor(Color.rgb(209, 219, 230));
         }
 
-        tvTotalUsd.setText(stringUtils.convertDoubleToString(record.getPortfolioUsdValue(), 1));
+        tvTotalUsd.setText(stringUtils.convertDoubleToString(record.getPortfolioUsdValue(), 1) + "$");
         tvThreshold.setText(stringUtils.convertDoubleToString(record.getThresholdRebalancingPercent(), 3) + "%");
         tvCoins.setText(String.valueOf(record.getCoinsCount()));
         tvHighestDeviationCoin.setText(record.getHighestDeviationCoin());
