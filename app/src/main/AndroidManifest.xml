@@ -41,7 +41,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Bianic"
+            android:label="@string/manifest_main_label"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,19 +51,19 @@
         </activity>
         <activity
             android:name=".GuideActivity"
-            android:label="Guide" />
+            android:label="@string/manifest_guide_label" />
         <activity
             android:name=".ExceptionsActivity"
-            android:label="Exceptions" />
+            android:label="@string/manifest_excp_label" />
         <activity
             android:name=".ConfigureActivity"
-            android:label="Configure" />
+            android:label="@string/manifest_config_label" />
         <activity
             android:name=".ReportsActivity"
-            android:label="Reports" />
+            android:label="@string/manifest_rep_label" />
         <activity
             android:name=".DetailedReportActivity"
-            android:label="Detailed Report" />
+            android:label="@string/manifest_detrep_label" />
     </application>
 
 </manifest>

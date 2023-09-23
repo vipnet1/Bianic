@@ -151,6 +151,8 @@
     <string name="C_main_toast_allocationsSumNot100">"Total allocations sum is not 100 - it's "</string>
     <string name="C_main_toast_duplicatedSymbol">"Same symbol name in multiple records - "</string>
 
+    <string name="C_excp_cdClearException">"Clear exception "</string>
+
     <string name="C_reports_toast_reportGenerated">Report generated.</string>
     <string name="C_reports_dialog_reportGenerationTitle">Report Generation</string>
     <string name="C_reports_dialog_reportGenerationMessage">Generating report. Wait a moment please.</string>
@@ -223,4 +225,13 @@
     <string name="C_notificationType_normalExceptionChannelDesc">Fixable problem occurred.</string>
     <string name="C_notificationType_criticalExceptionChannelDesc">Problem we didn\'t expect to happen.</string>
     <string name="C_notificationType_fatalExceptionChannelDesc">Problem storing other exceptions.</string>
+    <string name="C_reports_cdReportDetails">"Report details "</string>
+    <string name="C_reports_cdClearReport">"Clear report "</string>
+
+    <string name="manifest_main_label">Bianic</string>
+    <string name="manifest_config_label">Configure</string>
+    <string name="manifest_detrep_label">Detailed Report</string>
+    <string name="manifest_guide_label">Guide</string>
+    <string name="manifest_excp_label">Exceptions</string>
+    <string name="manifest_rep_label">Reports</string>
 </resources>

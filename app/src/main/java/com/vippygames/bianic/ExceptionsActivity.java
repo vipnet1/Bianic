@@ -80,12 +80,14 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         ExceptionsLogDb db = new ExceptionsLogDb(this);
         List<ExceptionsLogRecord> records = db.loadRecords(db.getRecordsOrderedByCreatedAt());
 
+        int index = 0;
         for (ExceptionsLogRecord record : records) {
-            addExceptionRecordToUi(record);
+            addExceptionRecordToUi(record, index);
+            index++;
         }
     }
 
-    private void addExceptionRecordToUi(ExceptionsLogRecord record) {
+    private void addExceptionRecordToUi(ExceptionsLogRecord record, int index) {
         View recordRoot = addEmptyRecord();
 
         TextView tvRecordDbId = recordRoot.findViewById(R.id.record_db_id);
@@ -109,6 +111,7 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         tvSeverity.setText(severity);
         tvMessage.setText(record.getMessage());
 
+        btnClearException.setContentDescription(getString(R.string.C_excp_cdClearException) + index);
         btnClearException.setOnClickListener(this);
 
         String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);

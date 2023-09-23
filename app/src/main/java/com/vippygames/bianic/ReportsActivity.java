@@ -104,12 +104,14 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         ReportsDb db = new ReportsDb(this);
         List<ReportsRecord> records = db.loadRecords(db.getRecordsOrderedByCreatedAt());
 
+        int index = 0;
         for (ReportsRecord record : records) {
-            addReportRecordToUi(record);
+            addReportRecordToUi(record, index);
+            index++;
         }
     }
 
-    private void addReportRecordToUi(ReportsRecord record) {
+    private void addReportRecordToUi(ReportsRecord record, int index) {
         View recordRoot = addEmptyRecord();
 
         TextView tvRecordDbUuid = recordRoot.findViewById(R.id.record_db_uuid);
@@ -144,7 +146,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         tvHighestDeviationCoin.setText(record.getHighestDeviationCoin());
         tvHighestDeviationPercent.setText(stringUtils.convertDoubleToString(record.getHighestDeviationPercent(), 3) + "%");
 
+        btnDetails.setContentDescription(getString(R.string.C_reports_cdReportDetails) + index);
         btnDetails.setOnClickListener(this);
+
+        btnClearReport.setContentDescription(getString(R.string.C_reports_cdClearReport) + index);
         btnClearReport.setOnClickListener(this);
 
         String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
