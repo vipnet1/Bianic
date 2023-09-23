@@ -69,9 +69,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:contentDescription="Your Binance Api Key"
                 android:enabled="true"
                 android:hint="Api Key"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:minHeight="48dp" />
 
             <Button
                 android:id="@+id/btn_show_beginning_api"
@@ -103,9 +105,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:contentDescription="Your Binance Secret Key"
                 android:enabled="true"
                 android:hint="Secret Key"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:minHeight="48dp" />
 
             <Button
                 android:id="@+id/btn_show_beginning_secret"
@@ -164,7 +168,8 @@
                 android:enabled="true"
                 android:hint="Validation interval in minutes"
                 android:inputType="number"
-                android:maxLength="6" />
+                android:maxLength="6"
+                android:minHeight="48dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -211,7 +216,8 @@
                 android:enabled="true"
                 android:hint="Threshold rebalancing percent"
                 android:inputType="numberDecimal"
-                android:maxLength="9" />
+                android:maxLength="9"
+                android:minHeight="48dp" />
 
             <TextView
                 android:layout_width="match_parent"

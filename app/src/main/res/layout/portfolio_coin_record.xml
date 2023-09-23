@@ -18,6 +18,7 @@
             android:enabled="true"
             android:hint="Symbol"
             android:inputType="text"
+            android:minHeight="48dp"
             android:maxLength="10" />
 
         <EditText
@@ -29,6 +30,7 @@
             android:enabled="true"
             android:hint="Allocation %"
             android:inputType="numberDecimal"
+            android:minHeight="48dp"
             android:maxLength="6" />
 
         <Button
