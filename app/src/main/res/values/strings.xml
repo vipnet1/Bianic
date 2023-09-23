@@ -116,4 +116,37 @@
     <string name="reprcd_tv_highestDeviation">Highest Deviation</string>
     <string name="reprcd_btn_details">Details</string>
     <string name="reprcd_btn_clear">Clear</string>
+
+    <string name="C_main_toast_failedValidateRecords">Failed validating records. View exception for details.</string>
+    <string name="C_main_toast_recordsValid">Records are valid</string>
+    <string name="C_main_dialog_requestPermissionsTitle">Why Those Permissions Are Needed</string>
+    <string name="C_main_dialog_requestPermissionsMessage"><![CDATA[The permissions we will ask for are crucial for the normal operation of the app. The battery one to continue doing our job in power saving mode. The notifications to run in background & communicate with you.]]></string>
+    <string name="C_main_dialog_requestPermissionsSure">Sure</string>
+    <string name="C_main_dialog_recordsValidationTitle">Records Validation</string>
+    <string name="C_main_dialog_recordsValidationMessage">Checking with binance whether the records are valid. Wait a moment please.</string>
+    <string name="C_main_dialog_aboutTitle">About</string>
+    <string name="C_main_dialog_aboutMessage">"App version: "</string>
+    <string name="C_main_dialog_aboutGetHelp">Get Help</string>
+    <string name="C_main_toast_noEmailAppFound">No email app found</string>
+    <string name="C_main_dialog_aboutReview">Review</string>
+    <string name="C_main_dialog_aboutCancel">Cancel</string>
+    <string name="C_main_toast_reviewThankYou">Thank you for your feedback!</string>
+    <string name="C_main_toast_reviewNoBrowserApp">No browser app found</string>
+    <string name="C_main_toast_onlyOneRecordEdit">Only one concurrent record edit</string>
+    <string name="C_main_toast_savedRecords">Saved records</string>
+    <string name="C_main_toast_cantRevertWhileEditing">Can\'t revert while editing record</string>
+    <string name="C_main_toast_restoredRecords">Restored previous records</string>
+    <string name="C_main_toast_cantValidateWhileEditing">Can\'t validate records while editing record</string>
+    <string name="C_main_toast_allocationCantBeEmpty">Allocation cannot be empty</string>
+    <string name="C_main_toast_allocationMaximalIs">Maximal allocation is 100%</string>
+    <string name="C_main_toast_allocationMinimalIs">Minimal allocation is 0.1%</string>
+    <string name="C_main_toast_allocationDotNotFirstCharacter">Dot cannot be first character in allocation</string>
+    <string name="C_main_toast_allocationDotNotLastCharacter">Dot cannot be last character in allocation</string>
+    <string name="C_main_toast_allocationUpToDigitsAfterDot">up to 2 digits after dot in allocation</string>
+    <string name="C_main_toast_allocationCoinInvalidFormat">Coin has invalid allocation format.</string>
+    <string name="C_main_toast_symbolNotEmpty">Symbol cannot be empty</string>
+    <string name="C_main_toast_symbolOnlyAlphanumeric">Symbol must contain only alphanumeric characters</string>
+    <string name="C_main_toast_cantSaveWhileEditing">Can\'t save while editing record</string>
+    <string name="C_main_toast_allocationsSumNot100">"Total allocations sum is not 100 - it's "</string>
+    <string name="C_main_toast_duplicatedSymbol">"Same symbol name in multiple records - "</string>
 </resources>
