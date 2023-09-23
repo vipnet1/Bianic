@@ -15,7 +15,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:text="Please, configure the keys in Binance as READ ONLY!"
+        android:text="@string/config_tv_setKeysRo"
         android:textColor="#F44336"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -42,7 +42,7 @@
                 android:backgroundTint="#9093F3"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Guide how to create keys"
+                android:text="@string/config_btn_guideCreateKeys"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
@@ -59,7 +59,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
-                android:text="Api Key"
+                android:text="@string/config_tv_apiKey"
                 android:textColor="#2F3E4C"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -69,9 +69,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:contentDescription="Your Binance Api Key"
                 android:enabled="true"
-                android:hint="Api Key"
+                android:hint="@string/config_edt_apiKey"
                 android:inputType="textPassword"
                 android:minHeight="48dp" />
 
@@ -84,7 +83,7 @@
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
                 android:backgroundTint="#9C27B0"
-                android:text="Show Beginning Of Api"
+                android:text="@string/config_btn_showApi"
                 android:visibility="visible" />
 
             <TextView
@@ -95,7 +94,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
-                android:text="Secret Key"
+                android:text="@string/config_tv_secretKey"
                 android:textColor="#2F3E4C"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -105,9 +104,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:contentDescription="Your Binance Secret Key"
                 android:enabled="true"
-                android:hint="Secret Key"
+                android:hint="@string/config_edt_secretKey"
                 android:inputType="textPassword"
                 android:minHeight="48dp" />
 
@@ -120,7 +118,7 @@
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
                 android:backgroundTint="#9C27B0"
-                android:text="Show Beginning Of Secret"
+                android:text="@string/config_btn_showSecret"
                 android:visibility="visible" />
 
             <TextView
@@ -131,7 +129,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
-                android:text="Validation Interval"
+                android:text="@string/config_tv_validationInterval"
                 android:textColor="#2F3E4C"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -143,7 +141,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
-                android:text="Every how many MINUTES check whether should rebalance. Doing it often may drain your battery faster."
+                android:text="@string/config_tv_descValidationInterval0"
                 android:textColor="#2F3E4C"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -155,7 +153,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
-                android:text="To have no impact on your battery the interval won't be exact, but close to the value you select. So IT IS NORMAL if the real check is performed some minutes after or before the selected interval."
+                android:text="@string/config_tv_descValidationInterval1"
                 android:textColor="#275581"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -166,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:enabled="true"
-                android:hint="Validation interval in minutes"
+                android:hint="@string/config_edt_validationInterval"
                 android:inputType="number"
                 android:maxLength="6"
                 android:minHeight="48dp" />
@@ -179,7 +177,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
-                android:text="Threshold Rebalancing Percent"
+                android:text="@string/config_tv_thresholdRebalancingPercent"
                 android:textColor="#2F3E4C"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -191,7 +189,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
-                android:text="By what percent ANY COIN INITIAL ALLOCATION have to go up/down for you to get notified. We threat the coins that you added in the main page as your whole portfolio even if you have other coins."
+                android:text="@string/config_tv_descThresholdRebalancingPercent0"
                 android:textColor="#2F3E4C"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -203,7 +201,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
-                android:text="Suppose you have 30% BTC and 70% ETH of your total portfolio, and you put 10 in the setting below. Some day BTC went up and now above 33% of your whole portfolio. BTC went up by more than 10% of it's initial allocation so you will get notified."
+                android:text="@string/config_tv_descThresholdRebalancingPercent1"
                 android:textColor="#275581"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -214,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:enabled="true"
-                android:hint="Threshold rebalancing percent"
+                android:hint="@string/config_edt_thresholdRebalancingPercent"
                 android:inputType="numberDecimal"
                 android:maxLength="9"
                 android:minHeight="48dp" />
@@ -227,7 +225,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
-                android:text="Rebalancing Check Activation"
+                android:text="@string/config_tv_rebalancingCheckActivation"
                 android:textColor="#2F3E4C"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -241,7 +239,7 @@
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="30dp"
                 android:backgroundTint="#4CAF50"
-                android:text="Activate"
+                android:text="@string/config_btn_rebalanceActivate"
                 android:visibility="visible" />
 
             <Button
@@ -253,7 +251,7 @@
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="30dp"
                 android:backgroundTint="#E91E63"
-                android:text="Deactivate"
+                android:text="@string/config_btn_rebalanceDeactivate"
                 android:visibility="gone" />
 
             <TextView
@@ -270,7 +268,7 @@
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="5dp"
                 android:backgroundTint="#4CAF50"
-                android:text="Save"
+                android:text="@string/config_btn_save"
                 android:visibility="visible" />
 
             <Button
@@ -282,7 +280,7 @@
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
                 android:backgroundTint="#9C27B0"
-                android:text="Revert"
+                android:text="@string/config_btn_revert"
                 android:visibility="visible" />
 
         </LinearLayout>

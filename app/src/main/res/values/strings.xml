@@ -1,3 +1,119 @@
 <resources>
     <string name="app_name">Bianic</string>
+
+    <string name="main_sv_cdCoinsScrollView">Select cryptos to rebalance or monitor</string>
+    <string name="main_tv_rebalanceCheckWarning">Periodic rebalancing check won\'t occur until you validate records!</string>
+    <string name="main_btn_addRecord">Add record</string>
+    <string name="main_btn_save">Save</string>
+    <string name="main_btn_revert">Revert</string>
+    <string name="main_btn_validateRecords">Validate Records</string>
+
+    <string name="config_tv_setKeysRo">Please, configure the keys in Binance as READ ONLY!</string>
+    <string name="config_btn_guideCreateKeys">Guide how to create keys</string>
+    <string name="config_tv_apiKey">Api Key</string>
+    <string name="config_edt_apiKey">Enter your Binance Api Key</string>
+    <string name="config_btn_showApi">Show Beginning Of Api</string>
+    <string name="config_tv_secretKey">Secret Key</string>
+    <string name="config_edt_secretKey">Enter your Binance Secret Key</string>
+    <string name="config_btn_showSecret">Show Beginning Of Secret</string>
+    <string name="config_tv_validationInterval">Validation Interval</string>
+    <string name="config_tv_descValidationInterval0">Every how many MINUTES check whether should rebalance. Doing it often may drain your battery faster.</string>
+    <string name="config_tv_descValidationInterval1">To have no impact on your battery the interval won\'t be exact, but close to the value you select. So IT IS NORMAL if the real check is performed some minutes after or before the selected interval.</string>
+    <string name="config_edt_validationInterval">Enter validation interval in minutes</string>
+    <string name="config_tv_thresholdRebalancingPercent">Threshold Rebalancing Percent</string>
+    <string name="config_tv_descThresholdRebalancingPercent0">By what percent ANY COIN INITIAL ALLOCATION have to go up/down for you to get notified. We threat the coins that you added in the main page as your whole portfolio even if you have other coins.</string>
+    <string name="config_tv_descThresholdRebalancingPercent1">Suppose you have 30% BTC and 70% ETH of your total portfolio, and you put 10 in the setting below. Some day BTC went up and now above 33% of your whole portfolio. BTC went up by more than 10% of it\'s initial allocation so you will get notified.</string>
+    <string name="config_edt_thresholdRebalancingPercent">Enter threshold rebalancing percent</string>
+    <string name="config_tv_rebalancingCheckActivation">Rebalancing Check Activation</string>
+    <string name="config_btn_rebalanceActivate">Activate</string>
+    <string name="config_btn_rebalanceDeactivate">Deactivate</string>
+    <string name="config_btn_save">Save</string>
+    <string name="config_btn_revert">Revert</string>
+
+    <string name="detrep_sv_cdDetailedReportTable">Detailed crypto report table</string>
+    <string name="detrep_hsv_cdDetailedReportColumns">Detailed crypto report columns</string>
+    <string name="detrep_tv_coinColumn">Coin</string>
+    <string name="detrep_tv_targetAllocationColumn">Target Allocation</string>
+    <string name="detrep_tv_quantityColumn">Quantity</string>
+    <string name="detrep_tv_priceColumn">Price</string>
+    <string name="detrep_tv_currentValueColumn">Current Value</string>
+    <string name="detrep_tv_currentAllocationColumn">Current Allocation</string>
+    <string name="detrep_tv_targetQuantityColumn">Target Quantity</string>
+
+    <string name="excp_sv_cdExceptionsScrollView">Exceptions log list</string>
+
+    <string name="guide_sv_cdGuideScrollView">How to use Bianic guide</string>
+    <string name="guide_tv_explain0">Welcome To Bianic</string>
+    <string name="guide_tv_explain1">Let\'s do a quick brief on how to configure and use Bianic.</string>
+    <string name="guide_tv_explain2">Remember: you can always get back here by clicking on the three dots and then Guide button at the top right corner of the main page.</string>
+    <string name="guide_tv_explain3">Configure The Keys</string>
+    <string name="guide_tv_explain4">Go to the configuration page. The only required thing here is to paste your Binance API and Secret keys. You can also read there how to generate them in Binance.</string>
+    <string name="guide_tv_explain5">Please configure the keys in Binance as Read Only. We don\'t need any other permission and it\'s in your interests to secure your account.</string>
+    <string name="guide_tv_explain6">After Pasting the keys scroll down and click on the Save button.</string>
+    <string name="guide_tv_explain7">We will discuss other configuration options as we dive deeper.</string>
+    <string name="guide_tv_explain8">That\'s all, now you can start using Bianic. Next we show what you can do.</string>
+    <string name="guide_tv_explain9">Select Your Cryptos</string>
+    <string name="guide_tv_explain10">In the Main Page, you select coins and their allocation percent. This data will be used in other features of the app. Of course you don\'t have to put here all the coins you have in the portfolio, only those you want Bianic to work with.</string>
+    <string name="guide_tv_explain11">Bianic works only with cryptos in the Spot Wallet. It won\'t recognize or use coins outside of your Spot Wallet.</string>
+    <string name="guide_tv_explain12">After selecting click on Save button. Then click on Validate Records, to check whether Bianic can work with the coins you inserted. When records are valid you may continue.</string>
+    <string name="guide_tv_explain13">Generate Crypto Reports</string>
+    <string name="guide_tv_explain14">Enter the reports page. You can click on Generate Report button, and you will see a new record appears. You can click on Details to view it. You can see each coin\'s price, the amount and how many in USD you had of that coin at the report generation moment.</string>
+    <string name="guide_tv_explain15">You can also view other parameters relevant to rebalancing. You can see the initial allocation you put for the coins in the main page and the current allocation. You can see how many coins you need to buy or sell to return to the initial allocation.</string>
+    <string name="guide_tv_explain16">We keep only 30 reports. After exceeding this amount old reports are deleted.</string>
+    <string name="guide_tv_explain17">Doing Time Rebalancing</string>
+    <string name="guide_tv_explain18">You can do Time Rebalancing that way. You can enter Bianic every hour/day/week, generate a report and view how many coins you need to buy or sell. Then you just go to Binance and perform the trades and you are done!</string>
+    <string name="guide_tv_explain19">If you have the Binance app, you usually can do it in around a minute!</string>
+    <string name="guide_tv_explain20">Doing Threshold Rebalancing</string>
+    <string name="guide_tv_explain21">In the configuration page, set the Threshold Rebalance Percent you want to rebalance on.</string>
+    <string name="guide_tv_explain22">On report generation, if any coin deviated by the threshold you set, the report\'s color will be green and it will tell you that deviation occurred.</string>
+    <string name="guide_tv_explain23">You can click on Generate Report button and view whether the threshold was reached every some hours or minutes of course.</string>
+    <string name="guide_tv_explain24">But we strongly recommend to use our Live Coin Watch feature instead.</string>
+    <string name="guide_tv_explain25">Live Coin Watch</string>
+    <string name="guide_tv_explain26">Key feature of Bianic. Set in the configuration page the Validation Interval and click on the Activate button. Then click Save.</string>
+    <string name="guide_tv_explain27">You will see a notification that tells you that Bianic performs validation\'s in background, with the last validation time if any performed.</string>
+    <string name="guide_tv_explain28">In background, Bianic will check every Validation Interval minutes whether any coin reached the threshold you put in the configuration.</string>
+    <string name="guide_tv_explain29">If so, it will notify you about it and will generate a report at the moment.</string>
+    <string name="guide_tv_explain30">So you can let Bianic monitor your coins, and it will tell you when threshold rebalancing is possible.</string>
+    <string name="guide_tv_explain31">We communicate with you via notifications. Notice the notification\'s colors: green means rebalancing available, orange-red that some exception occurred.</string>
+    <string name="guide_tv_explain32">Pro Tip #1: Manage what notifications are shown to you using android\'s notification channels feature.</string>
+    <string name="guide_tv_explain33">Pro Tip #2: Click on notification to be taken to the relevant page.</string>
+    <string name="guide_tv_explain34">After reboot, Live Coin Watch will turn on if was activated before. Just give it some minutes.</string>
+    <string name="guide_tv_explain35">To stop the Live Coin Watch just enter the configuration page, click on the Deactivate button and then click Save.</string>
+    <string name="guide_tv_explain36">Exceptions Log</string>
+    <string name="guide_tv_explain37">Sometimes problems occur. You have no internet, pasted the wrong API key or any other possible issue. Exceptions Log feature is here to notify you when such things happen and to help you understand and fix the problems by yourself.</string>
+    <string name="guide_tv_explain38">When any problem occurs, we notify you using orange-red notification. We also save it so you can enter Bianic, enter the Exceptions page and see what happened.</string>
+    <string name="guide_tv_explain39">There are 3 types of exceptions:</string>
+    <string name="guide_tv_explain40">Normal Exception: Fixable issue that we predicted that may occur to you. For example no internet connection while Live Coin Watch is trying to retrieve information from Binance.</string>
+    <string name="guide_tv_explain41">Critical Exception: Problem that we didn\'t expect to ever happen.</string>
+    <string name="guide_tv_explain42">Fatal Exception: Problem saving other exceptions.</string>
+    <string name="guide_tv_explain43">Usually, you encounter Normal Exceptions. They will often come with an indicative message about what was the cause. Their aim is to basically ask you to do some action, or fix something so Bianic can continue doing it\'s job.</string>
+    <string name="guide_tv_explain44">If you encounter an issue that you can\'t fix or don\'t understand what happened, please contact us using the About and then Get Help buttons in the Main Page.</string>
+    <string name="guide_tv_explain45">We ask you to write us once you encounter any Critical or Fatal exceptions, as you shouldn\'t see them at all. That way we can keep improving Bianic.</string>
+    <string name="guide_tv_explain46">We keep only 30 exceptions. After exceeding this amount old exceptions are deleted.</string>
+    <string name="guide_tv_explain47">Pro Tip #1: Different exception types have different colors. In the Exceptions page they can be yellow-orange-red. Also they have different orange-red types of color\'s in the notifications.</string>
+    <string name="guide_tv_explain48">Pro Tip #2: 99% of Exceptions occur because you have no network, slow network, wrong Binance keys or didn\'t setup the cryptos in the Main Page correctly.</string>
+    <string name="guide_tv_explain49">That\'s all. Have Fun!</string>
+
+    <string name="rep_sv_reportsScrollView">Crypto reports list</string>
+
+    <string name="excprcd_tv_createdAt">Created At</string>
+    <string name="excprcd_tv_severity">Severity</string>
+    <string name="excprcd_tv_message">Message</string>
+    <string name="excprcd_btn_clear">Clear</string>
+
+    <string name="coinrcd_edt_symbol">Symbol</string>
+    <string name="coinrcd_edt_allocation">Allocation %</string>
+    <string name="coinrcd_btn_apply">Apply</string>
+    <string name="coinrcd_btn_edit">Edit</string>
+    <string name="coinrcd_btn_cancel">Cancel</string>
+
+    <string name="reprcd_tv_createdAt">Created At</string>
+    <string name="reprcd_tv_passedThreshold">Passed Threshold</string>
+    <string name="reprcd_tv_didntPassThreshold">Didn\'t Pass Threshold</string>
+    <string name="reprcd_tv_totalUsd">Total USD</string>
+    <string name="reprcd_tv_threshold">Threshold</string>
+    <string name="reprcd_tv_coins">Coins</string>
+    <string name="reprcd_tv_highestDeviation">Highest Deviation</string>
+    <string name="reprcd_btn_details">Details</string>
+    <string name="reprcd_btn_clear">Clear</string>
 </resources>

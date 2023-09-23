@@ -2,16 +2,22 @@
   <dictionary name="timur">
     <words>
       <w>apikey</w>
+      <w>biani</w>
       <w>bianic</w>
       <w>binance</w>
       <w>binancerebalancinghelper</w>
+      <w>coinrcd</w>
       <w>consts</w>
+      <w>detrep</w>
+      <w>excp</w>
+      <w>excprcd</w>
       <w>hmac</w>
       <w>infos</w>
       <w>rebalance</w>
       <w>rebalancer</w>
       <w>rebalancing</w>
       <w>recv</w>
+      <w>reprcd</w>
       <w>sqlite</w>
       <w>substructed</w>
       <w>usdt</w>
