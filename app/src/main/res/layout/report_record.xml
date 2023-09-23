@@ -193,6 +193,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="#9C27B0"
+        android:contentDescription="View crypto report details"
         android:text="Details" />
 
     <Button
@@ -203,6 +204,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="#2196F3"
+        android:contentDescription="Remove this crypto report"
         android:text="Clear" />
 
     <TextView
