@@ -2,6 +2,7 @@ package com.vippygames.bianic.rebalancing.api;
 
 import android.content.Context;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.rebalancing.api.coins_amount.CoinAmount;
 import com.vippygames.bianic.rebalancing.api.coins_amount.CoinsAmountApi;
@@ -41,17 +42,17 @@ public class BinanceApi {
             CoinsAmountParseException, SignatureGenerationException, KeyNotFoundException {
 
         NetworkAuthRequestHelper networkAuthRequestHelper = new NetworkAuthRequestHelper(context);
-        CoinsAmountApi coinsAmountApi = new CoinsAmountApi();
+        CoinsAmountApi coinsAmountApi = new CoinsAmountApi(context);
 
         Response response = networkAuthRequestHelper.performRequest(BinanceApiConsts.ACCOUNT_ENDPOINT, "");
 
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
-            throw new EmptyResponseBodyException();
+            throw new EmptyResponseBodyException(context);
         }
 
         if (!response.isSuccessful()) {
-            throw new FailedRequestStatusException(response.code(), tryGetFailedRequestMessage(responseBody));
+            throw new FailedRequestStatusException(context, response.code(), tryGetFailedRequestMessage(responseBody));
         }
 
         List<CoinAmount> result = coinsAmountApi.parseCoinsAmount(responseBody);
@@ -67,19 +68,19 @@ public class BinanceApi {
             return new ArrayList<>();
         }
 
-        NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper();
-        CoinsPriceApi coinsPriceApi = new CoinsPriceApi();
+        NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper(context);
+        CoinsPriceApi coinsPriceApi = new CoinsPriceApi(context);
 
         Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_PRICE_ENDPOINT,
                 "?symbols=" + coinsPriceApi.getSymbolsForQuery(symbols));
 
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
-            throw new EmptyResponseBodyException();
+            throw new EmptyResponseBodyException(context);
         }
 
         if (!response.isSuccessful()) {
-            throw new FailedRequestStatusException(response.code(), tryGetFailedRequestMessage(responseBody));
+            throw new FailedRequestStatusException(context, response.code(), tryGetFailedRequestMessage(responseBody));
         }
 
         List<CoinPrice> result = coinsPriceApi.parseCoinsPrice(responseBody);
@@ -89,18 +90,18 @@ public class BinanceApi {
 
     public Map<String, ExchangeInfo> getExchangeInfo() throws NetworkRequestException,
             EmptyResponseBodyException, FailedRequestStatusException, ExchangeInfoParseException {
-        NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper();
-        ExchangeInfoApi exchangeInfoApi = new ExchangeInfoApi();
+        NetworkRequestHelper networkRequestHelper = new NetworkRequestHelper(context);
+        ExchangeInfoApi exchangeInfoApi = new ExchangeInfoApi(context);
 
         Response response = networkRequestHelper.performRequest(BinanceApiConsts.TICKER_EXCHANGE_INFO_ENDPOINT, "?permissions=SPOT");
 
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
-            throw new EmptyResponseBodyException();
+            throw new EmptyResponseBodyException(context);
         }
 
         if (!response.isSuccessful()) {
-            throw new FailedRequestStatusException(response.code(), tryGetFailedRequestMessage(responseBody));
+            throw new FailedRequestStatusException(context, response.code(), tryGetFailedRequestMessage(responseBody));
         }
 
         Map<String, ExchangeInfo> result = exchangeInfoApi.parseExchangeInfo(responseBody);
@@ -110,10 +111,10 @@ public class BinanceApi {
 
     private String tryGetFailedRequestMessage(ResponseBody responseBody) {
         try {
-            ResponseParser responseParser = new ResponseParser();
+            ResponseParser responseParser = new ResponseParser(context);
             return responseParser.parseResponseString(responseBody);
         } catch (ResponseParseException e) {
-            return "Failed to get reason";
+            return context.getString(R.string.C_binanceapi_failedGetReqFailReason);
         }
     }
 }

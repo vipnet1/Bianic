@@ -2,6 +2,7 @@ package com.vippygames.bianic.rebalancing.report.manual;
 
 import android.widget.Toast;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.ReportsActivity;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
@@ -42,12 +43,12 @@ public class ManualReportGeneration {
                  EmptyResponseBodyException | SignatureGenerationException |
                  CoinsPriceParseException | CoinsAmountParseException |
                  CoinsDetailsBuilderException | KeyNotFoundException | EmptyPortfolioException e) {
-            showToast("Exception occurred. View exceptions for more details.");
+            showToast(reportsActivity.getString(R.string.C_manrepgen_exceptionOccurred));
 
             ExceptionHandler exceptionHandler = new ExceptionHandler(reportsActivity);
             exceptionHandler.handleException(e);
         } catch (Exception e) {
-            showToast("Critical Exception occurred. View exceptions for more details.");
+            showToast(reportsActivity.getString(R.string.C_manrepgen_criticalExceptionOccurred));
 
             CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(reportsActivity);
             criticalExceptionHandler.handleException(

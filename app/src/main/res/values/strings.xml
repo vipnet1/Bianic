@@ -117,6 +117,7 @@
     <string name="reprcd_btn_details">Details</string>
     <string name="reprcd_btn_clear">Clear</string>
 
+<!--    C stands for code-->
     <string name="C_main_toast_failedValidateRecords">Failed validating records. View exception for details.</string>
     <string name="C_main_toast_recordsValid">Records are valid</string>
     <string name="C_main_dialog_requestPermissionsTitle">Why Those Permissions Are Needed</string>
@@ -149,4 +150,61 @@
     <string name="C_main_toast_cantSaveWhileEditing">Can\'t save while editing record</string>
     <string name="C_main_toast_allocationsSumNot100">"Total allocations sum is not 100 - it's "</string>
     <string name="C_main_toast_duplicatedSymbol">"Same symbol name in multiple records - "</string>
+
+    <string name="C_reports_toast_reportGenerated">Report generated.</string>
+    <string name="C_reports_dialog_reportGenerationTitle">Report Generation</string>
+    <string name="C_reports_dialog_reportGenerationMessage">Generating report. Wait a moment please.</string>
+    <string name="C_reports_toast_clickValidateRecords">Click on \'Validate Records\' button in main page</string>
+
+    <string name="C_detrep_targetquantity_buy">"Buy "</string>
+    <string name="C_detrep_targetquantity_sell">"Sell "</string>
+
+    <string name="C_config_dialog_contractTitle">Important</string>
+    <string name="C_config_dialog_contractMessage">Storing the keys on your device in Bianic is safe because you should configure them as READ ONLY in Binance. Don\'t ever change the fact that they are read-only after showing it to Bianic. We are not responsible for any issues, trades or losses occurred because of not following this simple rule. We are not responsible for your losses in general - Bianic is a tool to help you and make your adventure easier, not an investment/trading advisor.</string>
+    <string name="C_config_dialog_contractAccept">Accept</string>
+    <string name="C_config_toast_apiBeginningEmpty">Api key is empty</string>
+    <string name="C_config_toast_secretBeginningEmpty">Secret key is empty</string>
+    <string name="C_config_toast_apiBeginsWith">"Api key begins with "</string>
+    <string name="C_config_toast_secretBeginsWith">"Secret key begins with "</string>
+    <string name="C_config_toast_revertedConfiguration">Reverted configuration</string>
+    <string name="C_config_toast_thresholdRebalanceCantBeEmpty">Threshold rebalancing percent - cannot be empty</string>
+    <string name="C_config_toast_thresholdRebalanceLessThan">Threshold rebalancing percent - value must be less than 1000000</string>
+    <string name="C_config_toast_thresholdRebalanceDotNotFirst">Threshold rebalancing percent - dot cannot be first character</string>
+    <string name="C_config_toast_thresholdRebalanceDotNotLast">Threshold rebalancing percent - dot cannot be last character</string>
+    <string name="C_config_toast_thresholdRebalanceMoreThan">Threshold rebalancing percent - value cannot be lower than 0.1</string>
+    <string name="C_config_toast_thresholdRebalanceUpToDigitsAfterDot">Threshold rebalancing percent - up to 3 digits after dot</string>
+    <string name="C_config_toast_validationIntervalNotEmpty">Validation interval - cannot be empty</string>
+    <string name="C_config_toast_validationIntervalNotLowerThan">Validation interval - cannot be lower than 2</string>
+    <string name="C_config_toast_rebalanceActivateNeedNotificationsPerm">Need notifications permission to run rebalancing check</string>
+    <string name="C_config_toast_rebalanceActivateNeedCheckChannel">Enable rebalancing check notification channel.</string>
+    <string name="C_config_toast_savedConfig">Saved configuration</string>
+    <string name="C_config_toast_guideNoBrowserAppFound">No browser app found</string>
+
+    <string name="C_stringutils_msg_utcTime">"UTC TIME: "</string>
+
+    <string name="C_binanceapi_failedGetReqFailReason">Failed to get reason</string>
+
+    <string name="C_excpdet_notProvideBinanceKeys">Likely you didn\'t provide the Binance keys.</string>
+    <string name="C_excpdet_wrongSecretKey">"Likely wrong secret key. "</string>
+    <string name="C_excpdet_noInternetConnection">"Likely no internet connection. "</string>
+    <string name="C_excpdet_likelySlowOrNoNetwork">"Likely or slow network connection or no network at all. "</string>
+    <string name="C_excpdet_binanceRemovedCoins">"Likely Binance removed one of your coins from the exchange. Please validate the records again. "</string>
+    <string name="C_excpdet_validateRecordsAgain">Please validate records again, it will likely solve the issue.</string>
+    <string name="C_excpdet_totalCoinsValueLessThan0">"Total value of selected coins is less than "</string>
+    <string name="C_excpdet_totalCoinsValueLessThan1">$. Add some value to them.</string>
+    <string name="C_excpdet_validateRecordsClickButton">You need to validate records by clicking the button in the main page.</string>
+
+    <string name="C_manrepgen_exceptionOccurred">Exception occurred. View exceptions for more details.</string>
+    <string name="C_manrepgen_criticalExceptionOccurred">Critical Exception occurred. View exceptions for more details.</string>
+
+    <string name="C_rebchk_notification_checkRunningTitle">Rebalancing Check</string>
+    <string name="C_rebchk_notification_checkRunningCheckTime">"Checked "</string>
+    <string name="C_rebchk_notification_checkRunningNotChecked">Checking whether should rebalance</string>
+
+    <string name="C_validation_coinNotOnBinance0">Coin \'</string>
+    <string name="C_validation_coinNotOnBinance1">\' not found on Binance exchange.</string>
+
+    <string name="C_trshwatch_coinReachedThreshold0">"Coin "</string>
+    <string name="C_trshwatch_coinReachedThreshold1">" reached threshold to rebalance."</string>
+    <string name="C_trshwatch_reportGenerated">Rebalancing available, report generated.</string>
 </resources>

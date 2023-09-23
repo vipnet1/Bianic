@@ -1,5 +1,7 @@
 package com.vippygames.bianic.rebalancing.data_format;
 
+import android.content.Context;
+
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.rebalancing.api.coins_amount.CoinAmount;
 import com.vippygames.bianic.rebalancing.api.coins_price.CoinPrice;
@@ -11,6 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 public class CoinsDetailsBuilder {
+    private final Context context;
+
+    public CoinsDetailsBuilder(Context context) {
+        this.context = context;
+    }
+
     public List<CoinDetails> getCoinsDetails(
             List<ThresholdAllocationRecord> records, List<CoinAmount> coinsAmount, List<CoinPrice> coinsPrice
     ) throws CoinsDetailsBuilderException {
@@ -19,7 +27,7 @@ public class CoinsDetailsBuilder {
         } catch (CoinsDetailsBuilderException e) {
             throw e;
         } catch (Exception e) {
-            throw new CoinsDetailsBuilderException(e);
+            throw new CoinsDetailsBuilderException(context, e);
         }
     }
 

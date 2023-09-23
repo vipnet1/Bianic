@@ -3,6 +3,7 @@ package com.vippygames.bianic.rebalancing.validation;
 import android.widget.Toast;
 
 import com.vippygames.bianic.MainActivity;
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
@@ -57,9 +58,9 @@ public class BinanceRecordsValidation {
         for (ThresholdAllocationRecord record : records) {
             String coinSymbol = record.getSymbol();
             if (!exchangeInfo.containsKey(record.getSymbol())) {
-                String message = "Coin '" + coinSymbol + "' not found on Binance exchange.";
+                String message = mainActivity.getString(R.string.C_validation_coinNotOnBinance0) + coinSymbol + mainActivity.getString(R.string.C_validation_coinNotOnBinance1);
                 showToast(message, Toast.LENGTH_SHORT);
-                throw new FailedValidateRecordsException(message);
+                throw new FailedValidateRecordsException(mainActivity, message);
             }
         }
     }

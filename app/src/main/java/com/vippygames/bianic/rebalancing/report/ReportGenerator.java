@@ -26,7 +26,7 @@ public class ReportGenerator {
         ReportCalculations reportCalculations = new ReportCalculations();
         double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
         if (portfolioUsdValue < ReportsConsts.MIN_PORTFOLIO_VALUE_USDT) {
-            throw new EmptyPortfolioException();
+            throw new EmptyPortfolioException(context);
         }
 
         String uuid = generateUuid();

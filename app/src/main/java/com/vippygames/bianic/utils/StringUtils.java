@@ -1,5 +1,9 @@
 package com.vippygames.bianic.utils;
 
+import android.content.Context;
+
+import com.vippygames.bianic.R;
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,7 +13,12 @@ import java.util.Random;
 import java.util.TimeZone;
 
 public class StringUtils {
+    private final Context context;
     private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
+
+    public StringUtils(Context context) {
+        this.context = context;
+    }
 
     public String generateRandomString(int length) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -39,7 +48,7 @@ public class StringUtils {
             localFormat.setTimeZone(TimeZone.getDefault());
             return localFormat.format(date);
         } catch (Exception e) {
-            return "UTC TIME: " + utcTime;
+            return context.getString(R.string.C_stringutils_msg_utcTime) + utcTime;
         }
     }
 

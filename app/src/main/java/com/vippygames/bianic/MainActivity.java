@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnEdit.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
         String childrenTag = ROOT_TAG_PREFIX + recordTag;
 
@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return false;
         }
 
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         if (!stringUtils.isAlphanumeric(symbolInput)) {
             Toast.makeText(this, R.string.C_main_toast_symbolOnlyAlphanumeric, Toast.LENGTH_SHORT).show();
             return false;

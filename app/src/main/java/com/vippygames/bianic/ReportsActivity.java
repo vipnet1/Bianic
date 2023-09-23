@@ -83,7 +83,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     public void onManualReportGenerationTaskFinished(boolean result) {
         if (result) {
             refreshRecords();
-            Toast.makeText(this, "Report generated.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_reports_toast_reportGenerated, Toast.LENGTH_SHORT).show();
         }
         manualReportGenerationDialog.dismiss();
     }
@@ -124,7 +124,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         Button btnDetails = recordRoot.findViewById(R.id.btn_details);
         Button btnClearReport = recordRoot.findViewById(R.id.btn_clear_report);
 
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         tvRecordDbUuid.setTag(record.getUuid());
         tvCreatedAt.setText(stringUtils.convertUtcToLocalTime(record.getCreatedAt()));
 
@@ -157,8 +157,8 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initManualReportGenerationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Report Generation");
-        builder.setMessage("Generating report. Wait a moment please.");
+        builder.setTitle(R.string.C_reports_dialog_reportGenerationTitle);
+        builder.setMessage(R.string.C_reports_dialog_reportGenerationMessage);
         builder.setCancelable(false);
 
         manualReportGenerationDialog = builder.create();
@@ -207,7 +207,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             executor.execute(new ManualReportGenerationTask(this));
 
         } catch (UnvalidatedRecordsException e) {
-            Toast.makeText(this, "Click on 'Validate Records' button in main page", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_reports_toast_clickValidateRecords, Toast.LENGTH_SHORT).show();
             ExceptionHandler exceptionHandler = new ExceptionHandler(this);
             exceptionHandler.handleException(e);
         }

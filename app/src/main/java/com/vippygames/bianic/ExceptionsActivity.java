@@ -103,7 +103,7 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
             recordRoot.setBackgroundColor(Color.rgb(244, 107, 102));
         }
 
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         tvRecordDbId.setTag(record.getId());
         tvCreatedAt.setText(stringUtils.convertUtcToLocalTime(record.getCreatedAt()));
         tvSeverity.setText(severity);
