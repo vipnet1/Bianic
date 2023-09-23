@@ -1,6 +1,7 @@
 package com.vippygames.bianic;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -230,7 +231,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setPositiveButton("Get Help", (dialog, which) -> {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:" + ContactConsts.CONTACT_EMAIL));
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
+            }
         });
         builder.setNegativeButton("Review", (dialog, which) -> {
             startInAppReview();
@@ -453,14 +458,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean validateAllocationInput(String allocationInput) {
-        if (allocationInput.isEmpty()) {
-            Toast.makeText(this, "Allocation cannot be empty", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        try {
+            if (allocationInput.isEmpty()) {
+                Toast.makeText(this, "Allocation cannot be empty", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-        int dotIndex = allocationInput.indexOf(".");
+            int dotIndex = allocationInput.indexOf(".");
 
-        if (dotIndex < 0) {
+            if (dotIndex < 0) {
+                float allocation = Float.parseFloat(allocationInput);
+                if (allocation > 100) {
+                    Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                if (allocation < 0.1) {
+                    Toast.makeText(this, "Minimal allocation is 0.1%", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (dotIndex == 0) {
+                Toast.makeText(this, "Dot cannot be first character in allocation", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (dotIndex == allocationInput.length() - 1) {
+                Toast.makeText(this, "Dot cannot be last character in allocation", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            String charsAfterDot = allocationInput.substring(dotIndex + 1);
+
+            if (charsAfterDot.length() > 2) {
+                Toast.makeText(this, "up to 2 digits after dot in allocation", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
             float allocation = Float.parseFloat(allocationInput);
             if (allocation > 100) {
                 Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
@@ -471,35 +508,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "Minimal allocation is 0.1%", Toast.LENGTH_SHORT).show();
                 return false;
             }
-
-            return true;
-        }
-
-        if (dotIndex == 0) {
-            Toast.makeText(this, "Dot cannot be first character in allocation", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (dotIndex == allocationInput.length() - 1) {
-            Toast.makeText(this, "Dot cannot be last character in allocation", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        String charsAfterDot = allocationInput.substring(dotIndex + 1);
-
-        if (charsAfterDot.length() > 2) {
-            Toast.makeText(this, "up to 2 digits after dot in allocation", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        float allocation = Float.parseFloat(allocationInput);
-        if (allocation > 100) {
-            Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (allocation < 0.1) {
-            Toast.makeText(this, "Minimal allocation is 0.1%", Toast.LENGTH_SHORT).show();
+        } catch (NumberFormatException e) { //shouldn't ever get to catch clause, added just in case
+            Toast.makeText(this, "Coin has invalid allocation format.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -540,8 +550,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             View view = dynamicLinearLayout.getChildAt(i);
             EditText edtAllocation = view.findViewById(R.id.edt_allocation);
 
-            float allocation = Float.parseFloat(edtAllocation.getText().toString());
-            totalAllocationsSum += allocation;
+            try {
+                // for some reason got crash that empty, even when have validations for some reason in pre-launch tests
+                float allocation = Float.parseFloat(edtAllocation.getText().toString());
+                totalAllocationsSum += allocation;
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Coin has invalid allocation format.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
 
         if (totalAllocationsSum != 100.0f) {
