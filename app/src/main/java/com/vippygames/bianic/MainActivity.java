@@ -33,6 +33,7 @@ import com.vippygames.bianic.permissions.BatteryPermissions;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.rebalancing.validation.BinanceRecordsValidationTask;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
+import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -229,13 +230,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setTitle("About");
         builder.setMessage("App version: " + BuildConfig.VERSION_NAME);
         builder.setPositiveButton("Get Help", (dialog, which) -> {
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:" + ContactConsts.CONTACT_EMAIL));
-            try {
-                startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
-            }
+            ExternalAppUtils externalAppUtils = new ExternalAppUtils(this);
+            externalAppUtils.tryOpenUri("mailto:" + ContactConsts.CONTACT_EMAIL, "No email app found");
         });
         builder.setNegativeButton("Review", (dialog, which) -> {
             startInAppReview();
@@ -268,10 +264,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void openAppInPlayStore() {
         final String appPackageName = getPackageName();
+        ExternalAppUtils externalAppUtils = new ExternalAppUtils(this);
         try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ContactConsts.PLAY_STORE_MARKET_BASE_URI + appPackageName)));
-        } catch (android.content.ActivityNotFoundException ignored) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ContactConsts.PLAY_STORE_WEBSITE_BASE_URI + appPackageName)));
+            externalAppUtils.openUri(ContactConsts.PLAY_STORE_MARKET_BASE_URI + appPackageName);
+        } catch (ActivityNotFoundException ignored) {
+            externalAppUtils.tryOpenUri(ContactConsts.PLAY_STORE_WEBSITE_BASE_URI + appPackageName, "No browser app found");
         }
     }
 
