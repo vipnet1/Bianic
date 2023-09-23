@@ -10,7 +10,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:contentDescription="Select cryptos to rebalance or monitor">
 
         <LinearLayout
             android:id="@+id/layout_dynamic_main"

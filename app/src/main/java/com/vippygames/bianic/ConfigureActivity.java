@@ -16,10 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
+import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
+import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.RebalanceActivationUtils;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
@@ -297,9 +299,8 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
     private void initGuideToCreateKeys() {
         Button btnGuide = findViewById(R.id.guide_create_keys);
         btnGuide.setOnClickListener(view -> {
-            Uri uri = Uri.parse(ConfigurationConsts.GUIDE_CREATE_KEYS_URL);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            startActivity(intent);
+            ExternalAppUtils externalAppUtils = new ExternalAppUtils(this);
+            externalAppUtils.tryOpenUri(ConfigurationConsts.GUIDE_CREATE_KEYS_URL, "No browser app found");
         });
     }
 
