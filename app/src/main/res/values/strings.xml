@@ -207,4 +207,20 @@
     <string name="C_trshwatch_coinReachedThreshold0">"Coin "</string>
     <string name="C_trshwatch_coinReachedThreshold1">" reached threshold to rebalance."</string>
     <string name="C_trshwatch_reportGenerated">Rebalancing available, report generated.</string>
+
+    <string name="C_notificationType_rebalanceRunningChannelId">rebalance_check_running_channel</string>
+    <string name="C_notificationType_rebalanceAvailableChannelId">rebalance_available_channel</string>
+    <string name="C_notificationType_normalExceptionChannelId">normal_exception_channel</string>
+    <string name="C_notificationType_criticalExceptionChannelId">critical_exception_channel</string>
+    <string name="C_notificationType_fatalExceptionChannelId">fatal_exception_channel</string>
+    <string name="C_notificationType_rebalanceRunningChannelName">Rebalance Check Running</string>
+    <string name="C_notificationType_rebalanceAvailableChannelName">Rebalance Available</string>
+    <string name="C_notificationType_normalExceptionChannelName">Normal Exception</string>
+    <string name="C_notificationType_criticalExceptionChannelName">Critical Exception</string>
+    <string name="C_notificationType_fatalExceptionChannelName">Fatal Exception</string>
+    <string name="C_notificationType_rebalanceRunningChannelDesc">Indicates that performing rebalance check in background. Required for it to work.</string>
+    <string name="C_notificationType_rebalanceAvailableChannelDesc">Reached threshold you set you want to rebalance at.</string>
+    <string name="C_notificationType_normalExceptionChannelDesc">Fixable problem occurred.</string>
+    <string name="C_notificationType_criticalExceptionChannelDesc">Problem we didn\'t expect to happen.</string>
+    <string name="C_notificationType_fatalExceptionChannelDesc">Problem storing other exceptions.</string>
 </resources>

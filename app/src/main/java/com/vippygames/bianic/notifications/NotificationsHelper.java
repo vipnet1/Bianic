@@ -68,7 +68,7 @@ public class NotificationsHelper {
 
     private int getNextNotificationId(NotificationType notificationType) {
         SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(context);
-        String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.getChannelId();
+        String sp_key = SharedPrefsConsts.NEXT_NOTIFICATION_TYPE_ID_PREFIX + notificationType.getChannelId(context);
         int notificationId = sharedPreferencesHelper.getInt(sp_key, notificationType.getMinNotificationId());
 
         if (notificationId >= notificationType.getMaxNotificationId()) {
@@ -86,8 +86,8 @@ public class NotificationsHelper {
             return;
         }
 
-        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(), notificationType.getChannelName(), NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription(notificationType.getChannelDescription());
+        NotificationChannel channel = new NotificationChannel(notificationType.getChannelId(context), notificationType.getChannelName(context), NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(notificationType.getChannelDescription(context));
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
     }
@@ -102,7 +102,7 @@ public class NotificationsHelper {
         resultIntent.putExtra(NotificationConsts.LAUNCHED_FROM_NOTIFICATION_EXTRA, true);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        return new NotificationCompat.Builder(context, notificationType.getChannelId())
+        return new NotificationCompat.Builder(context, notificationType.getChannelId(context))
                 .setSmallIcon(notificationIcon)
                 .setLargeIcon(largeNotificationIcon)
                 .setContentTitle(title)

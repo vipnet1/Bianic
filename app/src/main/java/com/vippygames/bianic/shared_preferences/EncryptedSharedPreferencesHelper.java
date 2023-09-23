@@ -17,7 +17,7 @@ public class EncryptedSharedPreferencesHelper extends SharedPreferencesHelper {
     private static SharedPreferences encryptedPrefs = null;
 
     public EncryptedSharedPreferencesHelper(Context context) {
-        super();
+        super(context);
 
         if (encryptedPrefs == null) {
             try {

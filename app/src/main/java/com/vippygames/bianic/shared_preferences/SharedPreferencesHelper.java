@@ -7,14 +7,12 @@ import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 
 public class SharedPreferencesHelper {
+    protected final Context context;
     private static SharedPreferences regularPrefs = null;
     protected SharedPreferences usedPrefsRef;
 
-    protected SharedPreferencesHelper() {
-        usedPrefsRef = null;
-    }
-
     public SharedPreferencesHelper(Context context) {
+        this.context = context;
         if (regularPrefs == null) {
             regularPrefs = context.getSharedPreferences(SharedPrefsConsts.SHARED_PREFS_FILE, Context.MODE_PRIVATE);
         }
@@ -42,7 +40,7 @@ public class SharedPreferencesHelper {
 
     public int getInt(String key) throws KeyNotFoundException {
         if (!usedPrefsRef.contains(key)) {
-            throw new KeyNotFoundException(key);
+            throw new KeyNotFoundException(context, key);
         }
 
         return usedPrefsRef.getInt(key, 0);
@@ -62,7 +60,7 @@ public class SharedPreferencesHelper {
 
     public String getString(String key) throws KeyNotFoundException {
         if (!usedPrefsRef.contains(key)) {
-            throw new KeyNotFoundException(key);
+            throw new KeyNotFoundException(context, key);
         }
 
         return usedPrefsRef.getString(key, "");
