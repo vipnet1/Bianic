@@ -20,6 +20,7 @@ import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
 import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsRecord;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
+import com.vippygames.bianic.utils.ResourceUtils;
 import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.List;
@@ -97,16 +98,18 @@ public class DetailedReportActivity extends AppCompatActivity {
     }
 
     private int[] generateColumnsColors() {
+        ResourceUtils resourceUtils = new ResourceUtils(this);
         int[] possibleColors = {
-                Color.parseColor("#FFC107"), // Yellow
-                Color.parseColor("#4CAF50"), // Green
-                Color.parseColor("#F44336"), // Red
-                Color.parseColor("#2196F3"), // Blue
-                Color.parseColor("#9C27B0"),  // Purple
-                Color.parseColor("#FF99CC"), // Pink
-                Color.parseColor("#D68EF0"), // Light Purple
-                Color.parseColor("#3DE3E6"), // Light Blue
-                Color.parseColor("#9BE87D"), // Light Green
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor1),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor2),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor3),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor4),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor5),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor6),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor7),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor8),
+                resourceUtils.getColorByAttr(R.attr.detrepColumnColor9),
+
         };
 
         Random random = new Random();

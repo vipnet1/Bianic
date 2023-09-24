@@ -25,4 +25,14 @@
 
     <color name="reportNotReachColorDark">#B0B7BD</color>
     <color name="reportReachColorDark">#8BC48D</color>
+
+    <color name="detrepColumnColor1Dark">#C2991E</color>
+    <color name="detrepColumnColor2Dark">#437645</color>
+    <color name="detrepColumnColor3Dark">#B8433A</color>
+    <color name="detrepColumnColor4Dark">#2C7CBB</color>
+    <color name="detrepColumnColor5Dark">#6D2879</color>
+    <color name="detrepColumnColor6Dark">#BB819E</color>
+    <color name="detrepColumnColor7Dark">#A279B1</color>
+    <color name="detrepColumnColor8Dark">#3F9D9F</color>
+    <color name="detrepColumnColor9Dark">#7EA96C</color>
 </resources>

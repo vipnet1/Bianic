@@ -29,4 +29,14 @@
 
     <color name="reportNotReachColorLight">#D1DBE6</color>
     <color name="reportReachColorLight">#A2EFA5</color>
+
+    <color name="detrepColumnColor1Light">#FFC107</color>
+    <color name="detrepColumnColor2Light">#4CAF50</color>
+    <color name="detrepColumnColor3Light">#F44336</color>
+    <color name="detrepColumnColor4Light">#2196F3</color>
+    <color name="detrepColumnColor5Light">#9C27B0</color>
+    <color name="detrepColumnColor6Light">#FF99CC</color>
+    <color name="detrepColumnColor7Light">#D68EF0</color>
+    <color name="detrepColumnColor8Light">#3DE3E6</color>
+    <color name="detrepColumnColor9Light">#9BE87D</color>
 </resources>

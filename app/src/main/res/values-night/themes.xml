@@ -40,5 +40,15 @@
 
         <item name="reportNotReachColor">@color/reportNotReachColorDark</item>
         <item name="reportReachColor">@color/reportReachColorDark</item>
+
+        <item name="detrepColumnColor1">@color/detrepColumnColor1Dark</item>
+        <item name="detrepColumnColor2">@color/detrepColumnColor2Dark</item>
+        <item name="detrepColumnColor3">@color/detrepColumnColor3Dark</item>
+        <item name="detrepColumnColor4">@color/detrepColumnColor4Dark</item>
+        <item name="detrepColumnColor5">@color/detrepColumnColor5Dark</item>
+        <item name="detrepColumnColor6">@color/detrepColumnColor6Dark</item>
+        <item name="detrepColumnColor7">@color/detrepColumnColor7Dark</item>
+        <item name="detrepColumnColor8">@color/detrepColumnColor8Dark</item>
+        <item name="detrepColumnColor9">@color/detrepColumnColor9Dark</item>
     </style>
 </resources>

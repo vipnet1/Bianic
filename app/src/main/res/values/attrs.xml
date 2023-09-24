@@ -26,5 +26,16 @@
 
         <attr name="reportNotReachColor" format="color" />
         <attr name="reportReachColor" format="color" />
+
+        <attr name="detrepColumnColor1" format="color" />
+        <attr name="detrepColumnColor2" format="color" />
+        <attr name="detrepColumnColor3" format="color" />
+        <attr name="detrepColumnColor4" format="color" />
+        <attr name="detrepColumnColor5" format="color" />
+        <attr name="detrepColumnColor6" format="color" />
+        <attr name="detrepColumnColor7" format="color" />
+        <attr name="detrepColumnColor8" format="color" />
+        <attr name="detrepColumnColor9" format="color" />
+
     </declare-styleable>
 </resources>
