@@ -17,8 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
@@ -146,6 +144,8 @@ public class MainActivity extends ThemeAppCompatActivity implements View.OnClick
         setValidateRecordsViews();
 
         addFirstThresholdRecordIfNeeded();
+
+        dynamicLinearLayout.removeAllViews();
         loadThresholdAllocationRecords();
 
         initBinanceRecordsValidationDialog();

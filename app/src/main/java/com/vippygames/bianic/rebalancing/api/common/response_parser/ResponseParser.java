@@ -14,9 +14,11 @@ import okhttp3.ResponseBody;
 
 public class ResponseParser {
     private final Context context;
+
     public ResponseParser(Context context) {
         this.context = context;
     }
+
     public JSONObject parseResponseJsonObject(ResponseBody responseBody) throws ResponseParseException {
         try {
             String responseString = responseBody.string();

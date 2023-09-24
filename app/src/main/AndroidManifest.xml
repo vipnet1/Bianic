@@ -40,6 +40,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:label="@string/manifest_main_label"
             android:windowSoftInputMode="adjustPan">

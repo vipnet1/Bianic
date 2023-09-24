@@ -11,7 +11,6 @@ import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 
 public class GuideActivity extends AppCompatActivity {
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

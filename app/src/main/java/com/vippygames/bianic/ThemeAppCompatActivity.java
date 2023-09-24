@@ -15,7 +15,7 @@ public abstract class ThemeAppCompatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-    private void setSelectedTheme() {
+    protected void setSelectedTheme() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
         String theme = configurationManager.getTheme();
 
