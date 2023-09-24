@@ -21,6 +21,14 @@ public class ConfigurationManager {
         return encryptedSharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY, "");
     }
 
+    public String getTheme() {
+        return sharedPreferencesHelper.getString(SharedPrefsConsts.THEME_KEY, ConfigurationConsts.THEME_SYSTEM);
+    }
+
+    public void setTheme(String theme) {
+        sharedPreferencesHelper.setString(SharedPrefsConsts.THEME_KEY, theme);
+    }
+
     public String getApiKeyFailOnNotFound() throws KeyNotFoundException {
         return encryptedSharedPreferencesHelper.getString(SharedPrefsConsts.BINANCE_API_KEY);
     }

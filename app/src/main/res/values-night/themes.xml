@@ -22,6 +22,7 @@
         <item name="textColor5">@color/textColor5Dark</item>
         <item name="textColor6">@color/textColor6Dark</item>
         <item name="textColor7">@color/textColor7Dark</item>
+        <item name="textColor8">@color/textColor8Dark</item>
 
         <item name="textBackgroundColor1">@color/textBackgroundColor1Dark</item>
 
@@ -33,6 +34,7 @@
         <item name="btnColor6">@color/btnColor6Dark</item>
         <item name="btnColor7">@color/btnColor7Dark</item>
         <item name="btnColor8">@color/btnColor8Dark</item>
+        <item name="btnColor9">@color/btnColor9Dark</item>
 
         <item name="exceptionNormalColor">@color/exceptionColorNormalDark</item>
         <item name="exceptionCriticalColor">@color/exceptionColorCriticalDark</item>
