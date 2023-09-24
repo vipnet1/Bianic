@@ -1,33 +1,67 @@
 package com.vippygames.bianic.notifications;
 
-public enum NotificationType {
-    REBALANCING_RUNNING("rebalance_check_running_channel", "Rebalance Check Running"
-            , "Indicates that performing rebalance check in background. Required for it to work.", 1, 1),
-    REBALANCING_AVAILABLE("rebalance_available_channel", "Rebalance Available",
-            "Reached threshold you set you want to rebalance at.", 0, 0),
-    NORMAL_EXCEPTION("normal_exception_channel", "Normal Exception",
-            "Fixable problem occurred.", 2, 2),
-    CRITICAL_EXCEPTION("critical_exception_channel", "Critical Exception",
-            "Problem we didn't expect to happen.", 3, 3),
-    FATAL_EXCEPTION("fatal_exception_channel", "Fatal Exception",
-            "Problem storing other exceptions.", 4, 4);
+import android.content.Context;
 
-    private final String channelId;
-    private final String channelName;
-    private final String channelDescription;
+import com.vippygames.bianic.R;
+
+public enum NotificationType {
+    REBALANCING_RUNNING(1, 1),
+    REBALANCING_AVAILABLE(0, 0),
+    NORMAL_EXCEPTION(2, 2),
+    CRITICAL_EXCEPTION(3, 3),
+    FATAL_EXCEPTION(4, 4);
     private final int minNotificationId;
     private final int maxNotificationId;
 
-    public String getChannelId() {
-        return channelId;
+    public String getChannelId(Context context) {
+        switch (this) {
+            case REBALANCING_RUNNING:
+                return context.getString(R.string.C_notificationType_rebalanceRunningChannelId);
+            case REBALANCING_AVAILABLE:
+                return context.getString(R.string.C_notificationType_rebalanceAvailableChannelId);
+            case NORMAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_normalExceptionChannelId);
+            case CRITICAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_criticalExceptionChannelId);
+            case FATAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_fatalExceptionChannelId);
+            default: // should never get to this case
+                return "";
+        }
     }
 
-    public String getChannelName() {
-        return channelName;
+    public String getChannelName(Context context) {
+        switch (this) {
+            case REBALANCING_RUNNING:
+                return context.getString(R.string.C_notificationType_rebalanceRunningChannelName);
+            case REBALANCING_AVAILABLE:
+                return context.getString(R.string.C_notificationType_rebalanceAvailableChannelName);
+            case NORMAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_normalExceptionChannelName);
+            case CRITICAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_criticalExceptionChannelName);
+            case FATAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_fatalExceptionChannelName);
+            default: // should never get to this case
+                return "";
+        }
     }
 
-    public String getChannelDescription() {
-        return channelDescription;
+    public String getChannelDescription(Context context) {
+        switch (this) {
+            case REBALANCING_RUNNING:
+                return context.getString(R.string.C_notificationType_rebalanceRunningChannelDesc);
+            case REBALANCING_AVAILABLE:
+                return context.getString(R.string.C_notificationType_rebalanceAvailableChannelDesc);
+            case NORMAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_normalExceptionChannelDesc);
+            case CRITICAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_criticalExceptionChannelDesc);
+            case FATAL_EXCEPTION:
+                return context.getString(R.string.C_notificationType_fatalExceptionChannelDesc);
+            default: // should never get to this case
+                return "";
+        }
     }
 
     public int getMinNotificationId() {
@@ -38,10 +72,7 @@ public enum NotificationType {
         return maxNotificationId;
     }
 
-    NotificationType(String channelId, String channelName, String channelDescription, int minNotificationId, int maxNotificationId) {
-        this.channelId = channelId;
-        this.channelName = channelName;
-        this.channelDescription = channelDescription;
+    NotificationType(int minNotificationId, int maxNotificationId) {
         this.minNotificationId = minNotificationId;
         this.maxNotificationId = maxNotificationId;
     }

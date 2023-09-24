@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binanceRecordsValidationDialog.dismiss();
 
         if (!result) {
-            Toast.makeText(this, "Failed validating records. View exception for details.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_failedValidateRecords, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
 
         setValidateRecordsViews();
-        Toast.makeText(this, "Records are valid", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.C_main_toast_recordsValid, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -177,10 +176,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showRequestPermissionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Why Those Permissions Are Needed");
-        builder.setMessage("The permissions we will ask for are crucial for the normal operation of the app." + "The battery one to continue doing our job in power saving mode. The notifications to run " + "in background & communicate with you.");
+        builder.setTitle(R.string.C_main_dialog_requestPermissionsTitle);
+        builder.setMessage(R.string.C_main_dialog_requestPermissionsMessage);
         builder.setCancelable(false);
-        builder.setPositiveButton("Sure", (dialog, which) -> {
+        builder.setPositiveButton(R.string.C_main_dialog_requestPermissionsSure, (dialog, which) -> {
             dialog.dismiss();
             requestNeededPermissions();
         });
@@ -218,8 +217,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initBinanceRecordsValidationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Records Validation");
-        builder.setMessage("Checking with binance whether the records are valid. Wait a moment please.");
+        builder.setTitle(R.string.C_main_dialog_recordsValidationTitle);
+        builder.setMessage(R.string.C_main_dialog_recordsValidationMessage);
         builder.setCancelable(false);
 
         binanceRecordsValidationDialog = builder.create();
@@ -227,16 +226,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleActionAbout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("About");
-        builder.setMessage("App version: " + BuildConfig.VERSION_NAME);
-        builder.setPositiveButton("Get Help", (dialog, which) -> {
+        builder.setTitle(R.string.C_main_dialog_aboutTitle);
+        builder.setMessage(getString(R.string.C_main_dialog_aboutMessage) + BuildConfig.VERSION_NAME);
+        builder.setPositiveButton(R.string.C_main_dialog_aboutGetHelp, (dialog, which) -> {
             ExternalAppUtils externalAppUtils = new ExternalAppUtils(this);
-            externalAppUtils.tryOpenUri("mailto:" + ContactConsts.CONTACT_EMAIL, "No email app found");
+            externalAppUtils.tryOpenUri("mailto:" + ContactConsts.CONTACT_EMAIL, getString(R.string.C_main_toast_noEmailAppFound));
         });
-        builder.setNegativeButton("Review", (dialog, which) -> {
+        builder.setNegativeButton(R.string.C_main_dialog_aboutReview, (dialog, which) -> {
             startInAppReview();
         });
-        builder.setNeutralButton("Cancel", null);
+        builder.setNeutralButton(R.string.C_main_dialog_aboutCancel, null);
         AlertDialog dialog = builder.create();
 
         dialog.show();
@@ -251,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ReviewInfo reviewInfo = task.getResult();
                 Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
                 flow.addOnCompleteListener(reviewTask -> {
-                    Toast.makeText(this, "Thank you for your feedback!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.C_main_toast_reviewThankYou, Toast.LENGTH_LONG).show();
                 });
             } else {
                 // There was some problem, log or handle the error code.
@@ -268,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             externalAppUtils.openUri(ContactConsts.PLAY_STORE_MARKET_BASE_URI + appPackageName);
         } catch (ActivityNotFoundException ignored) {
-            externalAppUtils.tryOpenUri(ContactConsts.PLAY_STORE_WEBSITE_BASE_URI + appPackageName, "No browser app found");
+            externalAppUtils.tryOpenUri(ContactConsts.PLAY_STORE_WEBSITE_BASE_URI + appPackageName, getString(R.string.C_main_toast_reviewNoBrowserApp));
         }
     }
 
@@ -294,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleActionEdit(View recordRoot) {
         if (editedRecordRoot != null) {
-            Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_onlyOneRecordEdit, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -367,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleAddRecord() {
         if (editedRecordRoot != null) {
-            Toast.makeText(this, "Only one concurrent record edit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_onlyOneRecordEdit, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -389,23 +388,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnValidateRecords.setVisibility(View.VISIBLE);
 
-        Toast.makeText(this, "Saved records", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.C_main_toast_savedRecords, Toast.LENGTH_SHORT).show();
     }
 
     private void handleRevert() {
         if (editedRecordRoot != null) {
-            Toast.makeText(this, "Can't revert while editing record", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_cantRevertWhileEditing, Toast.LENGTH_SHORT).show();
             return;
         }
 
         revertRecords();
         setValidateRecordsViews();
-        Toast.makeText(this, "Restored previous records", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.C_main_toast_restoredRecords, Toast.LENGTH_SHORT).show();
     }
 
     private void handleValidateRecords() {
         if (editedRecordRoot != null) {
-            Toast.makeText(this, "Can't validate records while editing record", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_cantValidateWhileEditing, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -428,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnEdit.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
 
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
         String childrenTag = ROOT_TAG_PREFIX + recordTag;
 
@@ -457,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean validateAllocationInput(String allocationInput) {
         try {
             if (allocationInput.isEmpty()) {
-                Toast.makeText(this, "Allocation cannot be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.C_main_toast_allocationCantBeEmpty, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
@@ -466,12 +465,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (dotIndex < 0) {
                 float allocation = Float.parseFloat(allocationInput);
                 if (allocation > 100) {
-                    Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.C_main_toast_allocationMaximalIs, Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
                 if (allocation < 0.1) {
-                    Toast.makeText(this, "Minimal allocation is 0.1%", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.C_main_toast_allocationMinimalIs, Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -479,49 +478,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             if (dotIndex == 0) {
-                Toast.makeText(this, "Dot cannot be first character in allocation", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.C_main_toast_allocationDotNotFirstCharacter, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             if (dotIndex == allocationInput.length() - 1) {
-                Toast.makeText(this, "Dot cannot be last character in allocation", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.C_main_toast_allocationDotNotLastCharacter, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             String charsAfterDot = allocationInput.substring(dotIndex + 1);
-
             if (charsAfterDot.length() > 2) {
-                Toast.makeText(this, "up to 2 digits after dot in allocation", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.C_main_toast_allocationUpToDigitsAfterDot, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             float allocation = Float.parseFloat(allocationInput);
             if (allocation > 100) {
-                Toast.makeText(this, "Maximal allocation is 100%", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.C_main_toast_allocationMaximalIs, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             if (allocation < 0.1) {
-                Toast.makeText(this, "Minimal allocation is 0.1%", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.C_main_toast_allocationMinimalIs, Toast.LENGTH_SHORT).show();
                 return false;
             }
+
+            return true;
         } catch (NumberFormatException e) { //shouldn't ever get to catch clause, added just in case
-            Toast.makeText(this, "Coin has invalid allocation format.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_allocationCoinInvalidFormat, Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        return true;
     }
 
     private boolean validateSymbolInput(String symbolInput) {
         if (symbolInput.isEmpty()) {
-            Toast.makeText(this, "Symbol cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_symbolNotEmpty, Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         if (!stringUtils.isAlphanumeric(symbolInput)) {
-            Toast.makeText(this, "Symbol must contain only alphanumeric characters", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_symbolOnlyAlphanumeric, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -530,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean performSaveValidations() {
         if (editedRecordRoot != null) {
-            Toast.makeText(this, "Can't save while editing record", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_main_toast_cantSaveWhileEditing, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -552,13 +550,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 float allocation = Float.parseFloat(edtAllocation.getText().toString());
                 totalAllocationsSum += allocation;
             } catch (NumberFormatException e) {
-                Toast.makeText(this, "Coin has invalid allocation format.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.C_main_toast_allocationCoinInvalidFormat, Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
 
         if (totalAllocationsSum != 100.0f) {
-            Toast.makeText(this, "Total allocations sum is not 100 - it's " + totalAllocationsSum, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.C_main_toast_allocationsSumNot100) + totalAllocationsSum, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -573,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             String symbol = edtSymbol.getText().toString();
             if (existingAllocations.contains(symbol)) {
-                Toast.makeText(this, "Same symbol name in multiple records - " + symbol, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.C_main_toast_duplicatedSymbol) + symbol, Toast.LENGTH_SHORT).show();
                 return false;
             }
 

@@ -1,11 +1,17 @@
 package com.vippygames.bianic.exception_handle.exceptions;
 
+import android.content.Context;
+
 public class NormalException extends Exception {
-    public NormalException() {
+    protected final Context context;
+
+    public NormalException(Context context) {
+        this.context = context;
     }
 
-    public NormalException(Exception e) {
+    public NormalException(Context context, Exception e) {
         super(e);
+        this.context = context;
     }
 
     public String getExceptionName() {

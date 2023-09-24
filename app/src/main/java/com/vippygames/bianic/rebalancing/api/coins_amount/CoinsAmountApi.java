@@ -1,5 +1,7 @@
 package com.vippygames.bianic.rebalancing.api.coins_amount;
 
+import android.content.Context;
+
 import com.vippygames.bianic.rebalancing.api.coins_amount.exceptions.CoinsAmountParseException;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponseParser;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
@@ -14,6 +16,12 @@ import java.util.List;
 import okhttp3.ResponseBody;
 
 public class CoinsAmountApi {
+    private final Context context;
+
+    public CoinsAmountApi(Context context) {
+        this.context = context;
+    }
+
     /**
      * @param responseBody The response body
      * @return The coins amount I have for each coin. If none doesn't count that record
@@ -21,7 +29,7 @@ public class CoinsAmountApi {
      */
     public List<CoinAmount> parseCoinsAmount(ResponseBody responseBody) throws CoinsAmountParseException {
         try {
-            ResponseParser responseParser = new ResponseParser();
+            ResponseParser responseParser = new ResponseParser(context);
             JSONObject jsonBody = responseParser.parseResponseJsonObject(responseBody);
 
             JSONArray balances = jsonBody.getJSONArray("balances");
@@ -39,7 +47,7 @@ public class CoinsAmountApi {
 
             return coinAmounts;
         } catch (JSONException | ResponseParseException e) {
-            throw new CoinsAmountParseException(e);
+            throw new CoinsAmountParseException(context, e);
         }
     }
 }

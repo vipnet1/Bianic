@@ -40,7 +40,7 @@ public class BinanceManager {
         List<CoinAmount> coinsAmount = getCoinsAmount();
         List<CoinPrice> coinsPrice = getCoinsPrice(records);
 
-        CoinsDetailsBuilder coinsDetailsBuilder = new CoinsDetailsBuilder();
+        CoinsDetailsBuilder coinsDetailsBuilder = new CoinsDetailsBuilder(context);
         return coinsDetailsBuilder.getCoinsDetails(records, coinsAmount, coinsPrice);
     }
 

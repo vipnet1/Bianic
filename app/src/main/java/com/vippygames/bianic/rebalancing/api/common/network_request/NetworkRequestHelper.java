@@ -1,5 +1,7 @@
 package com.vippygames.bianic.rebalancing.api.common.network_request;
 
+import android.content.Context;
+
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.rebalancing.api.common.network_request.exceptions.NetworkRequestException;
 
@@ -11,6 +13,12 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class NetworkRequestHelper {
+    private final Context context;
+
+    public NetworkRequestHelper(Context context) {
+        this.context = context;
+    }
+
     public Response performRequest(String endpoint, String queryParams) throws NetworkRequestException {
         return performRequestImpl(
                 getRequestUrl(endpoint, queryParams)
@@ -34,7 +42,7 @@ public class NetworkRequestHelper {
 
             return client.newCall(request).execute();
         } catch (IOException e) {
-            throw new NetworkRequestException(e);
+            throw new NetworkRequestException(context, e);
         }
     }
 }

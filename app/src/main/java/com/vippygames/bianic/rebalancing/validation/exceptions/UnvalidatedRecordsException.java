@@ -1,11 +1,18 @@
 package com.vippygames.bianic.rebalancing.validation.exceptions;
 
+import android.content.Context;
+
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.exception_handle.exceptions.NormalException;
 
 public class UnvalidatedRecordsException extends NormalException {
+    public UnvalidatedRecordsException(Context context) {
+        super(context);
+    }
+
     @Override
     public String getMessage() {
-        return "You need to validate records by clicking the button in the main page.";
+        return context.getString(R.string.C_excpdet_validateRecordsClickButton);
     }
 
     @Override

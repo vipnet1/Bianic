@@ -1,5 +1,7 @@
 package com.vippygames.bianic.rebalancing.api.exchange_info;
 
+import android.content.Context;
+
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponseParser;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
@@ -15,9 +17,15 @@ import java.util.Map;
 import okhttp3.ResponseBody;
 
 public class ExchangeInfoApi {
+    private final Context context;
+
+    public ExchangeInfoApi(Context context) {
+        this.context = context;
+    }
+
     public Map<String, ExchangeInfo> parseExchangeInfo(ResponseBody jsonBody) throws ExchangeInfoParseException {
         try {
-            ResponseParser responseParser = new ResponseParser();
+            ResponseParser responseParser = new ResponseParser(context);
 
             JSONObject jsonObject = responseParser.parseResponseJsonObject(jsonBody);
             JSONArray pairsArray = jsonObject.getJSONArray("symbols");
@@ -40,7 +48,7 @@ public class ExchangeInfoApi {
 
             return exchangeInfos;
         } catch (JSONException | ResponseParseException e) {
-            throw new ExchangeInfoParseException(e);
+            throw new ExchangeInfoParseException(context, e);
         }
     }
 }

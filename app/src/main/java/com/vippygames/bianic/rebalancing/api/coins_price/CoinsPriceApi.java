@@ -1,5 +1,7 @@
 package com.vippygames.bianic.rebalancing.api.coins_price;
 
+import android.content.Context;
+
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.rebalancing.api.coins_price.exceptions.CoinsPriceParseException;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponseParser;
@@ -15,9 +17,15 @@ import java.util.List;
 import okhttp3.ResponseBody;
 
 public class CoinsPriceApi {
+    private final Context context;
+
+    public CoinsPriceApi(Context context) {
+        this.context = context;
+    }
+
     public List<CoinPrice> parseCoinsPrice(ResponseBody jsonBody) throws CoinsPriceParseException {
         try {
-            ResponseParser responseParser = new ResponseParser();
+            ResponseParser responseParser = new ResponseParser(context);
             JSONArray jsonArray = responseParser.parseResponseJsonArray(jsonBody);
 
             List<CoinPrice> coinPrices = new ArrayList<>();
@@ -36,7 +44,7 @@ public class CoinsPriceApi {
 
             return coinPrices;
         } catch (JSONException | ResponseParseException e) {
-            throw new CoinsPriceParseException(e);
+            throw new CoinsPriceParseException(context, e);
         }
     }
 

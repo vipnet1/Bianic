@@ -24,10 +24,12 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class NetworkAuthRequestHelper {
+    private final Context context;
     private final String apiKey;
     private final String secretKey;
 
     public NetworkAuthRequestHelper(Context context) throws KeyNotFoundException {
+        this.context = context;
         ConfigurationManager configurationManager = new ConfigurationManager(context);
 
         apiKey = configurationManager.getApiKeyFailOnNotFound();
@@ -67,7 +69,7 @@ public class NetworkAuthRequestHelper {
             byte[] signatureBytes = sha256_hmac.doFinal(params.getBytes(StandardCharsets.UTF_8));
             return Hex.encodeHexString(signatureBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new SignatureGenerationException(e);
+            throw new SignatureGenerationException(context, e);
         }
     }
 
@@ -91,7 +93,7 @@ public class NetworkAuthRequestHelper {
 
             return client.newCall(request).execute();
         } catch (IOException e) {
-            throw new NetworkRequestException(e);
+            throw new NetworkRequestException(context, e);
         }
     }
 }

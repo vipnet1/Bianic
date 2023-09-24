@@ -7,7 +7,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:contentDescription="@string/detrep_sv_cdDetailedReportTable">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -22,7 +23,8 @@
                 <TableRow
                     android:id="@+id/columns_table_row"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/detrep_hsv_cdDetailedReportColumns">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -30,7 +32,7 @@
                         android:background="#FFC107"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="Coin"
+                        android:text="@string/detrep_tv_coinColumn"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
@@ -40,7 +42,7 @@
                         android:background="#4CAF50"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="Target Allocation"
+                        android:text="@string/detrep_tv_targetAllocationColumn"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
@@ -50,7 +52,7 @@
                         android:background="#F44336"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="Quantity"
+                        android:text="@string/detrep_tv_quantityColumn"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
@@ -60,7 +62,7 @@
                         android:background="#FFC107"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="Price"
+                        android:text="@string/detrep_tv_priceColumn"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
@@ -70,7 +72,7 @@
                         android:background="#4CAF50"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="Current Value"
+                        android:text="@string/detrep_tv_currentValueColumn"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
@@ -80,7 +82,7 @@
                         android:background="#F44336"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="Current Allocation"
+                        android:text="@string/detrep_tv_currentAllocationColumn"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
@@ -90,7 +92,7 @@
                         android:background="#FFC107"
                         android:gravity="center"
                         android:padding="16dp"
-                        android:text="Target Quantity"
+                        android:text="@string/detrep_tv_targetQuantityColumn"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
                 </TableRow>

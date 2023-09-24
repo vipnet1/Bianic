@@ -18,7 +18,7 @@ public class RecordsValidationCheck {
         int areRecordsValidated = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
         if (areRecordsValidated != 1) {
-            throw new UnvalidatedRecordsException();
+            throw new UnvalidatedRecordsException(context);
         }
     }
 }

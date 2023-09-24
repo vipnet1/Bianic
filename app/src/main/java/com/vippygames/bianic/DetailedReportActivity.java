@@ -164,7 +164,7 @@ public class DetailedReportActivity extends AppCompatActivity {
     }
 
     private void addDataToCell(TextView cell, DetailedReportsRecord record, int cellIndex) {
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         switch (cellIndex) {
             case DetailedReportsConsts.COIN_COLUMN_INDEX:
                 cell.setText(record.getCoin());
@@ -188,9 +188,9 @@ public class DetailedReportActivity extends AppCompatActivity {
                 double targetQuantity = record.getTargetQuantity();
                 String message = "";
                 if (targetQuantity >= 0) {
-                    message += "Buy ";
+                    message += getString(R.string.C_detrep_targetquantity_buy);
                 } else {
-                    message += "Sell ";
+                    message += getString(R.string.C_detrep_targetquantity_sell);
                 }
 
                 double absoluteTargetQuantity = Math.abs(targetQuantity);
@@ -198,7 +198,7 @@ public class DetailedReportActivity extends AppCompatActivity {
 
                 double targetQuantityUsd = absoluteTargetQuantity * record.getPrice();
                 message += " " + record.getCoin() + " | "
-                        + stringUtils.convertDoubleToString(targetQuantityUsd, 2) + " USD";
+                        + stringUtils.convertDoubleToString(targetQuantityUsd, 2) + " $";
 
                 cell.setText(message);
                 break;

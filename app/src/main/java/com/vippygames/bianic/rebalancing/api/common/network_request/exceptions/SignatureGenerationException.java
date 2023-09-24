@@ -1,10 +1,13 @@
 package com.vippygames.bianic.rebalancing.api.common.network_request.exceptions;
 
+import android.content.Context;
+
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.exception_handle.exceptions.NormalException;
 
 public class SignatureGenerationException extends NormalException {
-    public SignatureGenerationException(Exception e) {
-        super(e);
+    public SignatureGenerationException(Context context, Exception e) {
+        super(context, e);
     }
 
     @Override
@@ -14,6 +17,6 @@ public class SignatureGenerationException extends NormalException {
 
     @Override
     public String getMessage() {
-        return "Likely wrong secret key. " + super.getMessage();
+        return context.getString(R.string.C_excpdet_wrongSecretKey) + super.getMessage();
     }
 }

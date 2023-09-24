@@ -1,5 +1,8 @@
 package com.vippygames.bianic.rebalancing.api.common.network_request.exceptions;
 
+import android.content.Context;
+
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.exception_handle.exceptions.NormalException;
 
 import java.io.IOException;
@@ -7,8 +10,8 @@ import java.io.IOException;
 public class NetworkRequestException extends NormalException {
     private final String customMessage;
 
-    public NetworkRequestException(IOException e) {
-        super(e);
+    public NetworkRequestException(Context context, IOException e) {
+        super(context, e);
         this.customMessage = generateCustomMessage();
     }
 
@@ -23,16 +26,12 @@ public class NetworkRequestException extends NormalException {
             return "";
         }
 
-        if (message.contains("java.net.SocketTimeoutException")) {
-            return "Likely too bad/slow internet connection. ";
-        }
-
         if (message.contains("No address associated with hostname") || message.contains("Failed to connect to")) {
-            return "Likely no internet connection. ";
+            return context.getString(R.string.C_excpdet_noInternetConnection);
         }
 
         if (message.contains("java.net.")) {
-            return "Likely or slow network connection or no network at all. ";
+            return context.getString(R.string.C_excpdet_likelySlowOrNoNetwork);
         }
 
         return "";

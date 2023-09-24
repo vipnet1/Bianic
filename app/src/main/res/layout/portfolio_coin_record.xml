@@ -16,10 +16,10 @@
             android:layout_margin="10dp"
             android:layout_weight="0.4"
             android:enabled="true"
-            android:hint="Symbol"
+            android:hint="@string/coinrcd_edt_symbol"
             android:inputType="text"
-            android:minHeight="48dp"
-            android:maxLength="10" />
+            android:maxLength="10"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/edt_allocation"
@@ -28,10 +28,10 @@
             android:layout_margin="10dp"
             android:layout_weight="0.4"
             android:enabled="true"
-            android:hint="Allocation %"
+            android:hint="@string/coinrcd_edt_allocation"
             android:inputType="numberDecimal"
-            android:minHeight="48dp"
-            android:maxLength="6" />
+            android:maxLength="6"
+            android:minHeight="48dp" />
 
         <Button
             android:id="@+id/btn_remove"
@@ -59,9 +59,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="0.7"
+            android:layout_weight="0.65"
             android:backgroundTint="#4CAF50"
-            android:text="Apply"
+            android:text="@string/coinrcd_btn_apply"
             android:visibility="visible" />
 
         <Button
@@ -71,7 +71,7 @@
             android:layout_margin="10dp"
             android:layout_weight="0.2"
             android:backgroundTint="#03A9F4"
-            android:text="Edit"
+            android:text="@string/coinrcd_btn_edit"
             android:visibility="gone" />
 
         <Button
@@ -79,10 +79,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.35"
             android:backgroundTint="#9C27B0"
-            android:text="Cancel"
-            android:textSize="10sp"
+            android:text="@string/coinrcd_btn_cancel"
+            android:textSize="12sp"
             android:visibility="invisible" />
     </LinearLayout>
 

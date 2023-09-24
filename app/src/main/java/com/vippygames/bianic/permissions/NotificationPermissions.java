@@ -25,14 +25,14 @@ public class NotificationPermissions {
 
     public boolean isChannelEnabled(Context context, NotificationType notificationType) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationChannel channel = manager.getNotificationChannel(notificationType.getChannelId());
+        NotificationChannel channel = manager.getNotificationChannel(notificationType.getChannelId(context));
 
         return channel == null || channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
     }
 
     public boolean isChannelExists(Context context, NotificationType notificationType) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        return manager.getNotificationChannel(notificationType.getChannelId()) != null;
+        return manager.getNotificationChannel(notificationType.getChannelId(context)) != null;
     }
 
     public void requestPostNotificationsPermission(Activity activity) {

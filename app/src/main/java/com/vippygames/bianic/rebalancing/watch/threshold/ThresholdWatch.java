@@ -2,6 +2,7 @@ package com.vippygames.bianic.rebalancing.watch.threshold;
 
 import android.content.Context;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.notifications.NotificationType;
@@ -27,7 +28,7 @@ public class ThresholdWatch {
         }
 
         ReportGenerator reportGenerator = new ReportGenerator(context);
-        showCanRebalanceNotification("Coin " + coinDetails.getSymbol() + " reached threshold to rebalance.");
+        showCanRebalanceNotification(context.getString(R.string.C_trshwatch_coinReachedThreshold0) + coinDetails.getSymbol() + context.getString(R.string.C_trshwatch_coinReachedThreshold1));
         reportGenerator.generateReport(coinsDetails);
     }
 
@@ -36,7 +37,7 @@ public class ThresholdWatch {
         ReportCalculations reportCalculations = new ReportCalculations();
         double portfolioUsdValue = reportCalculations.getAllCoinsUsdValue(coinsDetails);
         if (portfolioUsdValue < ReportsConsts.MIN_PORTFOLIO_VALUE_USDT) {
-            throw new EmptyPortfolioException();
+            throw new EmptyPortfolioException(context);
         }
 
         ConfigurationManager configurationManager = new ConfigurationManager(context);
@@ -59,6 +60,6 @@ public class ThresholdWatch {
     private void showCanRebalanceNotification(String message) {
         NotificationsHelper notificationsHelper = new NotificationsHelper(context);
         notificationsHelper.pushNotification(NotificationType.REBALANCING_AVAILABLE,
-                "Rebalancing available, report generated.", message, false);
+                context.getString(R.string.C_trshwatch_reportGenerated), message, false);
     }
 }

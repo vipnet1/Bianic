@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Created At"
+            android:text="@string/excprcd_tv_createdAt"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Severity"
+            android:text="@string/excprcd_tv_severity"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -67,7 +67,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="0dp"
         android:gravity="center"
-        android:text="Message"
+        android:text="@string/excprcd_tv_message"
         android:textColor="#2F3E4C"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -91,8 +91,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
-        android:contentDescription="Remove this exception"
-        android:text="Clear" />
+        android:text="@string/excprcd_btn_clear" />
 
     <TextView
         android:id="@+id/record_db_id"

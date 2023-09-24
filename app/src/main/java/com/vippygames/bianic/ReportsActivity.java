@@ -83,7 +83,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     public void onManualReportGenerationTaskFinished(boolean result) {
         if (result) {
             refreshRecords();
-            Toast.makeText(this, "Report generated.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_reports_toast_reportGenerated, Toast.LENGTH_SHORT).show();
         }
         manualReportGenerationDialog.dismiss();
     }
@@ -104,12 +104,14 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         ReportsDb db = new ReportsDb(this);
         List<ReportsRecord> records = db.loadRecords(db.getRecordsOrderedByCreatedAt());
 
+        int index = 0;
         for (ReportsRecord record : records) {
-            addReportRecordToUi(record);
+            addReportRecordToUi(record, index);
+            index++;
         }
     }
 
-    private void addReportRecordToUi(ReportsRecord record) {
+    private void addReportRecordToUi(ReportsRecord record, int index) {
         View recordRoot = addEmptyRecord();
 
         TextView tvRecordDbUuid = recordRoot.findViewById(R.id.record_db_uuid);
@@ -124,7 +126,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         Button btnDetails = recordRoot.findViewById(R.id.btn_details);
         Button btnClearReport = recordRoot.findViewById(R.id.btn_clear_report);
 
-        StringUtils stringUtils = new StringUtils();
+        StringUtils stringUtils = new StringUtils(this);
         tvRecordDbUuid.setTag(record.getUuid());
         tvCreatedAt.setText(stringUtils.convertUtcToLocalTime(record.getCreatedAt()));
 
@@ -144,7 +146,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         tvHighestDeviationCoin.setText(record.getHighestDeviationCoin());
         tvHighestDeviationPercent.setText(stringUtils.convertDoubleToString(record.getHighestDeviationPercent(), 3) + "%");
 
+        btnDetails.setContentDescription(getString(R.string.C_reports_cdReportDetails) + index);
         btnDetails.setOnClickListener(this);
+
+        btnClearReport.setContentDescription(getString(R.string.C_reports_cdClearReport) + index);
         btnClearReport.setOnClickListener(this);
 
         String recordTag = stringUtils.generateRandomString(ROOT_TAG_LENGTH);
@@ -157,8 +162,8 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initManualReportGenerationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Report Generation");
-        builder.setMessage("Generating report. Wait a moment please.");
+        builder.setTitle(R.string.C_reports_dialog_reportGenerationTitle);
+        builder.setMessage(R.string.C_reports_dialog_reportGenerationMessage);
         builder.setCancelable(false);
 
         manualReportGenerationDialog = builder.create();
@@ -207,7 +212,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             executor.execute(new ManualReportGenerationTask(this));
 
         } catch (UnvalidatedRecordsException e) {
-            Toast.makeText(this, "Click on 'Validate Records' button in main page", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.C_reports_toast_clickValidateRecords, Toast.LENGTH_SHORT).show();
             ExceptionHandler exceptionHandler = new ExceptionHandler(this);
             exceptionHandler.handleException(e);
         }

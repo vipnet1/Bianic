@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Created At"
+            android:text="@string/reprcd_tv_createdAt"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -41,7 +41,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:text="Passed Threshold"
+        android:text="@string/reprcd_tv_passedThreshold"
         android:textColor="#4CAF50"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -55,7 +55,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="0dp"
         android:gravity="center"
-        android:text="Didn't Pass Threshold"
+        android:text="@string/reprcd_tv_didntPassThreshold"
         android:textColor="#E91E63"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Total USD"
+            android:text="@string/reprcd_tv_totalUsd"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Threshold"
+            android:text="@string/reprcd_tv_threshold"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Coins"
+            android:text="@string/reprcd_tv_coins"
             android:textColor="#2F3E4C"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -150,7 +150,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         android:gravity="center"
-        android:text="Highest Deviation"
+        android:text="@string/reprcd_tv_highestDeviation"
         android:textColor="#2F3E4C"
         android:textSize="25sp"
         android:textStyle="italic" />
@@ -193,8 +193,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="#9C27B0"
-        android:contentDescription="View crypto report details"
-        android:text="Details" />
+        android:text="@string/reprcd_btn_details" />
 
     <Button
         android:id="@+id/btn_clear_report"
@@ -204,8 +203,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="#2196F3"
-        android:contentDescription="Remove this crypto report"
-        android:text="Clear" />
+        android:text="@string/reprcd_btn_clear" />
 
     <TextView
         android:id="@+id/record_db_uuid"

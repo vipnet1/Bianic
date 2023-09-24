@@ -6,6 +6,7 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.notifications.NotificationInfo;
 import com.vippygames.bianic.notifications.NotificationType;
 import com.vippygames.bianic.notifications.NotificationsHelper;
@@ -24,7 +25,7 @@ public class RebalancingForegroundService extends Service {
 
         NotificationsHelper notificationsHelper = new NotificationsHelper(this);
         NotificationInfo notificationInfo = notificationsHelper.pushNotification(NotificationType.REBALANCING_RUNNING,
-                "Rebalancing Check", "Checking whether should rebalance", true);
+                getString(R.string.C_rebchk_notification_checkRunningTitle), getString(R.string.C_rebchk_notification_checkRunningNotChecked), true);
         startForeground(notificationInfo.getNotificationId(), notificationInfo.getNotification());
     }
 
