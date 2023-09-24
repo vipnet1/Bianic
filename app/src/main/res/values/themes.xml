@@ -7,8 +7,8 @@
         <item name="colorOnPrimary">@color/white</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#FFEB3B</item>
-        <item name="colorSecondaryVariant">#FFC107</item>
+        <item name="colorSecondary">#808080</item>
+        <item name="colorSecondaryVariant">#C0C0C0</item>
         <item name="colorOnSecondary">@color/white</item>
 
         <!-- Status bar color. -->
@@ -19,5 +19,18 @@
         <item name="textColor2">@color/textColor2Light</item>
         <item name="textColor3">@color/textColor3Light</item>
         <item name="textColor4">@color/textColor4Light</item>
+        <item name="textColor5">@color/textColor5Light</item>
+        <item name="textColor6">@color/textColor6Light</item>
+
+        <item name="textBackgroundColor1">@color/textBackgroundColor1Light</item>
+
+        <item name="btnColor1">@color/btnColor1Light</item>
+        <item name="btnColor2">@color/btnColor2Light</item>
+        <item name="btnColor3">@color/btnColor3Light</item>
+        <item name="btnColor4">@color/btnColor4Light</item>
+        <item name="btnColor5">@color/btnColor5Light</item>
+        <item name="btnColor6">@color/btnColor6Light</item>
+        <item name="btnColor7">@color/btnColor7Light</item>
+        <item name="btnColor8">@color/btnColor8Light</item>
     </style>
 </resources>

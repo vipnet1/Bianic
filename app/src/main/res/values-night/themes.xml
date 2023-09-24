@@ -12,12 +12,25 @@
         <item name="colorOnSecondary">@color/white</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">#673AB7</item>
+        <item name="android:statusBarColor">#492094</item>
 
         <!-- Custom. -->
         <item name="textColor1">@color/textColor1Dark</item>
         <item name="textColor2">@color/textColor2Dark</item>
         <item name="textColor3">@color/textColor3Dark</item>
         <item name="textColor4">@color/textColor4Dark</item>
+        <item name="textColor5">@color/textColor5Dark</item>
+        <item name="textColor6">@color/textColor6Dark</item>
+
+        <item name="textBackgroundColor1">@color/textBackgroundColor1Dark</item>
+
+        <item name="btnColor1">@color/btnColor1Dark</item>
+        <item name="btnColor2">@color/btnColor2Dark</item>
+        <item name="btnColor3">@color/btnColor3Dark</item>
+        <item name="btnColor4">@color/btnColor4Dark</item>
+        <item name="btnColor5">@color/btnColor5Dark</item>
+        <item name="btnColor6">@color/btnColor6Dark</item>
+        <item name="btnColor7">@color/btnColor7Dark</item>
+        <item name="btnColor8">@color/btnColor8Dark</item>
     </style>
 </resources>

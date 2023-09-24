@@ -5,5 +5,18 @@
         <attr name="textColor2" format="color" />
         <attr name="textColor3" format="color" />
         <attr name="textColor4" format="color" />
+        <attr name="textColor5" format="color" />
+        <attr name="textColor6" format="color" />
+
+        <attr name="textBackgroundColor1" format="color" />
+
+        <attr name="btnColor1" format="color" />
+        <attr name="btnColor2" format="color" />
+        <attr name="btnColor3" format="color" />
+        <attr name="btnColor4" format="color" />
+        <attr name="btnColor5" format="color" />
+        <attr name="btnColor6" format="color" />
+        <attr name="btnColor7" format="color" />
+        <attr name="btnColor8" format="color" />
     </declare-styleable>
 </resources>
