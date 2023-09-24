@@ -44,7 +44,7 @@
                 android:padding="10dp"
                 android:text="@string/config_btn_guideCreateKeys"
                 android:textColor="#FFFFFF"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -84,6 +84,7 @@
                 android:layout_marginBottom="40dp"
                 android:backgroundTint="#9C27B0"
                 android:text="@string/config_btn_showApi"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <TextView
@@ -119,6 +120,7 @@
                 android:layout_marginBottom="40dp"
                 android:backgroundTint="#9C27B0"
                 android:text="@string/config_btn_showSecret"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <TextView
@@ -240,6 +242,7 @@
                 android:layout_marginBottom="30dp"
                 android:backgroundTint="#4CAF50"
                 android:text="@string/config_btn_rebalanceActivate"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <Button
@@ -252,6 +255,7 @@
                 android:layout_marginBottom="30dp"
                 android:backgroundTint="#E91E63"
                 android:text="@string/config_btn_rebalanceDeactivate"
+                android:textSize="20sp"
                 android:visibility="gone" />
 
             <TextView
@@ -269,6 +273,7 @@
                 android:layout_marginBottom="5dp"
                 android:backgroundTint="#4CAF50"
                 android:text="@string/config_btn_save"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <Button
@@ -281,6 +286,7 @@
                 android:layout_marginBottom="40dp"
                 android:backgroundTint="#9C27B0"
                 android:text="@string/config_btn_revert"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
         </LinearLayout>

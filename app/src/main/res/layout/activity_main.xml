@@ -37,27 +37,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#BAA919"
-        android:text="@string/main_btn_addRecord" />
+        android:text="@string/main_btn_addRecord"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#4CAF50"
-        android:text="@string/main_btn_save" />
+        android:text="@string/main_btn_save"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btn_revert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#E91E63"
-        android:text="@string/main_btn_revert" />
+        android:text="@string/main_btn_revert"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btn_validate_records"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#2196F3"
-        android:text="@string/main_btn_validateRecords" />
+        android:text="@string/main_btn_validateRecords"
+        android:textSize="20sp" />
 
 </LinearLayout>
