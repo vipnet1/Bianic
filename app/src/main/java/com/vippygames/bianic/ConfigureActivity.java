@@ -6,11 +6,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
@@ -297,7 +301,36 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         btnDeactivate.setOnClickListener(this);
 
         initGuideToCreateKeys();
+        initThemeSpinner();
         setConfigurationData();
+    }
+
+    private void initThemeSpinner() {
+        String[] themeOptions = {"System", "Light", "Dark"};
+        Spinner themeSpinner = findViewById(R.id.theme_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.theme_spinner_item, themeOptions);
+        themeSpinner.setAdapter(adapter);
+        themeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                        break;
+                    case 1:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        break;
+                    case 2:
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
     }
 
     private void initGuideToCreateKeys() {
