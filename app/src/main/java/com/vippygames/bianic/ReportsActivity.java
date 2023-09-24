@@ -26,6 +26,7 @@ import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.rebalancing.report.manual.ManualReportGenerationTask;
 import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;
 import com.vippygames.bianic.rebalancing.validation.exceptions.UnvalidatedRecordsException;
+import com.vippygames.bianic.utils.ResourceUtils;
 import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.List;
@@ -130,14 +131,15 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         tvRecordDbUuid.setTag(record.getUuid());
         tvCreatedAt.setText(stringUtils.convertUtcToLocalTime(record.getCreatedAt()));
 
+        ResourceUtils resourceUtils = new ResourceUtils(this);
         if (record.shouldRebalance()) {
             tvPassedThreshold.setVisibility(View.VISIBLE);
             tvDidNotPassThreshold.setVisibility(View.GONE);
-            recordRoot.setBackgroundColor(Color.rgb(162, 239, 165));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.reportReachColor));
         } else {
             tvPassedThreshold.setVisibility(View.GONE);
             tvDidNotPassThreshold.setVisibility(View.VISIBLE);
-            recordRoot.setBackgroundColor(Color.rgb(209, 219, 230));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.reportNotReachColor));
         }
 
         tvTotalUsd.setText(stringUtils.convertDoubleToString(record.getPortfolioUsdValue(), 1) + "$");

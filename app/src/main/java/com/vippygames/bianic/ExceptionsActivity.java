@@ -19,6 +19,7 @@ import com.vippygames.bianic.consts.ExceptionHandleConsts;
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogRecord;
+import com.vippygames.bianic.utils.ResourceUtils;
 import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.List;
@@ -97,12 +98,13 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         Button btnClearException = recordRoot.findViewById(R.id.btn_clear_exception);
 
         String severity = record.getSeverity();
+        ResourceUtils resourceUtils = new ResourceUtils(this);
         if (severity.equals(ExceptionHandleConsts.SEVERITY_NORMAL)) {
-            recordRoot.setBackgroundColor(Color.rgb(244, 236, 102));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.exceptionNormalColor));
         } else if (severity.equals(ExceptionHandleConsts.SEVERITY_CRITICAL)) {
-            recordRoot.setBackgroundColor(Color.rgb(244, 164, 102));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.exceptionCriticalColor));
         } else {
-            recordRoot.setBackgroundColor(Color.rgb(244, 107, 102));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.exceptionFatalColor));
         }
 
         StringUtils stringUtils = new StringUtils(this);

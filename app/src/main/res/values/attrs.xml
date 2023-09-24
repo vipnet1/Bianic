@@ -7,6 +7,7 @@
         <attr name="textColor4" format="color" />
         <attr name="textColor5" format="color" />
         <attr name="textColor6" format="color" />
+        <attr name="textColor7" format="color" />
 
         <attr name="textBackgroundColor1" format="color" />
 
@@ -18,5 +19,12 @@
         <attr name="btnColor6" format="color" />
         <attr name="btnColor7" format="color" />
         <attr name="btnColor8" format="color" />
+
+        <attr name="exceptionNormalColor" format="color" />
+        <attr name="exceptionCriticalColor" format="color" />
+        <attr name="exceptionFatalColor" format="color" />
+
+        <attr name="reportNotReachColor" format="color" />
+        <attr name="reportReachColor" format="color" />
     </declare-styleable>
 </resources>

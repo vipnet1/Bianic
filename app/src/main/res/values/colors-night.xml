@@ -5,7 +5,8 @@
     <color name="textColor3Dark">#DE91EA</color>
     <color name="textColor4Dark">#EF90B0</color>
     <color name="textColor5Dark">#2F3E4C</color>
-    <color name="textColor6Dark">#4CAF50</color>
+    <color name="textColor6Dark">#206623</color>
+    <color name="textColor7Dark">#980A3A</color>
 
     <color name="textBackgroundColor1Dark">#EF90B0</color>
 
@@ -17,4 +18,11 @@
     <color name="btnColor6Dark">#F44336</color>
     <color name="btnColor7Dark">#E91E63</color>
     <color name="btnColor8Dark">#9093F3</color>
+
+    <color name="exceptionColorNormalDark">#B6B48B</color>
+    <color name="exceptionColorCriticalDark">#B89B84</color>
+    <color name="exceptionColorFatalDark">#B68988</color>
+
+    <color name="reportNotReachColorDark">#B0B7BD</color>
+    <color name="reportReachColorDark">#8BC48D</color>
 </resources>

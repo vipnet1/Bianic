@@ -10,6 +10,7 @@
     <color name="textColor4Light">#E91E63</color>
     <color name="textColor5Light">#2F3E4C</color>
     <color name="textColor6Light">#4CAF50</color>
+    <color name="textColor7Light">@color/red</color>
 
     <color name="textBackgroundColor1Light">#E91E63</color>
 
@@ -21,4 +22,11 @@
     <color name="btnColor6Light">#F44336</color>
     <color name="btnColor7Light">#E91E63</color>
     <color name="btnColor8Light">#9093F3</color>
+
+    <color name="exceptionColorNormalLight">#F4EC66</color>
+    <color name="exceptionColorCriticalLight">#F4A466</color>
+    <color name="exceptionColorFatalLight">#F46B66</color>
+
+    <color name="reportNotReachColorLight">#D1DBE6</color>
+    <color name="reportReachColorLight">#A2EFA5</color>
 </resources>
