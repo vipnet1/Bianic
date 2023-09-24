@@ -234,4 +234,5 @@
     <string name="manifest_guide_label">Guide</string>
     <string name="manifest_excp_label">Exceptions</string>
     <string name="manifest_rep_label">Reports</string>
+    <string name="C_config_toast_thresholdRebalanceFormatInvalid">Invalid threshold rebalance percent format.</string>
 </resources>

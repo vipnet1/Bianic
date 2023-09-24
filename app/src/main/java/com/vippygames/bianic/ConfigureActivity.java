@@ -135,58 +135,63 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(this, R.string.C_config_toast_revertedConfiguration, Toast.LENGTH_SHORT).show();
     }
 
+
     private boolean isThresholdRebalancingPercentInputValid(String thresholdRebalancingPercentText) {
-        if (thresholdRebalancingPercentText.isEmpty()) {
-            Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceCantBeEmpty, Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        try {
+            if (thresholdRebalancingPercentText.isEmpty()) {
+                Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceCantBeEmpty, Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-        int dotIndex = thresholdRebalancingPercentText.indexOf(".");
+            int dotIndex = thresholdRebalancingPercentText.indexOf(".");
 
-        if (dotIndex < 0) {
-            if (thresholdRebalancingPercentText.length() > 6) {
+            if (dotIndex < 0) {
+                float trp = Float.parseFloat(thresholdRebalancingPercentText);
+                if (trp >= 1000000) {
+                    Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceLessThan, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                if (trp < 0.1) {
+                    Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceMoreThan, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (dotIndex == 0) {
+                Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceDotNotFirst, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (dotIndex == thresholdRebalancingPercentText.length() - 1) {
+                Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceDotNotLast, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            String charsAfterDot = thresholdRebalancingPercentText.substring(dotIndex + 1);
+            if (charsAfterDot.length() > 3) {
+                Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceUpToDigitsAfterDot, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            float trp = Float.parseFloat(thresholdRebalancingPercentText);
+            if (trp >= 1000000) {
                 Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceLessThan, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
-            if (thresholdRebalancingPercentText.equals("0")) {
+            if (trp < 0.1) {
                 Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceMoreThan, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             return true;
-        }
-
-        if (dotIndex == 0) {
-            Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceDotNotFirst, Toast.LENGTH_SHORT).show();
+        } catch (NumberFormatException e) { //shouldn't ever get to catch clause, added just in case
+            Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceFormatInvalid, Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        if (dotIndex == thresholdRebalancingPercentText.length() - 1) {
-            Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceDotNotLast, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        String charsBeforeDot = thresholdRebalancingPercentText.substring(0, dotIndex);
-        String charsAfterDot = thresholdRebalancingPercentText.substring(dotIndex + 1);
-
-        if (charsBeforeDot.length() > 6) {
-            Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceLessThan, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (charsAfterDot.length() > 3) {
-            Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceUpToDigitsAfterDot, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        float value = Float.parseFloat(thresholdRebalancingPercentText);
-        if (value < 0.1) {
-            Toast.makeText(this, R.string.C_config_toast_thresholdRebalanceMoreThan, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
     }
 
     private boolean isValidationIntervalInputValid(String validationIntervalText) {

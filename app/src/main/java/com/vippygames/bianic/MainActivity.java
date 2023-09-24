@@ -488,7 +488,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             String charsAfterDot = allocationInput.substring(dotIndex + 1);
-
             if (charsAfterDot.length() > 2) {
                 Toast.makeText(this, R.string.C_main_toast_allocationUpToDigitsAfterDot, Toast.LENGTH_SHORT).show();
                 return false;
@@ -504,12 +503,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, R.string.C_main_toast_allocationMinimalIs, Toast.LENGTH_SHORT).show();
                 return false;
             }
+
+            return true;
         } catch (NumberFormatException e) { //shouldn't ever get to catch clause, added just in case
             Toast.makeText(this, R.string.C_main_toast_allocationCoinInvalidFormat, Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        return true;
     }
 
     private boolean validateSymbolInput(String symbolInput) {
