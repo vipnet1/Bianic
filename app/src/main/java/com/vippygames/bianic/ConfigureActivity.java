@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
@@ -317,19 +316,6 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void setSelectedTheme() {
-        ConfigurationManager configurationManager = new ConfigurationManager(this);
-        String theme = configurationManager.getTheme();
-
-        if (theme.equals(ConfigurationConsts.THEME_LIGHT)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        } else if (theme.equals(ConfigurationConsts.THEME_DARK)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }
-    }
-
     private void initThemeSpinner() {
         Spinner themeSpinner = findViewById(R.id.theme_spinner);
         String[] themeOptions = {ConfigurationConsts.THEME_SYSTEM, ConfigurationConsts.THEME_LIGHT, ConfigurationConsts.THEME_DARK};
@@ -349,7 +335,8 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
                 ConfigurationManager configurationManager = new ConfigurationManager(ConfigureActivity.this);
                 if (!themeOptions[position].equals(configurationManager.getTheme())) {
                     configurationManager.setTheme(themeOptions[position]);
-                    setSelectedTheme();
+                    ThemeApplication app = (ThemeApplication) getApplication();
+                    app.setSelectedTheme();
                 }
             }
 

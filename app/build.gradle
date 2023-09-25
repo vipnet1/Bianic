@@ -10,8 +10,8 @@ android {
         applicationId "com.vippygames.bianic"
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 11
-        versionName "1.31"
+        versionCode 12
+        versionName "1.32"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
