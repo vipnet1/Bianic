@@ -201,7 +201,7 @@ public class DetailedReportActivity extends AppCompatActivity {
 
                 double targetQuantityUsd = absoluteTargetQuantity * record.getPrice();
                 message += " " + record.getCoin() + " | "
-                        + stringUtils.convertDoubleToString(targetQuantityUsd, 2) + " $";
+                        + stringUtils.convertDoubleToString(targetQuantityUsd, 2) + "$";
 
                 cell.setText(message);
                 break;

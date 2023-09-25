@@ -15,7 +15,7 @@ public class KeyNotFoundException extends NormalException {
 
     @Override
     public String getMessage() {
-        return context.getString(R.string.C_excpdet_notProvideBinanceKeys) + ". SharedPreferences key '" + this.key + "' not found";
+        return context.getString(R.string.C_excpdet_notProvideBinanceKeys) + " SharedPreferences key '" + this.key + "' not found";
     }
 
     @Override
