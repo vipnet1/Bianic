@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
+import com.vippygames.bianic.BuildConfig;
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;

@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.common;
 
 import android.app.Application;
 

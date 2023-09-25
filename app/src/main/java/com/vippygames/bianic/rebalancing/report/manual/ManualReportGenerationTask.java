@@ -1,6 +1,6 @@
 package com.vippygames.bianic.rebalancing.report.manual;
 
-import com.vippygames.bianic.ReportsActivity;
+import com.vippygames.bianic.activities.ReportsActivity;
 
 public class ManualReportGenerationTask implements Runnable {
     private final ReportsActivity reportsActivity;

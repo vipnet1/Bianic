@@ -1,6 +1,6 @@
 package com.vippygames.bianic.rebalancing.validation;
 
-import com.vippygames.bianic.MainActivity;
+import com.vippygames.bianic.activities.MainActivity;
 
 public class BinanceRecordsValidationTask implements Runnable {
     private final MainActivity mainActivity;

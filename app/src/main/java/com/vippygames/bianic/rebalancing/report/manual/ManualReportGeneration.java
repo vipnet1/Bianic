@@ -3,7 +3,7 @@ package com.vippygames.bianic.rebalancing.report.manual;
 import android.widget.Toast;
 
 import com.vippygames.bianic.R;
-import com.vippygames.bianic.ReportsActivity;
+import com.vippygames.bianic.activities.ReportsActivity;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.exception_handle.exceptions.CriticalException;

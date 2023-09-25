@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.ExceptionHandleConsts;
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;

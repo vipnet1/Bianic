@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.DetailedReportsConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;

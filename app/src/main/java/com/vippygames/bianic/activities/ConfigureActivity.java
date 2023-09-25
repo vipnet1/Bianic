@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.R;
+import com.vippygames.bianic.common.ThemeApplication;
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;

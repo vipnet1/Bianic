@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 
