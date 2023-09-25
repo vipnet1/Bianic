@@ -2,7 +2,6 @@ package com.vippygames.bianic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,17 +12,16 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.vippygames.bianic.consts.ExceptionHandleConsts;
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogRecord;
+import com.vippygames.bianic.utils.ResourceUtils;
 import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.List;
 
-public class ExceptionsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ExceptionsActivity extends ThemeAppCompatActivity implements View.OnClickListener {
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
 
@@ -97,12 +95,13 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         Button btnClearException = recordRoot.findViewById(R.id.btn_clear_exception);
 
         String severity = record.getSeverity();
+        ResourceUtils resourceUtils = new ResourceUtils(this);
         if (severity.equals(ExceptionHandleConsts.SEVERITY_NORMAL)) {
-            recordRoot.setBackgroundColor(Color.rgb(244, 236, 102));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.exceptionNormalColor));
         } else if (severity.equals(ExceptionHandleConsts.SEVERITY_CRITICAL)) {
-            recordRoot.setBackgroundColor(Color.rgb(244, 164, 102));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.exceptionCriticalColor));
         } else {
-            recordRoot.setBackgroundColor(Color.rgb(244, 107, 102));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.exceptionFatalColor));
         }
 
         StringUtils stringUtils = new StringUtils(this);

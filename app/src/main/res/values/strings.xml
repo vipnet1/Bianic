@@ -117,7 +117,7 @@
     <string name="reprcd_btn_details">Details</string>
     <string name="reprcd_btn_clear">Clear</string>
 
-<!--    C stands for code-->
+    <!--    C stands for code-->
     <string name="C_main_toast_failedValidateRecords">Failed validating records. View exception for details.</string>
     <string name="C_main_toast_recordsValid">Records are valid</string>
     <string name="C_main_dialog_requestPermissionsTitle">Why Those Permissions Are Needed</string>

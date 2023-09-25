@@ -3,7 +3,6 @@ package com.vippygames.bianic;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.db.reports.ReportsDb;
@@ -26,13 +23,14 @@ import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.rebalancing.report.manual.ManualReportGenerationTask;
 import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;
 import com.vippygames.bianic.rebalancing.validation.exceptions.UnvalidatedRecordsException;
+import com.vippygames.bianic.utils.ResourceUtils;
 import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ReportsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ReportsActivity extends ThemeAppCompatActivity implements View.OnClickListener {
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
 
@@ -130,14 +128,15 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         tvRecordDbUuid.setTag(record.getUuid());
         tvCreatedAt.setText(stringUtils.convertUtcToLocalTime(record.getCreatedAt()));
 
+        ResourceUtils resourceUtils = new ResourceUtils(this);
         if (record.shouldRebalance()) {
             tvPassedThreshold.setVisibility(View.VISIBLE);
             tvDidNotPassThreshold.setVisibility(View.GONE);
-            recordRoot.setBackgroundColor(Color.rgb(162, 239, 165));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.reportReachColor));
         } else {
             tvPassedThreshold.setVisibility(View.GONE);
             tvDidNotPassThreshold.setVisibility(View.VISIBLE);
-            recordRoot.setBackgroundColor(Color.rgb(209, 219, 230));
+            recordRoot.setBackgroundColor(resourceUtils.getColorByAttr(R.attr.reportNotReachColor));
         }
 
         tvTotalUsd.setText(stringUtils.convertDoubleToString(record.getPortfolioUsdValue(), 1) + "$");

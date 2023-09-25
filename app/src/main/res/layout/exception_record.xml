@@ -17,7 +17,7 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="@string/excprcd_tv_createdAt"
-            android:textColor="#2F3E4C"
+            android:textColor="?attr/textColor5"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -44,7 +44,7 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="@string/excprcd_tv_severity"
-            android:textColor="#2F3E4C"
+            android:textColor="?attr/textColor5"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
         android:layout_marginBottom="0dp"
         android:gravity="center"
         android:text="@string/excprcd_tv_message"
-        android:textColor="#2F3E4C"
+        android:textColor="?attr/textColor5"
         android:textSize="25sp"
         android:textStyle="bold" />
 
@@ -91,7 +91,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
-        android:text="@string/excprcd_btn_clear" />
+        android:backgroundTint="?attr/btnColor4"
+        android:text="@string/excprcd_btn_clear"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/record_db_id"
@@ -102,6 +104,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="#E91E63" />
+        android:background="?attr/btnColor7" />
 
 </LinearLayout>

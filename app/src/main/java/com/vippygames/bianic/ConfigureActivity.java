@@ -6,11 +6,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
@@ -21,7 +22,7 @@ import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.RebalanceActivationUtils;
 
-public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
+public class ConfigureActivity extends ThemeAppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
     private EditText edtSecretKey;
     private EditText edtValidationInterval;
@@ -297,7 +298,52 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         btnDeactivate.setOnClickListener(this);
 
         initGuideToCreateKeys();
+        initThemeSpinner();
         setConfigurationData();
+    }
+
+    private void setSpinnerInitialSelection(String[] themeOptions) {
+        Spinner themeSpinner = findViewById(R.id.theme_spinner);
+        ConfigurationManager configurationManager = new ConfigurationManager(ConfigureActivity.this);
+        String theme = configurationManager.getTheme();
+        for (int i = 0; i < themeOptions.length; i++) {
+            if (theme.equals(themeOptions[i])) {
+                themeSpinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    private void initThemeSpinner() {
+        Spinner themeSpinner = findViewById(R.id.theme_spinner);
+        String[] themeOptions = {ConfigurationConsts.THEME_SYSTEM, ConfigurationConsts.THEME_LIGHT, ConfigurationConsts.THEME_DARK};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.theme_spinner_item, themeOptions);
+        themeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            private boolean firstSelection = true;
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // because called first time on activity enter
+                if (firstSelection) {
+                    firstSelection = false;
+                    setSpinnerInitialSelection(themeOptions);
+                    return;
+                }
+
+                ConfigurationManager configurationManager = new ConfigurationManager(ConfigureActivity.this);
+                if (!themeOptions[position].equals(configurationManager.getTheme())) {
+                    configurationManager.setTheme(themeOptions[position]);
+                    setSelectedTheme();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
+        themeSpinner.setAdapter(adapter);
     }
 
     private void initGuideToCreateKeys() {

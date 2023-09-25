@@ -1,16 +1,57 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.BinanceRebalancingHelper" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.Material3.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">#2196F3</item>
+        <item name="colorPrimaryVariant">#00BCD4</item>
         <item name="colorOnPrimary">@color/white</item>
+
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">#808080</item>
+        <item name="colorSecondaryVariant">#C0C0C0</item>
+        <item name="colorOnSecondary">@color/white</item>
+
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">#3F51B5</item>
+
+        <!-- Custom. -->
+        <item name="textColor1">@color/textColor1Light</item>
+        <item name="textColor2">@color/textColor2Light</item>
+        <item name="textColor3">@color/textColor3Light</item>
+        <item name="textColor4">@color/textColor4Light</item>
+        <item name="textColor5">@color/textColor5Light</item>
+        <item name="textColor6">@color/textColor6Light</item>
+        <item name="textColor7">@color/textColor7Light</item>
+        <item name="textColor8">@color/textColor8Light</item>
+
+        <item name="textBackgroundColor1">@color/textBackgroundColor1Light</item>
+
+        <item name="btnColor1">@color/btnColor1Light</item>
+        <item name="btnColor2">@color/btnColor2Light</item>
+        <item name="btnColor3">@color/btnColor3Light</item>
+        <item name="btnColor4">@color/btnColor4Light</item>
+        <item name="btnColor5">@color/btnColor5Light</item>
+        <item name="btnColor6">@color/btnColor6Light</item>
+        <item name="btnColor7">@color/btnColor7Light</item>
+        <item name="btnColor8">@color/btnColor8Light</item>
+        <item name="btnColor9">@color/btnColor9Light</item>
+
+        <item name="exceptionNormalColor">@color/exceptionColorNormalLight</item>
+        <item name="exceptionCriticalColor">@color/exceptionColorCriticalLight</item>
+        <item name="exceptionFatalColor">@color/exceptionColorFatalLight</item>
+
+        <item name="reportNotReachColor">@color/reportNotReachColorLight</item>
+        <item name="reportReachColor">@color/reportReachColorLight</item>
+
+        <item name="detrepColumnColor1">@color/detrepColumnColor1Light</item>
+        <item name="detrepColumnColor2">@color/detrepColumnColor2Light</item>
+        <item name="detrepColumnColor3">@color/detrepColumnColor3Light</item>
+        <item name="detrepColumnColor4">@color/detrepColumnColor4Light</item>
+        <item name="detrepColumnColor5">@color/detrepColumnColor5Light</item>
+        <item name="detrepColumnColor6">@color/detrepColumnColor6Light</item>
+        <item name="detrepColumnColor7">@color/detrepColumnColor7Light</item>
+        <item name="detrepColumnColor8">@color/detrepColumnColor8Light</item>
+        <item name="detrepColumnColor9">@color/detrepColumnColor9Light</item>
     </style>
+
 </resources>

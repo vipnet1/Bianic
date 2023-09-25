@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textColor1Dark">#76CDD8</color>
+    <color name="textColor2Dark">#A17EE4</color>
+    <color name="textColor3Dark">#DE91EA</color>
+    <color name="textColor4Dark">#EF90B0</color>
+    <color name="textColor5Dark">#2F3E4C</color>
+    <color name="textColor6Dark">#206623</color>
+    <color name="textColor7Dark">#980A3A</color>
+    <color name="textColor8Dark">@color/white</color>
+
+    <color name="textBackgroundColor1Dark">#EF90B0</color>
+
+    <color name="btnColor1Dark">#BAA919</color>
+    <color name="btnColor2Dark">#4CAF50</color>
+    <color name="btnColor3Dark">#E91E63</color>
+    <color name="btnColor4Dark">#2196F3</color>
+    <color name="btnColor5Dark">#9C27B0</color>
+    <color name="btnColor6Dark">#F44336</color>
+    <color name="btnColor7Dark">#E91E63</color>
+    <color name="btnColor8Dark">#9093F3</color>
+    <color name="btnColor9Dark">#3F51B5</color>
+
+    <color name="exceptionColorNormalDark">#B6B48B</color>
+    <color name="exceptionColorCriticalDark">#B89B84</color>
+    <color name="exceptionColorFatalDark">#B68988</color>
+
+    <color name="reportNotReachColorDark">#B0B7BD</color>
+    <color name="reportReachColorDark">#8BC48D</color>
+
+    <color name="detrepColumnColor1Dark">#C2991E</color>
+    <color name="detrepColumnColor2Dark">#437645</color>
+    <color name="detrepColumnColor3Dark">#B8433A</color>
+    <color name="detrepColumnColor4Dark">#2C7CBB</color>
+    <color name="detrepColumnColor5Dark">#6D2879</color>
+    <color name="detrepColumnColor6Dark">#BB819E</color>
+    <color name="detrepColumnColor7Dark">#A279B1</color>
+    <color name="detrepColumnColor8Dark">#3F9D9F</color>
+    <color name="detrepColumnColor9Dark">#7EA96C</color>
+</resources>

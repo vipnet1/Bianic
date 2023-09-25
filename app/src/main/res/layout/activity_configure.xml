@@ -16,7 +16,7 @@
         android:layout_marginBottom="5dp"
         android:gravity="center"
         android:text="@string/config_tv_setKeysRo"
-        android:textColor="#F44336"
+        android:textColor="?attr/textColor4"
         android:textSize="25sp"
         android:textStyle="bold" />
 
@@ -31,6 +31,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <Spinner
+                android:id="@+id/theme_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="?attr/btnColor9" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="?attr/btnColor4" />
+
             <Button
                 android:id="@+id/guide_create_keys"
                 android:layout_width="match_parent"
@@ -39,17 +55,12 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="#9093F3"
+                android:backgroundTint="?attr/btnColor8"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/config_btn_guideCreateKeys"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="#03A9F4" />
+                android:textColor="@color/white"
+                android:textSize="24sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -60,7 +71,6 @@
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:text="@string/config_tv_apiKey"
-                android:textColor="#2F3E4C"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -82,8 +92,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
-                android:backgroundTint="#9C27B0"
+                android:backgroundTint="?attr/btnColor5"
                 android:text="@string/config_btn_showApi"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <TextView
@@ -95,7 +106,6 @@
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:text="@string/config_tv_secretKey"
-                android:textColor="#2F3E4C"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -117,8 +127,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
-                android:backgroundTint="#9C27B0"
+                android:backgroundTint="?attr/btnColor5"
                 android:text="@string/config_btn_showSecret"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <TextView
@@ -130,7 +141,6 @@
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:text="@string/config_tv_validationInterval"
-                android:textColor="#2F3E4C"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -142,9 +152,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="@string/config_tv_descValidationInterval0"
-                android:textColor="#2F3E4C"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -154,9 +162,8 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="@string/config_tv_descValidationInterval1"
-                android:textColor="#275581"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textColor="?attr/textColor1"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/edt_validation_interval"
@@ -178,7 +185,6 @@
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:text="@string/config_tv_thresholdRebalancingPercent"
-                android:textColor="#2F3E4C"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -190,9 +196,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="@string/config_tv_descThresholdRebalancingPercent0"
-                android:textColor="#2F3E4C"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -202,9 +206,8 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="0dp"
                 android:text="@string/config_tv_descThresholdRebalancingPercent1"
-                android:textColor="#275581"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textColor="?attr/textColor1"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/edt_threshold_rebalancing_percent"
@@ -226,7 +229,6 @@
                 android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:text="@string/config_tv_rebalancingCheckActivation"
-                android:textColor="#2F3E4C"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -238,8 +240,9 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="30dp"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="?attr/btnColor2"
                 android:text="@string/config_btn_rebalanceActivate"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <Button
@@ -250,14 +253,15 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="30dp"
-                android:backgroundTint="#E91E63"
+                android:backgroundTint="?attr/btnColor7"
                 android:text="@string/config_btn_rebalanceDeactivate"
+                android:textSize="20sp"
                 android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:background="#03A9F4" />
+                android:background="?attr/btnColor4" />
 
             <Button
                 android:id="@+id/btn_save"
@@ -267,8 +271,9 @@
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="5dp"
-                android:backgroundTint="#4CAF50"
+                android:backgroundTint="?attr/btnColor2"
                 android:text="@string/config_btn_save"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
             <Button
@@ -279,8 +284,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="40dp"
-                android:backgroundTint="#9C27B0"
+                android:backgroundTint="?attr/btnColor5"
                 android:text="@string/config_btn_revert"
+                android:textSize="20sp"
                 android:visibility="visible" />
 
         </LinearLayout>
