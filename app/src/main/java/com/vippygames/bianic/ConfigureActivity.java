@@ -277,11 +277,6 @@ public class ConfigureActivity extends ThemeAppCompatActivity implements View.On
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        redirectMain();
-    }
-
     private void initOperations() {
         edtApiKey = findViewById(R.id.edt_api_key);
         edtSecretKey = findViewById(R.id.edt_secret_key);
