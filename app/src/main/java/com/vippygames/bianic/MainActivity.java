@@ -144,8 +144,6 @@ public class MainActivity extends ThemeAppCompatActivity implements View.OnClick
         setValidateRecordsViews();
 
         addFirstThresholdRecordIfNeeded();
-
-        dynamicLinearLayout.removeAllViews();
         loadThresholdAllocationRecords();
 
         initBinanceRecordsValidationDialog();

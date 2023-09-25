@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.db.reports.ReportsDb;
@@ -32,7 +30,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ReportsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ReportsActivity extends ThemeAppCompatActivity implements View.OnClickListener {
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
 

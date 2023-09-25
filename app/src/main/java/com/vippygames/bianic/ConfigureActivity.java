@@ -1,7 +1,6 @@
 package com.vippygames.bianic;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -275,9 +274,7 @@ public class ConfigureActivity extends ThemeAppCompatActivity implements View.On
     }
 
     private void redirectMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        finish();
     }
 
     @Override
