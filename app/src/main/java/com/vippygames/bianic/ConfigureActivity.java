@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
@@ -22,7 +25,7 @@ import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.RebalanceActivationUtils;
 
-public class ConfigureActivity extends ThemeAppCompatActivity implements View.OnClickListener {
+public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtApiKey;
     private EditText edtSecretKey;
     private EditText edtValidationInterval;
@@ -311,6 +314,19 @@ public class ConfigureActivity extends ThemeAppCompatActivity implements View.On
                 themeSpinner.setSelection(i);
                 break;
             }
+        }
+    }
+
+    private void setSelectedTheme() {
+        ConfigurationManager configurationManager = new ConfigurationManager(this);
+        String theme = configurationManager.getTheme();
+
+        if (theme.equals(ConfigurationConsts.THEME_LIGHT)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (theme.equals(ConfigurationConsts.THEME_DARK)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
     }
 

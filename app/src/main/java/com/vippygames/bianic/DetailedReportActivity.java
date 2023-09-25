@@ -12,6 +12,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.vippygames.bianic.consts.DetailedReportsConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
@@ -24,7 +26,7 @@ import com.vippygames.bianic.utils.StringUtils;
 import java.util.List;
 import java.util.Random;
 
-public class DetailedReportActivity extends ThemeAppCompatActivity {
+public class DetailedReportActivity extends AppCompatActivity {
     private TableLayout detailedReportTable;
     private int[] columnsColors;
 

@@ -40,7 +40,6 @@
 
         <activity
             android:name=".MainActivity"
-            android:configChanges="uiMode"
             android:exported="true"
             android:label="@string/manifest_main_label"
             android:windowSoftInputMode="adjustPan">
@@ -52,23 +51,18 @@
         </activity>
         <activity
             android:name=".GuideActivity"
-            android:configChanges="uiMode"
             android:label="@string/manifest_guide_label" />
         <activity
             android:name=".ExceptionsActivity"
-            android:configChanges="uiMode"
             android:label="@string/manifest_excp_label" />
         <activity
             android:name=".ConfigureActivity"
-            android:configChanges="uiMode"
             android:label="@string/manifest_config_label" />
         <activity
             android:name=".ReportsActivity"
-            android:configChanges="uiMode"
             android:label="@string/manifest_rep_label" />
         <activity
             android:name=".DetailedReportActivity"
-            android:configChanges="uiMode"
             android:label="@string/manifest_detrep_label" />
     </application>
 

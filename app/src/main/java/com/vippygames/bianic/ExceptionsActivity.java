@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.vippygames.bianic.consts.ExceptionHandleConsts;
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.db.exceptions_log.ExceptionsLogDb;
@@ -21,7 +23,7 @@ import com.vippygames.bianic.utils.StringUtils;
 
 import java.util.List;
 
-public class ExceptionsActivity extends ThemeAppCompatActivity implements View.OnClickListener {
+public class ExceptionsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
 

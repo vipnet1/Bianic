@@ -17,9 +17,11 @@
             android:layout_weight="0.4"
             android:enabled="true"
             android:hint="@string/coinrcd_edt_symbol"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="text"
             android:maxLength="10"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:saveEnabled="false" />
 
         <EditText
             android:id="@+id/edt_allocation"
@@ -29,9 +31,11 @@
             android:layout_weight="0.4"
             android:enabled="true"
             android:hint="@string/coinrcd_edt_allocation"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="numberDecimal"
             android:maxLength="6"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:saveEnabled="false" />
 
         <Button
             android:id="@+id/btn_remove"
