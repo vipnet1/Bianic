@@ -8,6 +8,7 @@
     <string name="main_btn_revert">Revert</string>
     <string name="main_btn_validateRecords">Validate Records</string>
 
+    <string name="config_tv_theme">Theme</string>
     <string name="config_tv_setKeysRo">Please, configure the keys in Binance as READ ONLY!</string>
     <string name="config_btn_guideCreateKeys">Guide how to create keys</string>
     <string name="config_tv_apiKey">Api Key</string>

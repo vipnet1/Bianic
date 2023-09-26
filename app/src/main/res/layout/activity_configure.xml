@@ -22,12 +22,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="0dp"
                 android:gravity="center"
-                android:text="@string/config_tv_setKeysRo"
-                android:textColor="?attr/textColor4"
+                android:text="@string/config_tv_theme"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -38,7 +37,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:background="?attr/btnColor9" />
 
@@ -46,6 +45,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="?attr/btnColor4" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:text="@string/config_tv_setKeysRo"
+                android:textColor="?attr/textColor4"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/guide_create_keys"
@@ -272,7 +284,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="5dp"
                 android:backgroundTint="?attr/btnColor2"
