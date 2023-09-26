@@ -3,7 +3,7 @@
 
     <string name="main_sv_cdCoinsScrollView">Select cryptos to rebalance or monitor</string>
     <string name="main_tv_rebalanceCheckWarning">Periodic rebalancing check won\'t occur until you validate records!</string>
-    <string name="main_btn_addRecord">Add record</string>
+    <string name="main_btn_addRecord">Add Record</string>
     <string name="main_btn_save">Save</string>
     <string name="main_btn_revert">Revert</string>
     <string name="main_btn_validateRecords">Validate Records</string>
@@ -124,7 +124,7 @@
     <string name="C_main_dialog_requestPermissionsMessage"><![CDATA[The permissions we will ask for are crucial for the normal operation of the app. The battery one to continue doing our job in power saving mode. The notifications to run in background & communicate with you.]]></string>
     <string name="C_main_dialog_requestPermissionsSure">Sure</string>
     <string name="C_main_dialog_recordsValidationTitle">Records Validation</string>
-    <string name="C_main_dialog_recordsValidationMessage">Checking with binance whether the records are valid. Wait a moment please.</string>
+    <string name="C_main_dialog_recordsValidationMessage">Checking with Binance whether the records are valid. Wait a moment please.</string>
     <string name="C_main_dialog_aboutTitle">About</string>
     <string name="C_main_dialog_aboutMessage">"App version: "</string>
     <string name="C_main_dialog_aboutGetHelp">Get Help</string>

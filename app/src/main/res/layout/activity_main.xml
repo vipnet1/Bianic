@@ -31,13 +31,14 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
-
+SS
     <Button
         android:id="@+id/btn_add_record"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="?attr/btnColor1"
         android:text="@string/main_btn_addRecord"
+        android:layout_marginHorizontal="5dp"
         android:textSize="20sp" />
 
     <Button
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="?attr/btnColor2"
         android:text="@string/main_btn_save"
+        android:layout_marginHorizontal="5dp"
         android:textSize="20sp" />
 
     <Button
@@ -54,6 +56,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="?attr/btnColor3"
         android:text="@string/main_btn_revert"
+        android:layout_marginHorizontal="5dp"
         android:textSize="20sp" />
 
     <Button
@@ -61,6 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="?attr/btnColor4"
+        android:layout_marginHorizontal="5dp"
         android:text="@string/main_btn_validateRecords"
         android:textSize="20sp" />
 

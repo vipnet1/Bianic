@@ -26,6 +26,7 @@ import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
 import com.vippygames.bianic.BuildConfig;
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
@@ -190,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         AlertDialog requestPermissionsDialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(requestPermissionsDialog);
+
         requestPermissionsDialog.show();
     }
 
@@ -227,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setCancelable(false);
 
         binanceRecordsValidationDialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(binanceRecordsValidationDialog);
     }
 
     private void handleActionAbout() {
@@ -242,6 +250,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         builder.setNeutralButton(R.string.C_main_dialog_aboutCancel, null);
         AlertDialog dialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(dialog);
 
         dialog.show();
     }

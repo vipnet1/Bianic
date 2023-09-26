@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.common.ThemeApplication;
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ConfigurationConsts;
@@ -98,6 +99,10 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
             dialog.dismiss();
         });
         AlertDialog dialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(dialog);
+
         dialog.show();
     }
 

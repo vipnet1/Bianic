@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.db.reports.ReportsDb;
@@ -169,6 +170,9 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         builder.setCancelable(false);
 
         manualReportGenerationDialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(manualReportGenerationDialog);
     }
 
     private void handleActionClearAllReports() {
