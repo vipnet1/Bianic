@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.activities.main.MainActivity;
 import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.consts.ReportsConsts;

@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.vippygames.bianic.activities.ExceptionsActivity;
-import com.vippygames.bianic.activities.MainActivity;
+import com.vippygames.bianic.activities.main.MainActivity;
 import com.vippygames.bianic.R;
 import com.vippygames.bianic.activities.ReportsActivity;
 import com.vippygames.bianic.consts.NotificationConsts;

@@ -40,7 +40,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.main.MainActivity"
             android:exported="true"
             android:label="@string/manifest_main_label"
             android:theme="@style/Theme.App.Starting"

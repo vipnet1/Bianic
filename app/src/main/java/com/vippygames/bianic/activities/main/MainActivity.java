@@ -1,10 +1,11 @@
-package com.vippygames.bianic.activities;
+package com.vippygames.bianic.activities.main;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -26,6 +28,10 @@ import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
 import com.vippygames.bianic.BuildConfig;
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.activities.ConfigureActivity;
+import com.vippygames.bianic.activities.ExceptionsActivity;
+import com.vippygames.bianic.activities.GuideActivity;
+import com.vippygames.bianic.activities.ReportsActivity;
 import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
@@ -47,6 +53,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String COINS_SAVED_INFO_KEY = "coins_saved_info";
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
 
@@ -152,7 +159,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setValidateRecordsViews();
 
         addFirstThresholdRecordIfNeeded();
-        loadThresholdAllocationRecords();
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(COINS_SAVED_INFO_KEY)) {
+            loadRecordsFromBundle(savedInstanceState);
+        } else {
+            loadThresholdAllocationRecords();
+        }
 
         initBinanceRecordsValidationDialog();
         redirectToGuideIfNeeded();
@@ -235,6 +247,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         AlertDialogModify alertDialogModify = new AlertDialogModify(this);
         alertDialogModify.modify(binanceRecordsValidationDialog);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        saveThresholdAllocationRecordsToBundle(outState);
+        super.onSaveInstanceState(outState);
     }
 
     private void handleActionAbout() {
@@ -622,6 +640,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db.clearAndSaveRecords(records);
     }
 
+    private void saveThresholdAllocationRecordsToBundle(Bundle bundle) {
+        int recordsCount = dynamicLinearLayout.getChildCount();
+        if (recordsCount == 0) {
+            bundle.putParcelableArray(COINS_SAVED_INFO_KEY, null);
+            return;
+        }
+
+        CoinSavedInfo[] coinSavedInfos = new CoinSavedInfo[recordsCount];
+        for (int i = 0; i < recordsCount; i++) {
+            View view = dynamicLinearLayout.getChildAt(i);
+
+            EditText edtSymbol = view.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = view.findViewById(R.id.edt_allocation);
+
+            String symbol = edtSymbol.getText().toString();
+            String allocation = edtAllocation.getText().toString();
+
+            int isEdited = 0;
+            String symbolCancelData = "";
+            String allocationCancelData = "";
+            if (editedRecordRoot == view) {
+                isEdited = 1;
+                symbolCancelData = symbolBeforeEdit;
+                allocationCancelData = allocationBeforeEdit;
+            }
+
+            CoinSavedInfo coinSavedInfo = new CoinSavedInfo(symbol, allocation, isEdited, symbolCancelData, allocationCancelData);
+            coinSavedInfos[i] = coinSavedInfo;
+        }
+
+        bundle.putParcelableArray(COINS_SAVED_INFO_KEY, coinSavedInfos);
+    }
+
     private void revertRecords() {
         setValidateRecordsViews();
 
@@ -636,6 +687,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (ThresholdAllocationRecord record : records) {
             addThresholdAllocationRecordToUi(record.getSymbol(), record.getDesiredAllocation());
         }
+    }
+
+    private void loadRecordsFromBundle(Bundle savedInstanceState) {
+        Parcelable[] parcelables = savedInstanceState.getParcelableArray(COINS_SAVED_INFO_KEY);
+        if (parcelables == null) {
+            return;
+        }
+
+        View editedView = null;
+        CoinSavedInfo editedCoinSavedInfo = null;
+        for (Parcelable parcelable : parcelables) {
+            CoinSavedInfo coinSavedInfo = (CoinSavedInfo) parcelable;
+            View view = addCoinSavedInfoToUi(coinSavedInfo);
+            if (coinSavedInfo.getIsEdited() == 1) {
+                editedCoinSavedInfo = coinSavedInfo;
+                editedView = view;
+            }
+        }
+
+        if (editedView != null) {
+            handleActionEdit(editedView);
+            symbolBeforeEdit = editedCoinSavedInfo.getSymbolCancelEdtData();
+            allocationBeforeEdit = editedCoinSavedInfo.getAllocationCancelEdtData();
+        }
+    }
+
+    private View addCoinSavedInfoToUi(CoinSavedInfo coinSavedInfo) {
+        addThresholdAllocationRecord();
+
+        EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+        EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+
+        View record = editedRecordRoot;
+
+        edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
+        edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
+
+        handleActionApply();
+
+        return record;
     }
 
     private void addThresholdAllocationRecordToUi(String symbol, float desiredAllocation) {

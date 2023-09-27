@@ -2,7 +2,7 @@ package com.vippygames.bianic.rebalancing.validation;
 
 import android.widget.Toast;
 
-import com.vippygames.bianic.activities.MainActivity;
+import com.vippygames.bianic.activities.main.MainActivity;
 import com.vippygames.bianic.R;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
