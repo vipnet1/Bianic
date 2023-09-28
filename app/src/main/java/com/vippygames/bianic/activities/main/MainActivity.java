@@ -662,6 +662,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String allocationCancelData = "";
             if (editedRecordRoot == view) {
                 isEdited = 1;
+                Button btnCancel = view.findViewById(R.id.btn_cancel);
+                if (btnCancel.getVisibility() == View.VISIBLE) {
+                    isEdited = 2;
+                }
                 symbolCancelData = symbolBeforeEdit;
                 allocationCancelData = allocationBeforeEdit;
             }
@@ -695,38 +699,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        View editedView = null;
-        CoinSavedInfo editedCoinSavedInfo = null;
+        View editedRecord = null;
         for (Parcelable parcelable : parcelables) {
             CoinSavedInfo coinSavedInfo = (CoinSavedInfo) parcelable;
-            View view = addCoinSavedInfoToUi(coinSavedInfo);
-            if (coinSavedInfo.getIsEdited() == 1) {
-                editedCoinSavedInfo = coinSavedInfo;
-                editedView = view;
+            View record = addCoinSavedInfoToUi(coinSavedInfo);
+            if (record != null) {
+                editedRecord = record;
             }
         }
 
-        if (editedView != null) {
-            handleActionEdit(editedView);
-            symbolBeforeEdit = editedCoinSavedInfo.getSymbolCancelEdtData();
-            allocationBeforeEdit = editedCoinSavedInfo.getAllocationCancelEdtData();
-        }
+        editedRecordRoot = editedRecord;
     }
 
+    // returns edited record if edited, null otherwise
     private View addCoinSavedInfoToUi(CoinSavedInfo coinSavedInfo) {
-        addThresholdAllocationRecord();
+        int editStatus = coinSavedInfo.getIsEdited();
+        if (editStatus == 1) {
+            handleAddRecord();
 
-        EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+            EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+            edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
+            edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
+            return editedRecordRoot;
+        } else if (editStatus == 2) {
+            addThresholdAllocationRecord();
+            EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+            edtSymbol.setText(coinSavedInfo.getSymbolCancelEdtData());
+            edtAllocation.setText(coinSavedInfo.getAllocationCancelEdtData());
 
-        View record = editedRecordRoot;
+            View record = editedRecordRoot;
+            editedRecordRoot = null;
+            handleActionEdit(record);
 
-        edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
-        edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
+            edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
+            edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
+            return editedRecordRoot;
+        } else {
+            addThresholdAllocationRecord();
+            EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+            edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
+            edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
 
-        handleActionApply();
-
-        return record;
+            handleActionApply();
+            return null;
+        }
     }
 
     private void addThresholdAllocationRecordToUi(String symbol, float desiredAllocation) {

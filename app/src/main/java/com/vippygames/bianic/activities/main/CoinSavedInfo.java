@@ -8,7 +8,8 @@ import androidx.annotation.NonNull;
 public class CoinSavedInfo implements Parcelable {
     private final String symbolEdtData;
     private final String allocationEdtData;
-    private final int isEdited;
+    // 0 - not edited. 1 - edited, just added(no cancel button). 2 - edited(already applied in the past)
+    private final int editStatus;
 
     // empty unless edited record
     private final String symbolCancelEdtData;
@@ -25,7 +26,7 @@ public class CoinSavedInfo implements Parcelable {
     }
 
     public int getIsEdited() {
-        return isEdited;
+        return editStatus;
     }
 
     public String getSymbolCancelEdtData() {
@@ -39,16 +40,16 @@ public class CoinSavedInfo implements Parcelable {
     protected CoinSavedInfo(Parcel in) {
         this.symbolEdtData = in.readString();
         this.allocationEdtData = in.readString();
-        this.isEdited = in.readInt();
+        this.editStatus = in.readInt();
         this.symbolCancelEdtData = in.readString();
         this.allocationCancelEdtData = in.readString();
     }
 
-    public CoinSavedInfo(String symbolEdtData, String allocationEdtData, int isEdited,
+    public CoinSavedInfo(String symbolEdtData, String allocationEdtData, int editStatus,
                          String symbolCancelEdtData, String allocationCancelEdtData) {
         this.symbolEdtData = symbolEdtData;
         this.allocationEdtData = allocationEdtData;
-        this.isEdited = isEdited;
+        this.editStatus = editStatus;
         this.symbolCancelEdtData = symbolCancelEdtData;
         this.allocationCancelEdtData = allocationCancelEdtData;
     }
@@ -74,7 +75,7 @@ public class CoinSavedInfo implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(symbolEdtData);
         parcel.writeString(allocationEdtData);
-        parcel.writeInt(isEdited);
+        parcel.writeInt(editStatus);
         parcel.writeString(symbolCancelEdtData);
         parcel.writeString(allocationCancelEdtData);
     }
