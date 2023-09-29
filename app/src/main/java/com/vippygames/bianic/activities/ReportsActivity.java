@@ -68,16 +68,16 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         int itemId = item.getItemId();
 
         if (itemId == R.id.redirect_main) {
-            handleActionRedirectMain();
+            handleRedirectMain();
             return true;
         } else if (itemId == R.id.generate_report) {
-            handleActionGenerateReport();
+            handleGenerateReport();
             return true;
         } else if (itemId == R.id.clear_all_reports) {
-            handleActionClearAllReports();
+            handleClearAllReports();
             return true;
         } else if (itemId == R.id.refresh) {
-            handleActionRefresh();
+            handleRefresh();
         }
 
         return super.onOptionsItemSelected(item);
@@ -176,7 +176,11 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         alertDialogModify.modify(manualReportGenerationDialog);
     }
 
-    private void handleActionClearAllReports() {
+    private void handleClearAllReports() {
+        clearAllReports();
+    }
+
+    private void clearAllReports() {
         dynamicLinearLayout.removeAllViews();
 
         ReportsDb reportsDb = new ReportsDb(this);
@@ -187,6 +191,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleActionClearReport(View recordRoot) {
+        clearReport(recordRoot);
+    }
+
+    private void clearReport(View recordRoot) {
         TextView recordDbUuid = recordRoot.findViewById(R.id.record_db_uuid);
         dynamicLinearLayout.removeView(recordRoot);
 
@@ -200,6 +208,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleActionDetails(View recordRoot) {
+        enterDetailedReport(recordRoot);
+    }
+
+    private void enterDetailedReport(View recordRoot) {
         Intent intent = new Intent(this, DetailedReportActivity.class);
 
         TextView recordDbUuid = recordRoot.findViewById(R.id.record_db_uuid);
@@ -208,7 +220,11 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         this.startActivity(intent);
     }
 
-    private void handleActionGenerateReport() {
+    private void handleGenerateReport() {
+        generateReport();
+    }
+
+    private void generateReport() {
         try {
             RecordsValidationCheck recordsValidationCheck = new RecordsValidationCheck(this);
             recordsValidationCheck.validateThresholdAllocationRecordsValidated();
@@ -225,11 +241,15 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void handleActionRefresh() {
+    private void handleRefresh() {
         refreshRecords();
     }
 
-    private void handleActionRedirectMain() {
+    private void handleRedirectMain() {
+        redirectMain();
+    }
+
+    private void redirectMain() {
         if (!getIntent().getBooleanExtra(NotificationConsts.LAUNCHED_FROM_NOTIFICATION_EXTRA, false)) {
             finish();
             return;

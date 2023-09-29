@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +29,9 @@ import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.RebalanceActivationUtils;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
+    // value in bundle indicates if button activate/deactivate was seen. if 1 seen deactivate if 0 seen activate.
+    private static final String SAVED_ACTIVATE_STATUS_KEY = "saved_activate_status";
+
     private EditText edtApiKey;
     private EditText edtSecretKey;
     private EditText edtValidationInterval;
@@ -47,7 +51,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         int itemId = item.getItemId();
 
         if (itemId == R.id.redirect_main) {
-            handleActionRedirectMain();
+            handleRedirectMain();
             return true;
         }
 
@@ -59,17 +63,17 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         int viewId = view.getId();
 
         if (viewId == R.id.btn_show_beginning_api) {
-            handleActionShowBeginningApi();
+            handleShowBeginningApi();
         } else if (viewId == R.id.btn_show_beginning_secret) {
-            handleActionShowBeginningSecret();
+            handleShowBeginningSecret();
         } else if (viewId == R.id.btn_save) {
-            handleActionSave();
+            handleSave();
         } else if (viewId == R.id.btn_revert) {
-            handleActionRevert();
+            handleRevert();
         } else if (viewId == R.id.btn_activate) {
-            handleActionActivate();
+            handleActivate();
         } else if (viewId == R.id.btn_deactivate) {
-            handleActionDeactivate();
+            handleDeactivate();
         }
     }
 
@@ -79,7 +83,23 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_configure);
 
         initOperations();
+        setConfigurationData(savedInstanceState);
         showContractIfNeeded();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        saveActivationStatus(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void saveActivationStatus(Bundle outState) {
+        Button btnActivate = findViewById(R.id.btn_activate);
+        if (btnActivate.getVisibility() == View.VISIBLE) {
+            outState.putInt(SAVED_ACTIVATE_STATUS_KEY, 0);
+        } else {
+            outState.putInt(SAVED_ACTIVATE_STATUS_KEY, 1);
+        }
     }
 
     private void showContractIfNeeded() {
@@ -106,17 +126,29 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         dialog.show();
     }
 
-    private void handleActionActivate() {
+    private void handleActivate() {
+        activateClicked();
+    }
+
+    private void activateClicked() {
         btnActivate.setVisibility(View.GONE);
         btnDeactivate.setVisibility(View.VISIBLE);
     }
 
-    private void handleActionDeactivate() {
+    private void handleDeactivate() {
+        deactivateClicked();
+    }
+
+    private void deactivateClicked() {
         btnActivate.setVisibility(View.VISIBLE);
         btnDeactivate.setVisibility(View.GONE);
     }
 
-    private void handleActionShowBeginningApi() {
+    private void handleShowBeginningApi() {
+        showBeginningApi();
+    }
+
+    private void showBeginningApi() {
         String apiKey = edtApiKey.getText().toString();
 
         if (apiKey.isEmpty()) {
@@ -128,7 +160,11 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(this, getString(R.string.C_config_toast_apiBeginsWith) + "'" + first5ApiCharacters + "'", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleActionShowBeginningSecret() {
+    private void handleShowBeginningSecret() {
+        showBeginningSecret();
+    }
+
+    private void showBeginningSecret() {
         String secretKey = edtSecretKey.getText().toString();
 
         if (secretKey.isEmpty()) {
@@ -140,8 +176,12 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         Toast.makeText(this, getString(R.string.C_config_toast_secretBeginsWith) + "'" + first5SecretCharacters + "'", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleActionRevert() {
-        setConfigurationData();
+    private void handleRevert() {
+        revert();
+    }
+
+    private void revert() {
+        setConfigurationData(null);
         Toast.makeText(this, R.string.C_config_toast_revertedConfiguration, Toast.LENGTH_SHORT).show();
     }
 
@@ -237,7 +277,12 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
-    private void handleActionSave() {
+    private void handleSave() {
+        save();
+        redirectMain();
+    }
+
+    private void save() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
 
         int previousValidationInterval = configurationManager.getValidationInterval();
@@ -275,10 +320,9 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         rebalanceActivationUtils.changeRebalancerIfNeeded(previousValidationInterval,
                 previousIsRebalancingActivated, newValidationInterval, newIsRebalancingActivated);
         Toast.makeText(this, R.string.C_config_toast_savedConfig, Toast.LENGTH_SHORT).show();
-        redirectMain();
     }
 
-    private void handleActionRedirectMain() {
+    private void handleRedirectMain() {
         redirectMain();
     }
 
@@ -308,7 +352,6 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
 
         initGuideToCreateKeys();
         initThemeSpinner();
-        setConfigurationData();
     }
 
     private void setSpinnerInitialSelection(String[] themeOptions) {
@@ -364,7 +407,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
-    private void setConfigurationData() {
+    private void setConfigurationData(Bundle savedInstanceState) {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
 
         edtApiKey.setText(configurationManager.getApiKey());
@@ -372,7 +415,12 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         edtValidationInterval.setText(String.valueOf(configurationManager.getValidationInterval()));
         edtThresholdRebalancingPercent.setText(String.valueOf(configurationManager.getThresholdRebalancingPercent()));
 
-        if (configurationManager.isRebalancingActivated() == 1) {
+        int activationStatus = configurationManager.isRebalancingActivated();
+        if (savedInstanceState != null && savedInstanceState.containsKey(SAVED_ACTIVATE_STATUS_KEY)) {
+            activationStatus = savedInstanceState.getInt(SAVED_ACTIVATE_STATUS_KEY);
+        }
+
+        if (activationStatus == 1) {
             btnActivate.setVisibility(View.GONE);
             btnDeactivate.setVisibility(View.VISIBLE);
         } else {

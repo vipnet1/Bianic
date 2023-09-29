@@ -54,13 +54,13 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         int itemId = item.getItemId();
 
         if (itemId == R.id.redirect_main) {
-            handleActionRedirectMain();
+            handleRedirectMain();
             return true;
         } else if (itemId == R.id.refresh) {
-            handleActionRefresh();
+            handleRefresh();
             return true;
         } else if (itemId == R.id.clear_all_exceptions) {
-            handleActionClearAllExceptions();
+            handleClearAllExceptions();
             return true;
         }
 
@@ -135,7 +135,11 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
-    private void handleActionRedirectMain() {
+    private void handleRedirectMain() {
+        redirectMain();
+    }
+
+    private void redirectMain() {
         if (!getIntent().getBooleanExtra(NotificationConsts.LAUNCHED_FROM_NOTIFICATION_EXTRA, false)) {
             finish();
             return;
@@ -146,12 +150,20 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
         this.startActivity(intent);
     }
 
-    private void handleActionRefresh() {
+    private void handleRefresh() {
+        refresh();
+    }
+
+    private void refresh() {
         dynamicLinearLayout.removeAllViews();
         loadExceptions();
     }
 
-    private void handleActionClearAllExceptions() {
+    private void handleClearAllExceptions() {
+        clearAllExceptions();
+    }
+
+    private void clearAllExceptions() {
         dynamicLinearLayout.removeAllViews();
 
         ExceptionsLogDb db = new ExceptionsLogDb(this);
@@ -159,6 +171,10 @@ public class ExceptionsActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void handleActionClearException(View recordRoot) {
+        clearException(recordRoot);
+    }
+
+    private void clearException(View recordRoot) {
         TextView recordDbId = recordRoot.findViewById(R.id.record_db_id);
         dynamicLinearLayout.removeView(recordRoot);
 

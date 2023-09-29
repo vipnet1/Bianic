@@ -39,12 +39,14 @@ public class GuideActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 0);
-        super.onBackPressed();
+        redirectMain();
     }
 
     private void handleActionRedirectMain() {
+        redirectMain();
+    }
+
+    private void redirectMain() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         sp.setInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 0);
         finish();
