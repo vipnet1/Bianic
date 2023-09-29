@@ -116,7 +116,6 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         builder.setPositiveButton(R.string.C_config_dialog_contractAccept, (dialog, which) -> {
             SharedPreferencesHelper sp2 = new SharedPreferencesHelper(ConfigureActivity.this);
             sp2.setInt(SharedPrefsConsts.SHOULD_SHOW_CONTRACT, 0);
-            dialog.dismiss();
         });
         AlertDialog dialog = builder.create();
 

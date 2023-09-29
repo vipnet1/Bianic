@@ -6,10 +6,39 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 public class CoinSavedInfo implements Parcelable {
+    public enum EDIT_STATUS {
+        NOT_EDITED, // not edited
+
+        ADDED_RECORD, // edited, just added(no cancel button)
+
+        EDITED_RECORD; // edited(already applied in the past)
+
+        public int getValue() {
+            switch (this) {
+                case ADDED_RECORD:
+                    return 1;
+                case EDITED_RECORD:
+                    return 2;
+                default:
+                    return 0;
+            }
+        }
+
+        public static EDIT_STATUS valueToStatus(int value) {
+            switch (value) {
+                case 1:
+                    return ADDED_RECORD;
+                case 2:
+                    return EDITED_RECORD;
+                default:
+                    return NOT_EDITED;
+            }
+        }
+    }
+
     private final String symbolEdtData;
     private final String allocationEdtData;
-    // 0 - not edited. 1 - edited, just added(no cancel button). 2 - edited(already applied in the past)
-    private final int editStatus;
+    private final EDIT_STATUS editStatus;
 
     // empty unless edited record
     private final String symbolCancelEdtData;
@@ -25,7 +54,7 @@ public class CoinSavedInfo implements Parcelable {
         return allocationEdtData;
     }
 
-    public int getIsEdited() {
+    public EDIT_STATUS getEditStatus() {
         return editStatus;
     }
 
@@ -40,12 +69,12 @@ public class CoinSavedInfo implements Parcelable {
     protected CoinSavedInfo(Parcel in) {
         this.symbolEdtData = in.readString();
         this.allocationEdtData = in.readString();
-        this.editStatus = in.readInt();
+        this.editStatus = EDIT_STATUS.valueToStatus(in.readInt());
         this.symbolCancelEdtData = in.readString();
         this.allocationCancelEdtData = in.readString();
     }
 
-    public CoinSavedInfo(String symbolEdtData, String allocationEdtData, int editStatus,
+    public CoinSavedInfo(String symbolEdtData, String allocationEdtData, EDIT_STATUS editStatus,
                          String symbolCancelEdtData, String allocationCancelEdtData) {
         this.symbolEdtData = symbolEdtData;
         this.allocationEdtData = allocationEdtData;
@@ -75,7 +104,7 @@ public class CoinSavedInfo implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(symbolEdtData);
         parcel.writeString(allocationEdtData);
-        parcel.writeInt(editStatus);
+        parcel.writeInt(editStatus.getValue());
         parcel.writeString(symbolCancelEdtData);
         parcel.writeString(allocationCancelEdtData);
     }

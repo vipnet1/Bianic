@@ -144,13 +144,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (status == ObserveInfo.STATUS.FINISHED) {
-            SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-            sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
 
-            setValidateRecordsViews();
-            Toast.makeText(this, R.string.C_main_toast_recordsValid, Toast.LENGTH_SHORT).show();
-        }
+        setValidateRecordsViews();
+        Toast.makeText(this, R.string.C_main_toast_recordsValid, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -588,11 +586,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setValidateRecordsViews() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        int shouldValidateRecords = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
+        int areRecordsValidated = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
         TextView tvValidateRecords = findViewById(R.id.tv_validate_records);
 
-        if (shouldValidateRecords == 1) {
+        if (areRecordsValidated == 1) {
             hideBtnValidateRecords();
             tvValidateRecords.setVisibility(View.GONE);
         } else {
@@ -771,20 +769,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String symbol = edtSymbol.getText().toString();
             String allocation = edtAllocation.getText().toString();
 
-            int isEdited = 0;
+            CoinSavedInfo.EDIT_STATUS editStatus = CoinSavedInfo.EDIT_STATUS.NOT_EDITED;
             String symbolCancelData = "";
             String allocationCancelData = "";
             if (editedRecordRoot == view) {
-                isEdited = 1;
+                editStatus = CoinSavedInfo.EDIT_STATUS.ADDED_RECORD;
                 Button btnCancel = view.findViewById(R.id.btn_cancel);
                 if (btnCancel.getVisibility() == View.VISIBLE) {
-                    isEdited = 2;
+                    editStatus = CoinSavedInfo.EDIT_STATUS.EDITED_RECORD;
                 }
                 symbolCancelData = symbolBeforeEdit;
                 allocationCancelData = allocationBeforeEdit;
             }
 
-            CoinSavedInfo coinSavedInfo = new CoinSavedInfo(symbol, allocation, isEdited, symbolCancelData, allocationCancelData);
+            CoinSavedInfo coinSavedInfo = new CoinSavedInfo(symbol, allocation, editStatus, symbolCancelData, allocationCancelData);
             coinSavedInfos[i] = coinSavedInfo;
         }
 
@@ -826,15 +824,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // returns edited record if edited, null otherwise
     private View addCoinSavedInfoToUi(CoinSavedInfo coinSavedInfo) {
-        int editStatus = coinSavedInfo.getIsEdited();
-        if (editStatus == 1) {
+        CoinSavedInfo.EDIT_STATUS editStatus = coinSavedInfo.getEditStatus();
+        if (editStatus == CoinSavedInfo.EDIT_STATUS.ADDED_RECORD) {
             addRecord();
             EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
             EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
             edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
             edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
             return editedRecordRoot;
-        } else if (editStatus == 2) {
+        } else if (editStatus == CoinSavedInfo.EDIT_STATUS.EDITED_RECORD) {
             addThresholdAllocationRecord();
             EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
             EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
