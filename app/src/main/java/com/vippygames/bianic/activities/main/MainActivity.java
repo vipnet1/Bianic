@@ -1,6 +1,5 @@
 package com.vippygames.bianic.activities.main;
 
-import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
@@ -32,6 +33,8 @@ import com.vippygames.bianic.activities.ConfigureActivity;
 import com.vippygames.bianic.activities.ExceptionsActivity;
 import com.vippygames.bianic.activities.GuideActivity;
 import com.vippygames.bianic.activities.ReportsActivity;
+import com.vippygames.bianic.activities.main.validation_observer.ValidationObserveInfo;
+import com.vippygames.bianic.activities.main.validation_observer.ValidationViewModel;
 import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
@@ -40,7 +43,7 @@ import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.permissions.BatteryPermissions;
 import com.vippygames.bianic.permissions.NotificationPermissions;
-import com.vippygames.bianic.rebalancing.validation.BinanceRecordsValidationTask;
+import com.vippygames.bianic.rebalancing.validation.BinanceRecordsValidation;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.StringUtils;
@@ -53,6 +56,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private ValidationViewModel validationViewModel;
+    private Observer<ValidationObserveInfo> validationObserver;
     private static final String COINS_SAVED_INFO_KEY = "coins_saved_info";
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
@@ -115,24 +120,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    public void onBinanceRecordsValidationTaskFinished(boolean result) {
-        binanceRecordsValidationDialog.dismiss();
+    public void onBinanceRecordsValidationFinished(ValidationObserveInfo info) {
+//        binanceRecordsValidationDialog.dismiss();
 
-        if (!result) {
-            Toast.makeText(this, R.string.C_main_toast_failedValidateRecords, Toast.LENGTH_SHORT).show();
+        ValidationObserveInfo.STATUS status = info.getStatus();
+        if (status == ValidationObserveInfo.STATUS.FAILED) {
+            String message = info.getMessage();
+            if (message.isEmpty()) {
+                Toast.makeText(this, R.string.C_main_toast_failedValidateRecords, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
-        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
+        if (status == ValidationObserveInfo.STATUS.FINISHED) {
+            SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+            sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
 
-        setValidateRecordsViews();
-        Toast.makeText(this, R.string.C_main_toast_recordsValid, Toast.LENGTH_SHORT).show();
+            setValidateRecordsViews();
+            Toast.makeText(this, R.string.C_main_toast_recordsValid, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.installSplashScreen(this);
+
+        initValidationObserver();
+        registerValidationViewModelObserver();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -145,6 +161,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initBinanceRecordsValidationDialog();
 
         welcomeIfNeeded();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isValidationObserverRegistered()) {
+            unregisterValidationViewModelObserver();
+        }
+    }
+
+    private void initValidationObserver() {
+        validationViewModel = new ViewModelProvider(this).get(ValidationViewModel.class);
+        validationObserver = this::onBinanceRecordsValidationFinished;
+    }
+
+    private void registerValidationViewModelObserver() {
+        // Observe the state of the background task
+        validationViewModel.getTaskFinishedLiveData().observe(this, validationObserver);
+    }
+
+    private void unregisterValidationViewModelObserver() {
+        validationViewModel.getTaskFinishedLiveData().removeObserver(validationObserver);
+    }
+
+    private boolean isValidationObserverRegistered() {
+        return validationViewModel.getTaskFinishedLiveData().hasObservers();
     }
 
     @Override
@@ -525,7 +567,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void validateRecords() {
         binanceRecordsValidationDialog.show();
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new BinanceRecordsValidationTask(this));
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                BinanceRecordsValidation binanceRecordsValidation = new BinanceRecordsValidation(MainActivity.this);
+                ValidationObserveInfo validationObserveInfo = binanceRecordsValidation.validateRecordsBinance();
+                validationViewModel.setValidationObserveInfo(validationObserveInfo);
+            }
+        });
     }
 
     private void addThresholdAllocationRecord() {
