@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (savedInstanceState != null && savedInstanceState.containsKey(COINS_SAVED_INFO_KEY)) {
             loadRecordsFromBundle(savedInstanceState);
         } else {
-            loadThresholdAllocationRecords();
+            loadThresholdAllocationRecordsFromDb();
         }
     }
 
@@ -348,10 +348,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.C_main_toast_onlyOneRecordEdit, Toast.LENGTH_SHORT).show();
             return;
         }
+        editRecord(recordRoot);
+    }
 
-        Button btnValidateRecords = recordRoot.findViewById(R.id.btn_validate_records);
-        btnValidateRecords.setVisibility(View.INVISIBLE);
-
+    private void editRecord(View recordRoot) {
+        hideBtnValidateRecords();
         editedRecordRoot = recordRoot;
 
         Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
@@ -384,6 +385,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        applyRecord(symbol, allocation);
+    }
+
+    private void applyRecord(String symbol, String allocation) {
         symbolBeforeEdit = symbol.toUpperCase();
         allocationBeforeEdit = allocation;
 
@@ -391,11 +396,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleActionRemove() {
+        removeRecord();
+    }
+
+    private void removeRecord() {
         dynamicLinearLayout.removeView(editedRecordRoot);
         editedRecordRoot = null;
     }
 
     private void handleActionCancel() {
+        cancelRecord();
+    }
+
+    private void cancelRecord() {
         Button btnRemove = editedRecordRoot.findViewById(R.id.btn_remove);
         Button btnApply = editedRecordRoot.findViewById(R.id.btn_apply);
         Button btnEdit = editedRecordRoot.findViewById(R.id.btn_edit);
@@ -422,10 +435,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.C_main_toast_onlyOneRecordEdit, Toast.LENGTH_SHORT).show();
             return;
         }
+        addRecord();
+    }
 
-        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
-        btnValidateRecords.setVisibility(View.INVISIBLE);
-
+    private void addRecord() {
+        hideBtnValidateRecords();
         addThresholdAllocationRecord();
     }
 
@@ -433,17 +447,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!performSaveValidations()) {
             return;
         }
-        saveThresholdAllocationRecords();
+
+        saveRecords();
+        Toast.makeText(this, R.string.C_main_toast_savedRecords, Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveRecords() {
+        saveThresholdAllocationRecordsToDb();
 
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
         revertRecords();
-
-        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
-        btnValidateRecords.setVisibility(View.VISIBLE);
-
-        Toast.makeText(this, R.string.C_main_toast_savedRecords, Toast.LENGTH_SHORT).show();
     }
 
     private void handleRevert() {
@@ -453,7 +468,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         revertRecords();
-        setValidateRecordsViews();
         Toast.makeText(this, R.string.C_main_toast_restoredRecords, Toast.LENGTH_SHORT).show();
     }
 
@@ -462,9 +476,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.C_main_toast_cantValidateWhileEditing, Toast.LENGTH_SHORT).show();
             return;
         }
+        validateRecords();
+    }
 
+    private void validateRecords() {
         binanceRecordsValidationDialog.show();
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new BinanceRecordsValidationTask(this));
     }
@@ -499,14 +515,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         int shouldValidateRecords = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
-        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
         TextView tvValidateRecords = findViewById(R.id.tv_validate_records);
 
         if (shouldValidateRecords == 1) {
-            btnValidateRecords.setVisibility(View.INVISIBLE);
+            hideBtnValidateRecords();
             tvValidateRecords.setVisibility(View.GONE);
         } else {
-            btnValidateRecords.setVisibility(View.VISIBLE);
+            showBtnValidateRecords();
             tvValidateRecords.setVisibility(View.VISIBLE);
         }
     }
@@ -644,7 +659,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
-    private void saveThresholdAllocationRecords() {
+    private void saveThresholdAllocationRecordsToDb() {
         List<ThresholdAllocationRecord> records = new ArrayList<>();
 
         for (int i = 0; i < dynamicLinearLayout.getChildCount(); i++) {
@@ -703,12 +718,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void revertRecords() {
         setValidateRecordsViews();
-
         dynamicLinearLayout.removeAllViews();
-        loadThresholdAllocationRecords();
+        loadThresholdAllocationRecordsFromDb();
     }
 
-    private void loadThresholdAllocationRecords() {
+    private void loadThresholdAllocationRecordsFromDb() {
         ThresholdAllocationDb db = new ThresholdAllocationDb(this);
         List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecordsOrderedByDesiredAllocationThenSymbol());
 
@@ -739,8 +753,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View addCoinSavedInfoToUi(CoinSavedInfo coinSavedInfo) {
         int editStatus = coinSavedInfo.getIsEdited();
         if (editStatus == 1) {
-            handleAddRecord();
-
+            addRecord();
             EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
             EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
             edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
@@ -753,9 +766,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             edtSymbol.setText(coinSavedInfo.getSymbolCancelEdtData());
             edtAllocation.setText(coinSavedInfo.getAllocationCancelEdtData());
 
-            View record = editedRecordRoot;
-            editedRecordRoot = null;
-            handleActionEdit(record);
+            editRecord(editedRecordRoot);
 
             edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
             edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
@@ -764,29 +775,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             addThresholdAllocationRecord();
             EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
             EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
-            edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
-            edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
-
-            handleActionApply();
+            applyRecord(coinSavedInfo.getSymbolEdtData(), coinSavedInfo.getAllocationEdtData());
             return null;
         }
     }
 
     private void addThresholdAllocationRecordToUi(String symbol, float desiredAllocation) {
         addThresholdAllocationRecord();
-
-        EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
-
-        edtSymbol.setText(symbol);
-        edtAllocation.setText(String.valueOf(desiredAllocation));
-
-        handleActionApply();
+        applyRecord(symbol, String.valueOf(desiredAllocation));
     }
 
     private View addEmptyRecord() {
         View rootView = layoutInflater.inflate(R.layout.portfolio_coin_record, null);
         dynamicLinearLayout.addView(rootView);
         return rootView;
+    }
+
+    private void hideBtnValidateRecords() {
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
+        btnValidateRecords.setVisibility(View.INVISIBLE);
+    }
+
+    private void showBtnValidateRecords() {
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
+        btnValidateRecords.setVisibility(View.VISIBLE);
     }
 }
