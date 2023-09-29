@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String allocationBeforeEdit;
 
     private AlertDialog binanceRecordsValidationDialog;
-    private TextView tvValidateRecords;
-    private Button btnValidateRecords;
 
     // Only for records of dynamic layout
     @Override
@@ -97,19 +95,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int itemId = item.getItemId();
 
         if (itemId == R.id.redirect_exceptions) {
-            handleActionRedirectExceptions();
+            handleRedirectExceptions();
             return true;
         } else if (itemId == R.id.redirect_configure) {
-            handleActionRedirectConfigure();
+            handleRedirectConfigure();
             return true;
         } else if (itemId == R.id.redirect_reports) {
-            handleActionRedirectReports();
+            handleRedirectReports();
             return true;
         } else if (itemId == R.id.about) {
-            handleActionAbout();
+            handleAbout();
             return true;
         } else if (itemId == R.id.guide) {
-            handleActionRedirectGuide();
+            handleRedirectGuide();
             return true;
         }
 
@@ -138,8 +136,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkPermissions();
+        initOperations(savedInstanceState);
+        redirectToGuideIfNeeded();
+    }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        saveThresholdAllocationRecordsToBundle(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void initOperations(Bundle savedInstanceState) {
+        checkPermissions();
+        initViews(savedInstanceState);
+        initBinanceRecordsValidationDialog();
+    }
+
+    private void initViews(Bundle savedInstanceState) {
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dynamicLinearLayout = findViewById(R.id.layout_dynamic_main);
 
@@ -152,12 +165,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnRevert = findViewById(R.id.btn_revert);
         btnRevert.setOnClickListener(v -> handleRevert());
 
-        btnValidateRecords = findViewById(R.id.btn_validate_records);
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
         btnValidateRecords.setOnClickListener(v -> handleValidateRecords());
 
-        tvValidateRecords = findViewById(R.id.tv_validate_records);
         setValidateRecordsViews();
-
         addFirstThresholdRecordIfNeeded();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(COINS_SAVED_INFO_KEY)) {
@@ -165,9 +176,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             loadThresholdAllocationRecords();
         }
-
-        initBinanceRecordsValidationDialog();
-        redirectToGuideIfNeeded();
     }
 
     private void redirectToGuideIfNeeded() {
@@ -249,13 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alertDialogModify.modify(binanceRecordsValidationDialog);
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        saveThresholdAllocationRecordsToBundle(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    private void handleActionAbout() {
+    private void handleAbout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.C_main_dialog_aboutTitle);
         builder.setMessage(getString(R.string.C_main_dialog_aboutMessage) + BuildConfig.VERSION_NAME);
@@ -305,22 +307,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void handleActionRedirectExceptions() {
+    private void handleRedirectExceptions() {
+        redirectExceptions();
+    }
+
+    private void redirectExceptions() {
         Intent intent = new Intent(this, ExceptionsActivity.class);
         this.startActivity(intent);
     }
 
-    private void handleActionRedirectReports() {
+    private void handleRedirectReports() {
+        redirectReports();
+    }
+
+    private void redirectReports() {
         Intent intent = new Intent(this, ReportsActivity.class);
         this.startActivity(intent);
     }
 
-    private void handleActionRedirectGuide() {
+    private void handleRedirectGuide() {
+        redirectGuide();
+    }
+
+    private void redirectGuide() {
         Intent intent = new Intent(this, GuideActivity.class);
         this.startActivity(intent);
     }
 
-    private void handleActionRedirectConfigure() {
+    private void handleRedirectConfigure() {
+        redirectConfigure();
+    }
+
+    private void redirectConfigure() {
         Intent intent = new Intent(this, ConfigureActivity.class);
         this.startActivity(intent);
     }
@@ -331,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        Button btnValidateRecords = recordRoot.findViewById(R.id.btn_validate_records);
         btnValidateRecords.setVisibility(View.INVISIBLE);
 
         editedRecordRoot = recordRoot;
@@ -404,6 +423,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
         btnValidateRecords.setVisibility(View.INVISIBLE);
 
         addThresholdAllocationRecord();
@@ -420,6 +440,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         revertRecords();
 
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
         btnValidateRecords.setVisibility(View.VISIBLE);
 
         Toast.makeText(this, R.string.C_main_toast_savedRecords, Toast.LENGTH_SHORT).show();
@@ -477,6 +498,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setValidateRecordsViews() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         int shouldValidateRecords = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
+
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
+        TextView tvValidateRecords = findViewById(R.id.tv_validate_records);
 
         if (shouldValidateRecords == 1) {
             btnValidateRecords.setVisibility(View.INVISIBLE);
