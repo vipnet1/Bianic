@@ -1,6 +1,6 @@
-package com.vippygames.bianic.activities.main.validation_observer;
+package com.vippygames.bianic.activities.observe;
 
-public class ValidationObserveInfo {
+public class ObserveInfo {
     public enum STATUS {
         RUNNING, FINISHED, FAILED
     }
@@ -8,14 +8,9 @@ public class ValidationObserveInfo {
     private STATUS status;
     private String message;
 
-    public ValidationObserveInfo() {
+    public ObserveInfo() {
         status = STATUS.RUNNING;
         message = "";
-    }
-
-    public ValidationObserveInfo(STATUS status, String message) {
-        this.status = status;
-        this.message = message;
     }
 
     public STATUS getStatus() {

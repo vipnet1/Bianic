@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,9 +33,10 @@ import com.vippygames.bianic.R;
 import com.vippygames.bianic.activities.ConfigureActivity;
 import com.vippygames.bianic.activities.ExceptionsActivity;
 import com.vippygames.bianic.activities.GuideActivity;
-import com.vippygames.bianic.activities.ReportsActivity;
-import com.vippygames.bianic.activities.main.validation_observer.ValidationObserveInfo;
-import com.vippygames.bianic.activities.main.validation_observer.ValidationViewModel;
+import com.vippygames.bianic.activities.main.dialogs.ValidationDialogFragment;
+import com.vippygames.bianic.activities.reports.ReportsActivity;
+import com.vippygames.bianic.activities.observe.ObserveInfo;
+import com.vippygames.bianic.activities.observe.ObserveViewModel;
 import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
@@ -56,8 +58,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private ValidationViewModel validationViewModel;
-    private Observer<ValidationObserveInfo> validationObserver;
+    private ObserveViewModel validationObserveViewModel;
+    private Observer<ObserveInfo> validationObserver;
+    // means shown in this activity instance
+    private static final String SHOWN_PERMISSIONS_KEY = "shown_permissions_info";
     private static final String COINS_SAVED_INFO_KEY = "coins_saved_info";
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
@@ -69,8 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View editedRecordRoot = null;
     private String symbolBeforeEdit;
     private String allocationBeforeEdit;
-
-    private AlertDialog binanceRecordsValidationDialog;
+    private boolean alreadyShownPermissions;
 
     // Only for records of dynamic layout
     @Override
@@ -120,11 +123,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    public void onBinanceRecordsValidationFinished(ValidationObserveInfo info) {
-//        binanceRecordsValidationDialog.dismiss();
+    public void onBinanceRecordsValidationFinished(ObserveInfo info) {
+        ObserveInfo.STATUS status = info.getStatus();
+        if (status == ObserveInfo.STATUS.RUNNING) {
+            return;
+        }
 
-        ValidationObserveInfo.STATUS status = info.getStatus();
-        if (status == ValidationObserveInfo.STATUS.FAILED) {
+        ValidationDialogFragment existingDialogFragment = getValidationDialogFragment();
+        if (existingDialogFragment != null) {
+            existingDialogFragment.dismiss();
+        }
+
+        if (status == ObserveInfo.STATUS.FAILED) {
             String message = info.getMessage();
             if (message.isEmpty()) {
                 Toast.makeText(this, R.string.C_main_toast_failedValidateRecords, Toast.LENGTH_SHORT).show();
@@ -134,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (status == ValidationObserveInfo.STATUS.FINISHED) {
+        if (status == ObserveInfo.STATUS.FINISHED) {
             SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
             sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
 
@@ -153,56 +163,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        alreadyShownPermissions = savedInstanceState != null
+                && savedInstanceState.getBoolean(SHOWN_PERMISSIONS_KEY, false);
+
         if (!shouldWelcome()) {
             checkPermissions();
         }
 
         initViews(savedInstanceState);
-        initBinanceRecordsValidationDialog();
-
         welcomeIfNeeded();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isValidationObserverRegistered()) {
-            unregisterValidationViewModelObserver();
-        }
-    }
-
-    private void initValidationObserver() {
-        validationViewModel = new ViewModelProvider(this).get(ValidationViewModel.class);
-        validationObserver = this::onBinanceRecordsValidationFinished;
-    }
-
-    private void registerValidationViewModelObserver() {
-        // Observe the state of the background task
-        validationViewModel.getTaskFinishedLiveData().observe(this, validationObserver);
-    }
-
-    private void unregisterValidationViewModelObserver() {
-        validationViewModel.getTaskFinishedLiveData().removeObserver(validationObserver);
-    }
-
-    private boolean isValidationObserverRegistered() {
-        return validationViewModel.getTaskFinishedLiveData().hasObservers();
+        unregisterValidationViewModelObserver();
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         saveThresholdAllocationRecordsToBundle(outState);
+        outState.putBoolean(SHOWN_PERMISSIONS_KEY, alreadyShownPermissions);
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        int requestedPermissionsCount = sp.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
-        if (!shouldWelcome() && requestedPermissionsCount == 0) {
-            checkPermissions();
-        }
+    private void initValidationObserver() {
+        validationObserveViewModel = new ViewModelProvider(this).get(ObserveViewModel.class);
+        validationObserver = this::onBinanceRecordsValidationFinished;
+    }
+
+    private void registerValidationViewModelObserver() {
+        validationObserveViewModel.getTaskFinishedLiveData().observe(this, validationObserver);
+    }
+
+    private void unregisterValidationViewModelObserver() {
+        validationObserveViewModel.getTaskFinishedLiveData().removeObserver(validationObserver);
     }
 
     private void initViews(Bundle savedInstanceState) {
@@ -243,6 +238,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         builder.setPositiveButton(R.string.C_main_dialog_welcomeBtnOkay, (dialog, which) -> {
             redirectGuide();
+
+            Handler handler = new Handler();
+            handler.postDelayed(this::checkPermissions, 500);
         });
 
         AlertDialog welcomeDialog = builder.create();
@@ -256,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void checkPermissions() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         int do_not_request_permissions = sp.getInt(SharedPrefsConsts.DO_NOT_REQUEST_PERMISSIONS_KEY, 0);
-        if (do_not_request_permissions == 1) {
+        if (do_not_request_permissions == 1 || alreadyShownPermissions) {
             return;
         }
 
@@ -281,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             SharedPreferencesHelper sph = new SharedPreferencesHelper(this);
             int count = sph.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
             sph.setInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, count + 1);
+            alreadyShownPermissions = true;
 
             requestNeededPermissions();
         });
@@ -289,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int requestedPermissionsCount = sharedPreferencesHelper.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
         if (requestedPermissionsCount >= NEVER_SHOW_PERMISSIONS_BUTTON_REQUEST_COUNT) {
             builder.setNegativeButton(R.string.C_main_dialog_requestPermissionsNeverAgain, (dialog, which) -> {
-                dialog.dismiss();
                 SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
                 sp.setInt(SharedPrefsConsts.DO_NOT_REQUEST_PERMISSIONS_KEY, 1);
             });
@@ -330,18 +328,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void initBinanceRecordsValidationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.C_main_dialog_recordsValidationTitle);
-        builder.setMessage(R.string.C_main_dialog_recordsValidationMessage);
-        builder.setCancelable(false);
-
-        binanceRecordsValidationDialog = builder.create();
-
-        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
-        alertDialogModify.modify(binanceRecordsValidationDialog);
-    }
-
     private void handleAbout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.C_main_dialog_aboutTitle);
@@ -350,9 +336,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ExternalAppUtils externalAppUtils = new ExternalAppUtils(this);
             externalAppUtils.tryOpenUri("mailto:" + ContactConsts.CONTACT_EMAIL, getString(R.string.C_main_toast_noEmailAppFound));
         });
-        builder.setNegativeButton(R.string.C_main_dialog_aboutReview, (dialog, which) -> {
-            startInAppReview();
-        });
+        builder.setNegativeButton(R.string.C_main_dialog_aboutReview, (dialog, which) -> startInAppReview());
         builder.setNeutralButton(R.string.C_main_dialog_aboutCancel, null);
         AlertDialog dialog = builder.create();
 
@@ -370,9 +354,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // We can get the ReviewInfo object
                 ReviewInfo reviewInfo = task.getResult();
                 Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
-                flow.addOnCompleteListener(reviewTask -> {
-                    Toast.makeText(this, R.string.C_main_toast_reviewThankYou, Toast.LENGTH_LONG).show();
-                });
+                flow.addOnCompleteListener(reviewTask -> Toast.makeText(this, R.string.C_main_toast_reviewThankYou, Toast.LENGTH_LONG).show());
             } else {
                 // There was some problem, log or handle the error code.
                 //  @ReviewErrorCode int reviewErrorCode = ((ReviewException) task.getException()).getErrorCode();
@@ -565,15 +547,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void validateRecords() {
-        binanceRecordsValidationDialog.show();
+        ValidationDialogFragment dialogFragment = new ValidationDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), ValidationDialogFragment.TAG);
+
+        validationObserveViewModel.setObserveInfo(new ObserveInfo());
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                BinanceRecordsValidation binanceRecordsValidation = new BinanceRecordsValidation(MainActivity.this);
-                ValidationObserveInfo validationObserveInfo = binanceRecordsValidation.validateRecordsBinance();
-                validationViewModel.setValidationObserveInfo(validationObserveInfo);
-            }
+        executor.execute(() -> {
+            BinanceRecordsValidation binanceRecordsValidation = new BinanceRecordsValidation(MainActivity.this);
+            ObserveInfo observeInfo = binanceRecordsValidation.validateRecordsBinance();
+            validationObserveViewModel.postObserveInfo(observeInfo);
         });
     }
 
@@ -865,8 +848,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return editedRecordRoot;
         } else {
             addThresholdAllocationRecord();
-            EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
-            EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
             applyRecord(coinSavedInfo.getSymbolEdtData(), coinSavedInfo.getAllocationEdtData());
             return null;
         }
@@ -896,5 +877,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean shouldWelcome() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         return sp.getInt(SharedPrefsConsts.SHOULD_WELCOME, 1) == 1;
+    }
+
+    // null if not found
+    private ValidationDialogFragment getValidationDialogFragment() {
+        return (ValidationDialogFragment) getSupportFragmentManager().findFragmentByTag(ValidationDialogFragment.TAG);
     }
 }

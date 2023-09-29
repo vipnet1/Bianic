@@ -1,4 +1,4 @@
-package com.vippygames.bianic.activities;
+package com.vippygames.bianic.activities.reports;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,19 +13,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.activities.DetailedReportActivity;
 import com.vippygames.bianic.activities.main.MainActivity;
-import com.vippygames.bianic.common.AlertDialogModify;
+import com.vippygames.bianic.activities.observe.ObserveInfo;
+import com.vippygames.bianic.activities.observe.ObserveViewModel;
+import com.vippygames.bianic.activities.reports.dialogs.ManualReportDialogFragment;
 import com.vippygames.bianic.consts.NotificationConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.db.reports.ReportsDb;
 import com.vippygames.bianic.db.reports.ReportsRecord;
 import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
-import com.vippygames.bianic.rebalancing.report.manual.ManualReportGenerationTask;
+import com.vippygames.bianic.rebalancing.report.manual.ManualReportGeneration;
 import com.vippygames.bianic.rebalancing.validation.RecordsValidationCheck;
 import com.vippygames.bianic.rebalancing.validation.exceptions.UnvalidatedRecordsException;
 import com.vippygames.bianic.utils.ResourceUtils;
@@ -36,13 +40,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ReportsActivity extends AppCompatActivity implements View.OnClickListener {
+    private ObserveViewModel reportGenObserveViewModel;
+    private Observer<ObserveInfo> reportObserver;
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
 
     private LayoutInflater layoutInflater;
     private LinearLayout dynamicLinearLayout;
-
-    private AlertDialog manualReportGenerationDialog;
 
     @Override
     public void onClick(View view) {
@@ -83,16 +87,31 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 
-    public void onManualReportGenerationTaskFinished(boolean result) {
-        if (result) {
-            refreshRecords();
-            Toast.makeText(this, R.string.C_reports_toast_reportGenerated, Toast.LENGTH_SHORT).show();
+    public void onManualReportGenerationFinished(ObserveInfo info) {
+        ObserveInfo.STATUS status = info.getStatus();
+        if (status == ObserveInfo.STATUS.RUNNING) {
+            return;
         }
-        manualReportGenerationDialog.dismiss();
+
+        ManualReportDialogFragment existingDialogFragment = getManualReportDialogFragment();
+        if (existingDialogFragment != null) {
+            existingDialogFragment.dismiss();
+        }
+
+        if (status == ObserveInfo.STATUS.FAILED) {
+            Toast.makeText(this, info.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        refreshRecords();
+        Toast.makeText(this, R.string.C_reports_toast_reportGenerated, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initReportObserver();
+        registerReportViewModelObserver();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
 
@@ -100,7 +119,25 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         dynamicLinearLayout = findViewById(R.id.layout_dynamic_reports);
 
         loadReports();
-        initManualReportGenerationDialog();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReportViewModelObserver();
+    }
+
+    private void initReportObserver() {
+        reportGenObserveViewModel = new ViewModelProvider(this).get(ObserveViewModel.class);
+        reportObserver = this::onManualReportGenerationFinished;
+    }
+
+    private void registerReportViewModelObserver() {
+        reportGenObserveViewModel.getTaskFinishedLiveData().observe(this, reportObserver);
+    }
+
+    private void unregisterReportViewModelObserver() {
+        reportGenObserveViewModel.getTaskFinishedLiveData().removeObserver(reportObserver);
     }
 
     private void loadReports() {
@@ -164,18 +201,6 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         btnClearReport.setTag(childrenTag);
     }
 
-    private void initManualReportGenerationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.C_reports_dialog_reportGenerationTitle);
-        builder.setMessage(R.string.C_reports_dialog_reportGenerationMessage);
-        builder.setCancelable(false);
-
-        manualReportGenerationDialog = builder.create();
-
-        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
-        alertDialogModify.modify(manualReportGenerationDialog);
-    }
-
     private void handleClearAllReports() {
         clearAllReports();
     }
@@ -229,11 +254,17 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             RecordsValidationCheck recordsValidationCheck = new RecordsValidationCheck(this);
             recordsValidationCheck.validateThresholdAllocationRecordsValidated();
 
-            manualReportGenerationDialog.show();
+            ManualReportDialogFragment dialogFragment = new ManualReportDialogFragment();
+            dialogFragment.show(getSupportFragmentManager(), ManualReportDialogFragment.TAG);
+
+            reportGenObserveViewModel.setObserveInfo(new ObserveInfo());
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(new ManualReportGenerationTask(this));
-
+            executor.execute(() -> {
+                ManualReportGeneration manualReportGeneration = new ManualReportGeneration(ReportsActivity.this);
+                ObserveInfo observeInfo = manualReportGeneration.generateReport();
+                reportGenObserveViewModel.postObserveInfo(observeInfo);
+            });
         } catch (UnvalidatedRecordsException e) {
             Toast.makeText(this, R.string.C_reports_toast_clickValidateRecords, Toast.LENGTH_SHORT).show();
             ExceptionHandler exceptionHandler = new ExceptionHandler(this);
@@ -274,5 +305,10 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
     private View getRecordRoot(View view) {
         String rootTag = ((String) view.getTag()).substring(ROOT_TAG_PREFIX.length());
         return dynamicLinearLayout.findViewWithTag(rootTag);
+    }
+
+    // null if not found
+    private ManualReportDialogFragment getManualReportDialogFragment() {
+        return (ManualReportDialogFragment) getSupportFragmentManager().findFragmentByTag(ManualReportDialogFragment.TAG);
     }
 }

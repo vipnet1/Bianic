@@ -1,9 +1,9 @@
 package com.vippygames.bianic.rebalancing.report.manual;
 
-import android.widget.Toast;
+import android.content.Context;
 
 import com.vippygames.bianic.R;
-import com.vippygames.bianic.activities.ReportsActivity;
+import com.vippygames.bianic.activities.observe.ObserveInfo;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
 import com.vippygames.bianic.exception_handle.ExceptionHandler;
 import com.vippygames.bianic.exception_handle.exceptions.CriticalException;
@@ -23,43 +23,44 @@ import com.vippygames.bianic.shared_preferences.exceptions.KeyNotFoundException;
 import java.util.List;
 
 public class ManualReportGeneration {
-    private final ReportsActivity reportsActivity;
+    private ObserveInfo observeInfo;
+    private final Context context;
 
-    public ManualReportGeneration(ReportsActivity reportsActivity) {
-        this.reportsActivity = reportsActivity;
+    public ManualReportGeneration(Context context) {
+        this.context = context;
     }
 
-    public boolean generateReport() {
+    public ObserveInfo generateReport() {
         try {
-            BinanceManager binanceManager = new BinanceManager(reportsActivity);
+            observeInfo = new ObserveInfo();
+
+            BinanceManager binanceManager = new BinanceManager(context);
             List<CoinDetails> coinsDetails = binanceManager.generateCoinsDetails();
 
-            ReportGenerator reportGenerator = new ReportGenerator(reportsActivity);
+            ReportGenerator reportGenerator = new ReportGenerator(context);
             reportGenerator.generateReport(coinsDetails);
 
-            return true;
+            observeInfo.setStatus(ObserveInfo.STATUS.FINISHED);
+            return observeInfo;
 
         } catch (NetworkRequestException | FailedRequestStatusException |
                  EmptyResponseBodyException | SignatureGenerationException |
                  CoinsPriceParseException | CoinsAmountParseException |
                  CoinsDetailsBuilderException | KeyNotFoundException | EmptyPortfolioException e) {
-            showToast(reportsActivity.getString(R.string.C_manrepgen_exceptionOccurred));
+            observeInfo.setMessage(context.getString(R.string.C_manrepgen_exceptionOccurred));
 
-            ExceptionHandler exceptionHandler = new ExceptionHandler(reportsActivity);
+            ExceptionHandler exceptionHandler = new ExceptionHandler(context);
             exceptionHandler.handleException(e);
         } catch (Exception e) {
-            showToast(reportsActivity.getString(R.string.C_manrepgen_criticalExceptionOccurred));
+            observeInfo.setMessage(context.getString(R.string.C_manrepgen_criticalExceptionOccurred));
 
-            CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(reportsActivity);
+            CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
             criticalExceptionHandler.handleException(
                     new CriticalException(e, CriticalException.CriticalExceptionType.UNLABELED_EXCEPTION)
             );
         }
 
-        return false;
-    }
-
-    public void showToast(String message) {
-        reportsActivity.runOnUiThread(() -> Toast.makeText(reportsActivity, message, Toast.LENGTH_SHORT).show());
+        observeInfo.setStatus(ObserveInfo.STATUS.FAILED);
+        return observeInfo;
     }
 }

@@ -1,11 +1,9 @@
 package com.vippygames.bianic.rebalancing.validation;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import com.vippygames.bianic.activities.main.MainActivity;
 import com.vippygames.bianic.R;
-import com.vippygames.bianic.activities.main.validation_observer.ValidationObserveInfo;
+import com.vippygames.bianic.activities.observe.ObserveInfo;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
@@ -23,16 +21,16 @@ import java.util.List;
 import java.util.Map;
 
 public class BinanceRecordsValidation {
-    private ValidationObserveInfo validationObserveInfo;
+    private ObserveInfo observeInfo;
     private final Context context;
 
     public BinanceRecordsValidation(Context context) {
         this.context = context;
     }
 
-    public ValidationObserveInfo validateRecordsBinance() {
+    public ObserveInfo validateRecordsBinance() {
         try {
-            validationObserveInfo = new ValidationObserveInfo(ValidationObserveInfo.STATUS.RUNNING, "");
+            observeInfo = new ObserveInfo();
 
             ThresholdAllocationDb db = new ThresholdAllocationDb(context);
             List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecords());
@@ -42,8 +40,8 @@ public class BinanceRecordsValidation {
 
             validateCoinsInExchangeInfo(records, exchangeInfo);
 
-            validationObserveInfo.setStatus(ValidationObserveInfo.STATUS.FINISHED);
-            return validationObserveInfo;
+            observeInfo.setStatus(ObserveInfo.STATUS.FINISHED);
+            return observeInfo;
 
         } catch (NetworkRequestException | FailedRequestStatusException
                  | EmptyResponseBodyException | FailedValidateRecordsException
@@ -57,8 +55,8 @@ public class BinanceRecordsValidation {
             );
         }
 
-        validationObserveInfo.setStatus(ValidationObserveInfo.STATUS.FAILED);
-        return validationObserveInfo;
+        observeInfo.setStatus(ObserveInfo.STATUS.FAILED);
+        return observeInfo;
     }
 
     private void validateCoinsInExchangeInfo(List<ThresholdAllocationRecord> records, Map<String, ExchangeInfo> exchangeInfo) throws FailedValidateRecordsException {
@@ -66,7 +64,7 @@ public class BinanceRecordsValidation {
             String coinSymbol = record.getSymbol();
             if (!exchangeInfo.containsKey(record.getSymbol())) {
                 String message = context.getString(R.string.C_validation_coinNotOnBinance0) + coinSymbol + context.getString(R.string.C_validation_coinNotOnBinance1);
-                validationObserveInfo.setMessage(message);
+                observeInfo.setMessage(message);
                 throw new FailedValidateRecordsException(context, message);
             }
         }

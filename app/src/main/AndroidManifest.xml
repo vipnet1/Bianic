@@ -63,7 +63,7 @@
             android:name=".activities.ConfigureActivity"
             android:label="@string/manifest_config_label" />
         <activity
-            android:name=".activities.ReportsActivity"
+            android:name=".activities.reports.ReportsActivity"
             android:label="@string/manifest_rep_label" />
         <activity
             android:name=".activities.DetailedReportActivity"
