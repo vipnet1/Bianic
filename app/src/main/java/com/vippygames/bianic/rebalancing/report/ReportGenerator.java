@@ -4,10 +4,10 @@ import android.content.Context;
 
 import com.vippygames.bianic.configuration.ConfigurationManager;
 import com.vippygames.bianic.consts.ReportsConsts;
-import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
-import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsRecord;
 import com.vippygames.bianic.db.reports.ReportsDb;
 import com.vippygames.bianic.db.reports.ReportsRecord;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsDb;
+import com.vippygames.bianic.db.reports.detailed_reports.DetailedReportsRecord;
 import com.vippygames.bianic.rebalancing.data_format.CoinDetails;
 import com.vippygames.bianic.rebalancing.report.exceptions.EmptyPortfolioException;
 

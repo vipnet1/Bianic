@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.common;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

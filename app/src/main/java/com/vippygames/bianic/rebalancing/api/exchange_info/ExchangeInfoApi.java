@@ -3,9 +3,9 @@ package com.vippygames.bianic.rebalancing.api.exchange_info;
 import android.content.Context;
 
 import com.vippygames.bianic.consts.BinanceApiConsts;
-import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponseParser;
 import com.vippygames.bianic.rebalancing.api.common.response_parser.exceptions.ResponseParseException;
 import com.vippygames.bianic.rebalancing.api.exchange_info.exceptions.ExchangeInfoParseException;
+import com.vippygames.bianic.rebalancing.api.common.response_parser.ResponseParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;

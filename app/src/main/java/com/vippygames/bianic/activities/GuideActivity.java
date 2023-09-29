@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 
@@ -38,14 +39,16 @@ public class GuideActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 0);
-        super.onBackPressed();
+        redirectMain();
     }
 
     private void handleActionRedirectMain() {
+        redirectMain();
+    }
+
+    private void redirectMain() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 0);
+        sp.setInt(SharedPrefsConsts.SHOULD_WELCOME, 0);
         finish();
     }
 }

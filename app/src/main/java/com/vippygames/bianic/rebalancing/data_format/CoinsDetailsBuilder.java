@@ -64,13 +64,4 @@ public class CoinsDetailsBuilder {
 
         return coinsDetails;
     }
-
-    private Map<String, ThresholdAllocationRecord> getSymbolToThresholdAllocationRecordMap(
-            List<ThresholdAllocationRecord> records) {
-        Map<String, ThresholdAllocationRecord> result = new HashMap<>();
-        for (ThresholdAllocationRecord record : records) {
-            result.put(record.getSymbol(), record);
-        }
-        return result;
-    }
 }

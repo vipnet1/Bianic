@@ -22,7 +22,7 @@ public class ConfigurationManager {
     }
 
     public String getTheme() {
-        return sharedPreferencesHelper.getString(SharedPrefsConsts.THEME_KEY, ConfigurationConsts.THEME_SYSTEM);
+        return sharedPreferencesHelper.getString(SharedPrefsConsts.THEME_KEY, ConfigurationConsts.DEFAULT_THEME);
     }
 
     public void setTheme(String theme) {

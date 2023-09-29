@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.common;
 
 import android.app.Application;
 
@@ -16,7 +16,7 @@ public class ThemeApplication extends Application {
         setSelectedTheme();
     }
 
-    protected void setSelectedTheme() {
+    public void setSelectedTheme() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
         String theme = configurationManager.getTheme();
 

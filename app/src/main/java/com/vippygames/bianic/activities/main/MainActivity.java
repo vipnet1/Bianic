@@ -1,11 +1,11 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities.main;
 
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +17,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
+import com.vippygames.bianic.BuildConfig;
+import com.vippygames.bianic.R;
+import com.vippygames.bianic.activities.ConfigureActivity;
+import com.vippygames.bianic.activities.ExceptionsActivity;
+import com.vippygames.bianic.activities.GuideActivity;
+import com.vippygames.bianic.activities.main.dialogs.ValidationDialogFragment;
+import com.vippygames.bianic.activities.reports.ReportsActivity;
+import com.vippygames.bianic.activities.observe.ObserveInfo;
+import com.vippygames.bianic.activities.observe.ObserveViewModel;
+import com.vippygames.bianic.common.AlertDialogModify;
 import com.vippygames.bianic.consts.BinanceApiConsts;
 import com.vippygames.bianic.consts.ContactConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
@@ -30,7 +45,7 @@ import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.permissions.BatteryPermissions;
 import com.vippygames.bianic.permissions.NotificationPermissions;
-import com.vippygames.bianic.rebalancing.validation.BinanceRecordsValidationTask;
+import com.vippygames.bianic.rebalancing.validation.BinanceRecordsValidation;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.StringUtils;
@@ -43,8 +58,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private ObserveViewModel validationObserveViewModel;
+    private Observer<ObserveInfo> validationObserver;
+    // means shown in this activity instance
+    private static final String SHOWN_PERMISSIONS_KEY = "shown_permissions_info";
+    private static final String COINS_SAVED_INFO_KEY = "coins_saved_info";
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
+    private static final int NEVER_SHOW_PERMISSIONS_BUTTON_REQUEST_COUNT = 2;
 
     private LayoutInflater layoutInflater;
     private LinearLayout dynamicLinearLayout;
@@ -52,10 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View editedRecordRoot = null;
     private String symbolBeforeEdit;
     private String allocationBeforeEdit;
-
-    private AlertDialog binanceRecordsValidationDialog;
-    private TextView tvValidateRecords;
-    private Button btnValidateRecords;
+    private boolean alreadyShownPermissions;
 
     // Only for records of dynamic layout
     @Override
@@ -86,30 +104,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int itemId = item.getItemId();
 
         if (itemId == R.id.redirect_exceptions) {
-            handleActionRedirectExceptions();
+            handleRedirectExceptions();
             return true;
         } else if (itemId == R.id.redirect_configure) {
-            handleActionRedirectConfigure();
+            handleRedirectConfigure();
             return true;
         } else if (itemId == R.id.redirect_reports) {
-            handleActionRedirectReports();
+            handleRedirectReports();
             return true;
         } else if (itemId == R.id.about) {
-            handleActionAbout();
+            handleAbout();
             return true;
         } else if (itemId == R.id.guide) {
-            handleActionRedirectGuide();
+            handleRedirectGuide();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void onBinanceRecordsValidationTaskFinished(boolean result) {
-        binanceRecordsValidationDialog.dismiss();
+    public void onBinanceRecordsValidationFinished(ObserveInfo info) {
+        ObserveInfo.STATUS status = info.getStatus();
+        if (status == ObserveInfo.STATUS.RUNNING) {
+            return;
+        }
 
-        if (!result) {
-            Toast.makeText(this, R.string.C_main_toast_failedValidateRecords, Toast.LENGTH_SHORT).show();
+        ValidationDialogFragment existingDialogFragment = getValidationDialogFragment();
+        if (existingDialogFragment != null) {
+            existingDialogFragment.dismiss();
+        }
+
+        if (status == ObserveInfo.STATUS.FAILED) {
+            String message = info.getMessage();
+            if (message.isEmpty()) {
+                Toast.makeText(this, R.string.C_main_toast_failedValidateRecords, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
@@ -122,11 +153,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
+
+        initValidationObserver();
+        registerValidationViewModelObserver();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkPermissions();
+        alreadyShownPermissions = savedInstanceState != null
+                && savedInstanceState.getBoolean(SHOWN_PERMISSIONS_KEY, false);
 
+        if (!shouldWelcome()) {
+            checkPermissions();
+        }
+
+        initViews(savedInstanceState);
+        welcomeIfNeeded();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterValidationViewModelObserver();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        saveThresholdAllocationRecordsToBundle(outState);
+        outState.putBoolean(SHOWN_PERMISSIONS_KEY, alreadyShownPermissions);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void initValidationObserver() {
+        validationObserveViewModel = new ViewModelProvider(this).get(ObserveViewModel.class);
+        validationObserver = this::onBinanceRecordsValidationFinished;
+    }
+
+    private void registerValidationViewModelObserver() {
+        validationObserveViewModel.getTaskFinishedLiveData().observe(this, validationObserver);
+    }
+
+    private void unregisterValidationViewModelObserver() {
+        validationObserveViewModel.getTaskFinishedLiveData().removeObserver(validationObserver);
+    }
+
+    private void initViews(Bundle savedInstanceState) {
         layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dynamicLinearLayout = findViewById(R.id.layout_dynamic_main);
 
@@ -139,30 +211,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnRevert = findViewById(R.id.btn_revert);
         btnRevert.setOnClickListener(v -> handleRevert());
 
-        btnValidateRecords = findViewById(R.id.btn_validate_records);
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
         btnValidateRecords.setOnClickListener(v -> handleValidateRecords());
 
-        tvValidateRecords = findViewById(R.id.tv_validate_records);
         setValidateRecordsViews();
-
         addFirstThresholdRecordIfNeeded();
-        loadThresholdAllocationRecords();
 
-        initBinanceRecordsValidationDialog();
-        redirectToGuideIfNeeded();
-    }
-
-    private void redirectToGuideIfNeeded() {
-        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        if (sp.getInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 1) == 1) {
-            new Handler().postDelayed(() -> {
-                Intent intent = new Intent(MainActivity.this, GuideActivity.class);
-                startActivity(intent);
-            }, 1000);
+        if (savedInstanceState != null && savedInstanceState.containsKey(COINS_SAVED_INFO_KEY)) {
+            loadRecordsFromBundle(savedInstanceState);
+        } else {
+            loadThresholdAllocationRecordsFromDb();
         }
     }
 
+    private void welcomeIfNeeded() {
+        if (!shouldWelcome()) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.C_main_dialog_welcomeTitle);
+        builder.setMessage(R.string.C_main_dialog_welcomeMessage);
+        builder.setCancelable(false);
+
+        builder.setPositiveButton(R.string.C_main_dialog_welcomeBtnOkay, (dialog, which) -> {
+            redirectGuide();
+
+            Handler handler = new Handler();
+            handler.postDelayed(this::checkPermissions, 500);
+        });
+
+        AlertDialog welcomeDialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(welcomeDialog);
+
+        welcomeDialog.show();
+    }
+
     private void checkPermissions() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        int do_not_request_permissions = sp.getInt(SharedPrefsConsts.DO_NOT_REQUEST_PERMISSIONS_KEY, 0);
+        if (do_not_request_permissions == 1 || alreadyShownPermissions) {
+            return;
+        }
+
         BatteryPermissions batteryPermissions = new BatteryPermissions(this);
         NotificationPermissions notificationPermissions = new NotificationPermissions();
 
@@ -179,12 +272,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setTitle(R.string.C_main_dialog_requestPermissionsTitle);
         builder.setMessage(R.string.C_main_dialog_requestPermissionsMessage);
         builder.setCancelable(false);
+
         builder.setPositiveButton(R.string.C_main_dialog_requestPermissionsSure, (dialog, which) -> {
-            dialog.dismiss();
+            SharedPreferencesHelper sph = new SharedPreferencesHelper(this);
+            int count = sph.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
+            sph.setInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, count + 1);
+            alreadyShownPermissions = true;
+
             requestNeededPermissions();
         });
 
+        SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(this);
+        int requestedPermissionsCount = sharedPreferencesHelper.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
+        if (requestedPermissionsCount >= NEVER_SHOW_PERMISSIONS_BUTTON_REQUEST_COUNT) {
+            builder.setNegativeButton(R.string.C_main_dialog_requestPermissionsNeverAgain, (dialog, which) -> {
+                SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+                sp.setInt(SharedPrefsConsts.DO_NOT_REQUEST_PERMISSIONS_KEY, 1);
+            });
+        }
+
         AlertDialog requestPermissionsDialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(requestPermissionsDialog);
+
         requestPermissionsDialog.show();
     }
 
@@ -215,16 +326,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void initBinanceRecordsValidationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.C_main_dialog_recordsValidationTitle);
-        builder.setMessage(R.string.C_main_dialog_recordsValidationMessage);
-        builder.setCancelable(false);
-
-        binanceRecordsValidationDialog = builder.create();
-    }
-
-    private void handleActionAbout() {
+    private void handleAbout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.C_main_dialog_aboutTitle);
         builder.setMessage(getString(R.string.C_main_dialog_aboutMessage) + BuildConfig.VERSION_NAME);
@@ -232,11 +334,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ExternalAppUtils externalAppUtils = new ExternalAppUtils(this);
             externalAppUtils.tryOpenUri("mailto:" + ContactConsts.CONTACT_EMAIL, getString(R.string.C_main_toast_noEmailAppFound));
         });
-        builder.setNegativeButton(R.string.C_main_dialog_aboutReview, (dialog, which) -> {
-            startInAppReview();
-        });
+        builder.setNegativeButton(R.string.C_main_dialog_aboutReview, (dialog, which) -> startInAppReview());
         builder.setNeutralButton(R.string.C_main_dialog_aboutCancel, null);
         AlertDialog dialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(dialog);
 
         dialog.show();
     }
@@ -249,9 +352,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // We can get the ReviewInfo object
                 ReviewInfo reviewInfo = task.getResult();
                 Task<Void> flow = manager.launchReviewFlow(this, reviewInfo);
-                flow.addOnCompleteListener(reviewTask -> {
-                    Toast.makeText(this, R.string.C_main_toast_reviewThankYou, Toast.LENGTH_LONG).show();
-                });
+                flow.addOnCompleteListener(reviewTask -> Toast.makeText(this, R.string.C_main_toast_reviewThankYou, Toast.LENGTH_LONG).show());
             } else {
                 // There was some problem, log or handle the error code.
                 //  @ReviewErrorCode int reviewErrorCode = ((ReviewException) task.getException()).getErrorCode();
@@ -271,22 +372,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void handleActionRedirectExceptions() {
+    private void handleRedirectExceptions() {
+        redirectExceptions();
+    }
+
+    private void redirectExceptions() {
         Intent intent = new Intent(this, ExceptionsActivity.class);
         this.startActivity(intent);
     }
 
-    private void handleActionRedirectReports() {
+    private void handleRedirectReports() {
+        redirectReports();
+    }
+
+    private void redirectReports() {
         Intent intent = new Intent(this, ReportsActivity.class);
         this.startActivity(intent);
     }
 
-    private void handleActionRedirectGuide() {
+    private void handleRedirectGuide() {
+        redirectGuide();
+    }
+
+    private void redirectGuide() {
         Intent intent = new Intent(this, GuideActivity.class);
         this.startActivity(intent);
     }
 
-    private void handleActionRedirectConfigure() {
+    private void handleRedirectConfigure() {
+        redirectConfigure();
+    }
+
+    private void redirectConfigure() {
         Intent intent = new Intent(this, ConfigureActivity.class);
         this.startActivity(intent);
     }
@@ -296,9 +413,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.C_main_toast_onlyOneRecordEdit, Toast.LENGTH_SHORT).show();
             return;
         }
+        editRecord(recordRoot);
+    }
 
-        btnValidateRecords.setVisibility(View.INVISIBLE);
-
+    private void editRecord(View recordRoot) {
+        hideBtnValidateRecords();
         editedRecordRoot = recordRoot;
 
         Button btnRemove = recordRoot.findViewById(R.id.btn_remove);
@@ -331,6 +450,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        applyRecord(symbol, allocation);
+    }
+
+    private void applyRecord(String symbol, String allocation) {
         symbolBeforeEdit = symbol.toUpperCase();
         allocationBeforeEdit = allocation;
 
@@ -338,11 +461,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleActionRemove() {
+        removeRecord();
+    }
+
+    private void removeRecord() {
         dynamicLinearLayout.removeView(editedRecordRoot);
         editedRecordRoot = null;
     }
 
     private void handleActionCancel() {
+        cancelRecord();
+    }
+
+    private void cancelRecord() {
         Button btnRemove = editedRecordRoot.findViewById(R.id.btn_remove);
         Button btnApply = editedRecordRoot.findViewById(R.id.btn_apply);
         Button btnEdit = editedRecordRoot.findViewById(R.id.btn_edit);
@@ -369,9 +500,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.C_main_toast_onlyOneRecordEdit, Toast.LENGTH_SHORT).show();
             return;
         }
+        addRecord();
+    }
 
-        btnValidateRecords.setVisibility(View.INVISIBLE);
-
+    private void addRecord() {
+        hideBtnValidateRecords();
         addThresholdAllocationRecord();
     }
 
@@ -379,16 +512,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!performSaveValidations()) {
             return;
         }
-        saveThresholdAllocationRecords();
+
+        saveRecords();
+        Toast.makeText(this, R.string.C_main_toast_savedRecords, Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveRecords() {
+        saveThresholdAllocationRecordsToDb();
 
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
         revertRecords();
-
-        btnValidateRecords.setVisibility(View.VISIBLE);
-
-        Toast.makeText(this, R.string.C_main_toast_savedRecords, Toast.LENGTH_SHORT).show();
     }
 
     private void handleRevert() {
@@ -398,7 +533,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         revertRecords();
-        setValidateRecordsViews();
         Toast.makeText(this, R.string.C_main_toast_restoredRecords, Toast.LENGTH_SHORT).show();
     }
 
@@ -407,11 +541,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.C_main_toast_cantValidateWhileEditing, Toast.LENGTH_SHORT).show();
             return;
         }
+        validateRecords();
+    }
 
-        binanceRecordsValidationDialog.show();
+    private void validateRecords() {
+        ValidationDialogFragment dialogFragment = new ValidationDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), ValidationDialogFragment.TAG);
+
+        validationObserveViewModel.setObserveInfo(new ObserveInfo());
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new BinanceRecordsValidationTask(this));
+        executor.execute(() -> {
+            BinanceRecordsValidation binanceRecordsValidation = new BinanceRecordsValidation(MainActivity.this);
+            ObserveInfo observeInfo = binanceRecordsValidation.validateRecordsBinance();
+            validationObserveViewModel.postObserveInfo(observeInfo);
+        });
     }
 
     private void addThresholdAllocationRecord() {
@@ -442,13 +586,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setValidateRecordsViews() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        int shouldValidateRecords = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
+        int areRecordsValidated = sp.getInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 0);
 
-        if (shouldValidateRecords == 1) {
-            btnValidateRecords.setVisibility(View.INVISIBLE);
+        TextView tvValidateRecords = findViewById(R.id.tv_validate_records);
+
+        if (areRecordsValidated == 1) {
+            hideBtnValidateRecords();
             tvValidateRecords.setVisibility(View.GONE);
         } else {
-            btnValidateRecords.setVisibility(View.VISIBLE);
+            showBtnValidateRecords();
             tvValidateRecords.setVisibility(View.VISIBLE);
         }
     }
@@ -586,7 +732,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return dynamicLinearLayout.findViewWithTag(rootTag);
     }
 
-    private void saveThresholdAllocationRecords() {
+    private void saveThresholdAllocationRecordsToDb() {
         List<ThresholdAllocationRecord> records = new ArrayList<>();
 
         for (int i = 0; i < dynamicLinearLayout.getChildCount(); i++) {
@@ -606,14 +752,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db.clearAndSaveRecords(records);
     }
 
-    private void revertRecords() {
-        setValidateRecordsViews();
+    private void saveThresholdAllocationRecordsToBundle(Bundle bundle) {
+        int recordsCount = dynamicLinearLayout.getChildCount();
+        if (recordsCount == 0) {
+            bundle.putParcelableArray(COINS_SAVED_INFO_KEY, null);
+            return;
+        }
 
-        dynamicLinearLayout.removeAllViews();
-        loadThresholdAllocationRecords();
+        CoinSavedInfo[] coinSavedInfos = new CoinSavedInfo[recordsCount];
+        for (int i = 0; i < recordsCount; i++) {
+            View view = dynamicLinearLayout.getChildAt(i);
+
+            EditText edtSymbol = view.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = view.findViewById(R.id.edt_allocation);
+
+            String symbol = edtSymbol.getText().toString();
+            String allocation = edtAllocation.getText().toString();
+
+            CoinSavedInfo.EDIT_STATUS editStatus = CoinSavedInfo.EDIT_STATUS.NOT_EDITED;
+            String symbolCancelData = "";
+            String allocationCancelData = "";
+            if (editedRecordRoot == view) {
+                editStatus = CoinSavedInfo.EDIT_STATUS.ADDED_RECORD;
+                Button btnCancel = view.findViewById(R.id.btn_cancel);
+                if (btnCancel.getVisibility() == View.VISIBLE) {
+                    editStatus = CoinSavedInfo.EDIT_STATUS.EDITED_RECORD;
+                }
+                symbolCancelData = symbolBeforeEdit;
+                allocationCancelData = allocationBeforeEdit;
+            }
+
+            CoinSavedInfo coinSavedInfo = new CoinSavedInfo(symbol, allocation, editStatus, symbolCancelData, allocationCancelData);
+            coinSavedInfos[i] = coinSavedInfo;
+        }
+
+        bundle.putParcelableArray(COINS_SAVED_INFO_KEY, coinSavedInfos);
     }
 
-    private void loadThresholdAllocationRecords() {
+    private void revertRecords() {
+        setValidateRecordsViews();
+        dynamicLinearLayout.removeAllViews();
+        loadThresholdAllocationRecordsFromDb();
+    }
+
+    private void loadThresholdAllocationRecordsFromDb() {
         ThresholdAllocationDb db = new ThresholdAllocationDb(this);
         List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecordsOrderedByDesiredAllocationThenSymbol());
 
@@ -622,21 +804,81 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void loadRecordsFromBundle(Bundle savedInstanceState) {
+        Parcelable[] parcelables = savedInstanceState.getParcelableArray(COINS_SAVED_INFO_KEY);
+        if (parcelables == null) {
+            return;
+        }
+
+        View editedRecord = null;
+        for (Parcelable parcelable : parcelables) {
+            CoinSavedInfo coinSavedInfo = (CoinSavedInfo) parcelable;
+            View record = addCoinSavedInfoToUi(coinSavedInfo);
+            if (record != null) {
+                editedRecord = record;
+            }
+        }
+
+        editedRecordRoot = editedRecord;
+    }
+
+    // returns edited record if edited, null otherwise
+    private View addCoinSavedInfoToUi(CoinSavedInfo coinSavedInfo) {
+        CoinSavedInfo.EDIT_STATUS editStatus = coinSavedInfo.getEditStatus();
+        if (editStatus == CoinSavedInfo.EDIT_STATUS.ADDED_RECORD) {
+            addRecord();
+            EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+            edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
+            edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
+            return editedRecordRoot;
+        } else if (editStatus == CoinSavedInfo.EDIT_STATUS.EDITED_RECORD) {
+            addThresholdAllocationRecord();
+            EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
+            EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
+            edtSymbol.setText(coinSavedInfo.getSymbolCancelEdtData());
+            edtAllocation.setText(coinSavedInfo.getAllocationCancelEdtData());
+
+            editRecord(editedRecordRoot);
+
+            edtSymbol.setText(coinSavedInfo.getSymbolEdtData());
+            edtAllocation.setText(coinSavedInfo.getAllocationEdtData());
+            return editedRecordRoot;
+        } else {
+            addThresholdAllocationRecord();
+            applyRecord(coinSavedInfo.getSymbolEdtData(), coinSavedInfo.getAllocationEdtData());
+            return null;
+        }
+    }
+
     private void addThresholdAllocationRecordToUi(String symbol, float desiredAllocation) {
         addThresholdAllocationRecord();
-
-        EditText edtSymbol = editedRecordRoot.findViewById(R.id.edt_symbol);
-        EditText edtAllocation = editedRecordRoot.findViewById(R.id.edt_allocation);
-
-        edtSymbol.setText(symbol);
-        edtAllocation.setText(String.valueOf(desiredAllocation));
-
-        handleActionApply();
+        applyRecord(symbol, String.valueOf(desiredAllocation));
     }
 
     private View addEmptyRecord() {
         View rootView = layoutInflater.inflate(R.layout.portfolio_coin_record, null);
         dynamicLinearLayout.addView(rootView);
         return rootView;
+    }
+
+    private void hideBtnValidateRecords() {
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
+        btnValidateRecords.setVisibility(View.INVISIBLE);
+    }
+
+    private void showBtnValidateRecords() {
+        Button btnValidateRecords = findViewById(R.id.btn_validate_records);
+        btnValidateRecords.setVisibility(View.VISIBLE);
+    }
+
+    private boolean shouldWelcome() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        return sp.getInt(SharedPrefsConsts.SHOULD_WELCOME, 1) == 1;
+    }
+
+    // null if not found
+    private ValidationDialogFragment getValidationDialogFragment() {
+        return (ValidationDialogFragment) getSupportFragmentManager().findFragmentByTag(ValidationDialogFragment.TAG);
     }
 }

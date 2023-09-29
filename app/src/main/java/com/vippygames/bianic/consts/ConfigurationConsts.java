@@ -9,4 +9,5 @@ public class ConfigurationConsts {
     public static final String THEME_SYSTEM = "System";
     public static final String THEME_LIGHT = "Light";
     public static final String THEME_DARK = "Dark";
+    public static final String DEFAULT_THEME = THEME_SYSTEM;
 }

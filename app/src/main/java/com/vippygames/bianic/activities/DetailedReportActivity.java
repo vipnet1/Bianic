@@ -1,4 +1,4 @@
-package com.vippygames.bianic;
+package com.vippygames.bianic.activities;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vippygames.bianic.R;
 import com.vippygames.bianic.consts.DetailedReportsConsts;
 import com.vippygames.bianic.consts.ReportsConsts;
 import com.vippygames.bianic.consts.SharedPrefsConsts;
@@ -42,10 +43,10 @@ public class DetailedReportActivity extends AppCompatActivity {
         int itemId = item.getItemId();
 
         if (itemId == R.id.back) {
-            handleActionBack();
+            handleBack();
             return true;
         } else if (itemId == R.id.rotate) {
-            handleActionRotate();
+            handleRotate();
             return true;
         }
 
@@ -73,7 +74,11 @@ public class DetailedReportActivity extends AppCompatActivity {
         }
     }
 
-    private void handleActionRotate() {
+    private void handleRotate() {
+        rotate();
+    }
+
+    private void rotate() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
         int isRotationLandscape = sp.getInt(SharedPrefsConsts.IS_DETAILED_REPORT_ROTATION_LANDSCAPE,
                 DetailedReportsConsts.IS_DEFAULT_ROTATION_LANDSCAPE);
@@ -81,7 +86,11 @@ public class DetailedReportActivity extends AppCompatActivity {
         applyRotation();
     }
 
-    private void handleActionBack() {
+    private void handleBack() {
+        back();
+    }
+
+    private void back() {
         finish();
     }
 
@@ -201,7 +210,7 @@ public class DetailedReportActivity extends AppCompatActivity {
 
                 double targetQuantityUsd = absoluteTargetQuantity * record.getPrice();
                 message += " " + record.getCoin() + " | "
-                        + stringUtils.convertDoubleToString(targetQuantityUsd, 2) + " $";
+                        + stringUtils.convertDoubleToString(targetQuantityUsd, 2) + "$";
 
                 cell.setText(message);
                 break;

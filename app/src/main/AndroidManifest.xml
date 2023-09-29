@@ -9,8 +9,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".ThemeApplication"
+        android:name=".common.ThemeApplication"
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -18,7 +20,7 @@
         android:theme="@style/AppTheme">
 
         <receiver
-            android:name=".BootReceiver"
+            android:name=".common.BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -40,9 +42,10 @@
             android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.main.MainActivity"
             android:exported="true"
             android:label="@string/manifest_main_label"
+            android:theme="@style/Theme.App.Starting"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,19 +54,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GuideActivity"
+            android:name=".activities.GuideActivity"
             android:label="@string/manifest_guide_label" />
         <activity
-            android:name=".ExceptionsActivity"
+            android:name=".activities.ExceptionsActivity"
             android:label="@string/manifest_excp_label" />
         <activity
-            android:name=".ConfigureActivity"
+            android:name=".activities.ConfigureActivity"
             android:label="@string/manifest_config_label" />
         <activity
-            android:name=".ReportsActivity"
+            android:name=".activities.reports.ReportsActivity"
             android:label="@string/manifest_rep_label" />
         <activity
-            android:name=".DetailedReportActivity"
+            android:name=".activities.DetailedReportActivity"
             android:label="@string/manifest_detrep_label" />
     </application>
 

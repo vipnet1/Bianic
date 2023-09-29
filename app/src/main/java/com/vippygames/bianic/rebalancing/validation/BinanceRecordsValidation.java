@@ -1,9 +1,9 @@
 package com.vippygames.bianic.rebalancing.validation;
 
-import android.widget.Toast;
+import android.content.Context;
 
-import com.vippygames.bianic.MainActivity;
 import com.vippygames.bianic.R;
+import com.vippygames.bianic.activities.observe.ObserveInfo;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationDb;
 import com.vippygames.bianic.db.threshold_allocation.ThresholdAllocationRecord;
 import com.vippygames.bianic.exception_handle.CriticalExceptionHandler;
@@ -21,51 +21,52 @@ import java.util.List;
 import java.util.Map;
 
 public class BinanceRecordsValidation {
-    private final MainActivity mainActivity;
+    private ObserveInfo observeInfo;
+    private final Context context;
 
-    public BinanceRecordsValidation(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public BinanceRecordsValidation(Context context) {
+        this.context = context;
     }
 
-    public boolean validateRecordsBinance() {
+    public ObserveInfo validateRecordsBinance() {
         try {
-            ThresholdAllocationDb db = new ThresholdAllocationDb(mainActivity);
+            observeInfo = new ObserveInfo();
+
+            ThresholdAllocationDb db = new ThresholdAllocationDb(context);
             List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecords());
 
-            BinanceManager binanceManager = new BinanceManager(mainActivity);
+            BinanceManager binanceManager = new BinanceManager(context);
             Map<String, ExchangeInfo> exchangeInfo = binanceManager.getExchangeInfo();
 
             validateCoinsInExchangeInfo(records, exchangeInfo);
 
-            return true;
+            observeInfo.setStatus(ObserveInfo.STATUS.FINISHED);
+            return observeInfo;
 
         } catch (NetworkRequestException | FailedRequestStatusException
                  | EmptyResponseBodyException | FailedValidateRecordsException
                  | ExchangeInfoParseException e) {
-            ExceptionHandler exceptionHandler = new ExceptionHandler(mainActivity);
+            ExceptionHandler exceptionHandler = new ExceptionHandler(context);
             exceptionHandler.handleException(e);
         } catch (Exception e) {
-            CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(mainActivity);
+            CriticalExceptionHandler criticalExceptionHandler = new CriticalExceptionHandler(context);
             criticalExceptionHandler.handleException(
                     new CriticalException(e, CriticalException.CriticalExceptionType.UNLABELED_EXCEPTION)
             );
         }
 
-        return false;
+        observeInfo.setStatus(ObserveInfo.STATUS.FAILED);
+        return observeInfo;
     }
 
     private void validateCoinsInExchangeInfo(List<ThresholdAllocationRecord> records, Map<String, ExchangeInfo> exchangeInfo) throws FailedValidateRecordsException {
         for (ThresholdAllocationRecord record : records) {
             String coinSymbol = record.getSymbol();
             if (!exchangeInfo.containsKey(record.getSymbol())) {
-                String message = mainActivity.getString(R.string.C_validation_coinNotOnBinance0) + coinSymbol + mainActivity.getString(R.string.C_validation_coinNotOnBinance1);
-                showToast(message, Toast.LENGTH_SHORT);
-                throw new FailedValidateRecordsException(mainActivity, message);
+                String message = context.getString(R.string.C_validation_coinNotOnBinance0) + coinSymbol + context.getString(R.string.C_validation_coinNotOnBinance1);
+                observeInfo.setMessage(message);
+                throw new FailedValidateRecordsException(context, message);
             }
         }
-    }
-
-    public void showToast(String message, int toastLength) {
-        mainActivity.runOnUiThread(() -> Toast.makeText(mainActivity, message, toastLength).show());
     }
 }
