@@ -1,5 +1,6 @@
 package com.vippygames.bianic.activities.main;
 
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -224,24 +225,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean haveNotificationPermission = notificationPermissions.havePostNotificationsPermission(this);
 
         if (!haveBatteryPermission || !haveNotificationPermission) {
-            int requestedPermissionsCount = sp.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
-            sp.setInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, requestedPermissionsCount + 1);
-
-            showRequestPermissionsDialog(requestedPermissionsCount);
+            showRequestPermissionsDialog();
         }
     }
 
-    private void showRequestPermissionsDialog(int requestedPermissionsCount) {
+    private void showRequestPermissionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.C_main_dialog_requestPermissionsTitle);
         builder.setMessage(R.string.C_main_dialog_requestPermissionsMessage);
         builder.setCancelable(false);
 
         builder.setPositiveButton(R.string.C_main_dialog_requestPermissionsSure, (dialog, which) -> {
-            dialog.dismiss();
+            SharedPreferencesHelper sph = new SharedPreferencesHelper(this);
+            int count = sph.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
+            sph.setInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, count + 1);
+
             requestNeededPermissions();
         });
 
+        SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(this);
+        int requestedPermissionsCount = sharedPreferencesHelper.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
         if (requestedPermissionsCount >= NEVER_SHOW_PERMISSIONS_BUTTON_REQUEST_COUNT) {
             builder.setNegativeButton(R.string.C_main_dialog_requestPermissionsNeverAgain, (dialog, which) -> {
                 dialog.dismiss();
