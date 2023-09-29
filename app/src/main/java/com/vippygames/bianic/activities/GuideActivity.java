@@ -48,7 +48,7 @@ public class GuideActivity extends AppCompatActivity {
 
     private void redirectMain() {
         SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 0);
+        sp.setInt(SharedPrefsConsts.SHOULD_WELCOME, 0);
         finish();
     }
 }

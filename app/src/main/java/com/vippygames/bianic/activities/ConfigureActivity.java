@@ -278,11 +278,13 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void handleSave() {
-        save();
-        redirectMain();
+        if (save()) {
+            redirectMain();
+        }
     }
 
-    private void save() {
+    // true if success, false if failed
+    private boolean save() {
         ConfigurationManager configurationManager = new ConfigurationManager(this);
 
         int previousValidationInterval = configurationManager.getValidationInterval();
@@ -295,7 +297,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         if (!isValidationIntervalInputValid(validationIntervalText)
                 || !isThresholdRebalancingPercentInputValid(thresholdRebalancingPercentText)
                 || !isShouldRebalanceInputValid(shouldRebalanceInput)) {
-            return;
+            return false;
         }
 
         String apiKey = edtApiKey.getText().toString();
@@ -320,6 +322,7 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         rebalanceActivationUtils.changeRebalancerIfNeeded(previousValidationInterval,
                 previousIsRebalancingActivated, newValidationInterval, newIsRebalancingActivated);
         Toast.makeText(this, R.string.C_config_toast_savedConfig, Toast.LENGTH_SHORT).show();
+        return true;
     }
 
     private void handleRedirectMain() {

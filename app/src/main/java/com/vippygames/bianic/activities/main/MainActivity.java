@@ -2,6 +2,7 @@ package com.vippygames.bianic.activities.main;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String COINS_SAVED_INFO_KEY = "coins_saved_info";
     private static final String ROOT_TAG_PREFIX = "root_tag_";
     private static final int ROOT_TAG_LENGTH = 10;
+    private static final int NEVER_SHOW_PERMISSIONS_BUTTON_REQUEST_COUNT = 2;
 
     private LayoutInflater layoutInflater;
     private LinearLayout dynamicLinearLayout;
@@ -136,8 +138,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initOperations(savedInstanceState);
-        redirectToGuideIfNeeded();
+        if (!shouldWelcome()) {
+            checkPermissions();
+        }
+
+        initViews(savedInstanceState);
+        initBinanceRecordsValidationDialog();
+
+        welcomeIfNeeded();
     }
 
     @Override
@@ -146,10 +154,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onSaveInstanceState(outState);
     }
 
-    private void initOperations(Bundle savedInstanceState) {
-        checkPermissions();
-        initViews(savedInstanceState);
-        initBinanceRecordsValidationDialog();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        int requestedPermissionsCount = sp.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
+        if (!shouldWelcome() && requestedPermissionsCount == 0) {
+            checkPermissions();
+        }
     }
 
     private void initViews(Bundle savedInstanceState) {
@@ -178,17 +190,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void redirectToGuideIfNeeded() {
-        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        if (sp.getInt(SharedPrefsConsts.SHOULD_REDIRECT_TO_GUIDE, 1) == 1) {
-            new Handler().postDelayed(() -> {
-                Intent intent = new Intent(MainActivity.this, GuideActivity.class);
-                startActivity(intent);
-            }, 1000);
+    private void welcomeIfNeeded() {
+        if (!shouldWelcome()) {
+            return;
         }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Welcome To Bianic");
+        builder.setMessage("Let's get to work.");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Okay", (dialog, which) -> {
+            redirectGuide();
+        });
+
+        AlertDialog welcomeDialog = builder.create();
+
+        AlertDialogModify alertDialogModify = new AlertDialogModify(this);
+        alertDialogModify.modify(welcomeDialog);
+
+        welcomeDialog.show();
     }
 
     private void checkPermissions() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        int do_not_request_permissions = sp.getInt(SharedPrefsConsts.DO_NOT_REQUEST_PERMISSIONS_KEY, 0);
+        if (do_not_request_permissions == 1) {
+            return;
+        }
+
         BatteryPermissions batteryPermissions = new BatteryPermissions(this);
         NotificationPermissions notificationPermissions = new NotificationPermissions();
 
@@ -196,19 +226,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean haveNotificationPermission = notificationPermissions.havePostNotificationsPermission(this);
 
         if (!haveBatteryPermission || !haveNotificationPermission) {
-            showRequestPermissionsDialog();
+            int requestedPermissionsCount = sp.getInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, 0);
+            sp.setInt(SharedPrefsConsts.REQUESTED_PERMISSIONS_COUNT_KEY, requestedPermissionsCount + 1);
+
+            showRequestPermissionsDialog(requestedPermissionsCount);
         }
     }
 
-    private void showRequestPermissionsDialog() {
+    private void showRequestPermissionsDialog(int requestedPermissionsCount) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.C_main_dialog_requestPermissionsTitle);
         builder.setMessage(R.string.C_main_dialog_requestPermissionsMessage);
         builder.setCancelable(false);
+
         builder.setPositiveButton(R.string.C_main_dialog_requestPermissionsSure, (dialog, which) -> {
             dialog.dismiss();
             requestNeededPermissions();
         });
+
+        if (requestedPermissionsCount >= NEVER_SHOW_PERMISSIONS_BUTTON_REQUEST_COUNT) {
+            builder.setNegativeButton("No & Never Show Again", (dialog, which) -> {
+                dialog.dismiss();
+                SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+                sp.setInt(SharedPrefsConsts.DO_NOT_REQUEST_PERMISSIONS_KEY, 1);
+            });
+        }
 
         AlertDialog requestPermissionsDialog = builder.create();
 
@@ -799,5 +841,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showBtnValidateRecords() {
         Button btnValidateRecords = findViewById(R.id.btn_validate_records);
         btnValidateRecords.setVisibility(View.VISIBLE);
+    }
+
+    private boolean shouldWelcome() {
+        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+        return sp.getInt(SharedPrefsConsts.SHOULD_WELCOME, 1) == 1;
     }
 }
