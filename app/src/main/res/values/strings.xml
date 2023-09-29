@@ -236,4 +236,8 @@
     <string name="manifest_excp_label">Exceptions</string>
     <string name="manifest_rep_label">Reports</string>
     <string name="C_config_toast_thresholdRebalanceFormatInvalid">Invalid threshold rebalance percent format.</string>
+    <string name="C_main_dialog_welcomeTitle">Welcome!</string>
+    <string name="C_main_dialog_welcomeMessage">Dear investor, let\'s get to work.</string>
+    <string name="C_main_dialog_welcomeBtnOkay">Okay</string>
+    <string name="C_main_dialog_requestPermissionsNeverAgain"><![CDATA[No & Never Show Again]]></string>
 </resources>

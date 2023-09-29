@@ -2,10 +2,8 @@ package com.vippygames.bianic.activities.main;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -196,11 +194,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Welcome To Bianic");
-        builder.setMessage("Let's get to work.");
+        builder.setTitle(R.string.C_main_dialog_welcomeTitle);
+        builder.setMessage(R.string.C_main_dialog_welcomeMessage);
         builder.setCancelable(false);
 
-        builder.setPositiveButton("Okay", (dialog, which) -> {
+        builder.setPositiveButton(R.string.C_main_dialog_welcomeBtnOkay, (dialog, which) -> {
             redirectGuide();
         });
 
@@ -245,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         if (requestedPermissionsCount >= NEVER_SHOW_PERMISSIONS_BUTTON_REQUEST_COUNT) {
-            builder.setNegativeButton("No & Never Show Again", (dialog, which) -> {
+            builder.setNegativeButton(R.string.C_main_dialog_requestPermissionsNeverAgain, (dialog, which) -> {
                 dialog.dismiss();
                 SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
                 sp.setInt(SharedPrefsConsts.DO_NOT_REQUEST_PERMISSIONS_KEY, 1);
