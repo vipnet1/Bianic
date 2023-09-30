@@ -18,6 +18,10 @@ public class FailedRequestStatusException extends NormalException {
     }
 
     private String generateCustomMessage() {
+        if (message.contains("\"code\":-2014") || message.contains("\"code\":-2015")) {
+            return context.getString(R.string.C_excpdet_wrongApiKey);
+        }
+
         if (message.contains("\"code\":-1022")) {
             return context.getString(R.string.C_excpdet_wrongSecretKey);
         }

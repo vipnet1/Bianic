@@ -89,7 +89,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
     public void onManualReportGenerationFinished(ObserveInfo info) {
         ObserveInfo.STATUS status = info.getStatus();
-        if (status == ObserveInfo.STATUS.RUNNING) {
+        if (status == null || status == ObserveInfo.STATUS.IDLE || status == ObserveInfo.STATUS.RUNNING) {
             return;
         }
 
@@ -101,10 +101,12 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         if (status == ObserveInfo.STATUS.FAILED) {
             Toast.makeText(this, info.getMessage(), Toast.LENGTH_SHORT).show();
             return;
+        } else {
+            refreshRecords();
+            Toast.makeText(this, R.string.C_reports_toast_reportGenerated, Toast.LENGTH_SHORT).show();
         }
 
-        refreshRecords();
-        Toast.makeText(this, R.string.C_reports_toast_reportGenerated, Toast.LENGTH_SHORT).show();
+        reportGenObserveViewModel.setObserveInfo(new ObserveInfo(ObserveInfo.STATUS.IDLE, ""));
     }
 
     @Override
@@ -257,7 +259,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             ManualReportDialogFragment dialogFragment = new ManualReportDialogFragment();
             dialogFragment.show(getSupportFragmentManager(), ManualReportDialogFragment.TAG);
 
-            reportGenObserveViewModel.setObserveInfo(new ObserveInfo());
+            reportGenObserveViewModel.setObserveInfo(new ObserveInfo(ObserveInfo.STATUS.RUNNING, ""));
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {

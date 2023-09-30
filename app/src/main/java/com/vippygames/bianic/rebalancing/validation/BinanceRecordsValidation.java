@@ -30,7 +30,7 @@ public class BinanceRecordsValidation {
 
     public ObserveInfo validateRecordsBinance() {
         try {
-            observeInfo = new ObserveInfo();
+            observeInfo = new ObserveInfo(ObserveInfo.STATUS.RUNNING, "");
 
             ThresholdAllocationDb db = new ThresholdAllocationDb(context);
             List<ThresholdAllocationRecord> records = db.loadRecords(db.getRecords());

@@ -188,6 +188,7 @@
     <string name="C_binanceapi_failedGetReqFailReason">Failed to get reason</string>
 
     <string name="C_excpdet_notProvideBinanceKeys">Likely you didn\'t provide the Binance keys.</string>
+    <string name="C_excpdet_wrongApiKey">"Likely wrong API key. "</string>
     <string name="C_excpdet_wrongSecretKey">"Likely wrong secret key. "</string>
     <string name="C_excpdet_noInternetConnection">"Likely no internet connection. "</string>
     <string name="C_excpdet_likelySlowOrNoNetwork">"Likely or slow network connection or no network at all. "</string>

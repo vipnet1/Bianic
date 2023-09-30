@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onBinanceRecordsValidationFinished(ObserveInfo info) {
         ObserveInfo.STATUS status = info.getStatus();
-        if (status == ObserveInfo.STATUS.RUNNING) {
+        if (status == null || status == ObserveInfo.STATUS.IDLE || status == ObserveInfo.STATUS.RUNNING) {
             return;
         }
 
@@ -141,14 +141,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
-            return;
+        } else {
+            SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
+            sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
+
+            setValidateRecordsViews();
+            Toast.makeText(this, R.string.C_main_toast_recordsValid, Toast.LENGTH_SHORT).show();
         }
 
-        SharedPreferencesHelper sp = new SharedPreferencesHelper(this);
-        sp.setInt(SharedPrefsConsts.ARE_THRESHOLD_ALLOCATION_RECORDS_VALIDATED, 1);
-
-        setValidateRecordsViews();
-        Toast.makeText(this, R.string.C_main_toast_recordsValid, Toast.LENGTH_SHORT).show();
+        validationObserveViewModel.setObserveInfo(new ObserveInfo(ObserveInfo.STATUS.IDLE, ""));
     }
 
     @Override
@@ -548,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ValidationDialogFragment dialogFragment = new ValidationDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), ValidationDialogFragment.TAG);
 
-        validationObserveViewModel.setObserveInfo(new ObserveInfo());
+        validationObserveViewModel.setObserveInfo(new ObserveInfo(ObserveInfo.STATUS.RUNNING, ""));
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {

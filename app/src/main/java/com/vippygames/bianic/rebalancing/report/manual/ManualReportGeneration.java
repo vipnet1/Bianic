@@ -32,7 +32,7 @@ public class ManualReportGeneration {
 
     public ObserveInfo generateReport() {
         try {
-            observeInfo = new ObserveInfo();
+            observeInfo = new ObserveInfo(ObserveInfo.STATUS.RUNNING, "");
 
             BinanceManager binanceManager = new BinanceManager(context);
             List<CoinDetails> coinsDetails = binanceManager.generateCoinsDetails();
