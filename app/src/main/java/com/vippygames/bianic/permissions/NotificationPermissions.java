@@ -1,26 +1,22 @@
 package com.vippygames.bianic.permissions;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.vippygames.bianic.notifications.NotificationType;
+import com.vippygames.bianic.permissions.dialogs.NotificationPermissionDialogFragment;
 
 public class NotificationPermissions {
     public boolean havePostNotificationsPermission(Context context) {
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
-            return true;
-        }
-
-        int permissionState = ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS);
-        return permissionState == PackageManager.PERMISSION_GRANTED;
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        return notificationManagerCompat.areNotificationsEnabled();
     }
 
     public boolean isChannelEnabled(Context context, NotificationType notificationType) {
@@ -35,9 +31,16 @@ public class NotificationPermissions {
         return manager.getNotificationChannel(notificationType.getChannelId(context)) != null;
     }
 
-    public void requestPostNotificationsPermission(Activity activity) {
+    public void requestPostNotificationsPermission(FragmentActivity fragmentActivity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            ActivityCompat.requestPermissions(fragmentActivity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+        } else {
+            manualRequestNotifications(fragmentActivity);
         }
+    }
+
+    private void manualRequestNotifications(FragmentActivity fragmentActivity) {
+        NotificationPermissionDialogFragment dialogFragment = new NotificationPermissionDialogFragment();
+        dialogFragment.show(fragmentActivity.getSupportFragmentManager(), NotificationPermissionDialogFragment.TAG);
     }
 }

@@ -27,6 +27,7 @@ import com.vippygames.bianic.permissions.NotificationPermissions;
 import com.vippygames.bianic.shared_preferences.SharedPreferencesHelper;
 import com.vippygames.bianic.utils.ExternalAppUtils;
 import com.vippygames.bianic.utils.RebalanceActivationUtils;
+import com.vippygames.bianic.utils.StringUtils;
 
 public class ConfigureActivity extends AppCompatActivity implements View.OnClickListener {
     // value in bundle indicates if button activate/deactivate was seen. if 1 seen deactivate if 0 seen activate.
@@ -258,6 +259,26 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
+    private boolean isApiKeyValid(String apiKey) {
+        StringUtils stringUtils = new StringUtils(this);
+        if (!stringUtils.isAlphanumeric(apiKey)) {
+            Toast.makeText(this, R.string.C_config_toast_apiKeyNotAlphanumeric, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isSecretKeyValid(String secretKey) {
+        StringUtils stringUtils = new StringUtils(this);
+        if (!stringUtils.isAlphanumeric(secretKey)) {
+            Toast.makeText(this, R.string.C_config_toast_secretKeyNotAlphanumeric, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
     private boolean isShouldRebalanceInputValid(boolean shouldRebalance) {
         NotificationPermissions notificationPermissions = new NotificationPermissions();
 
@@ -290,19 +311,20 @@ public class ConfigureActivity extends AppCompatActivity implements View.OnClick
         int previousIsRebalancingActivated = configurationManager.isRebalancingActivated();
         boolean shouldRebalanceInput = btnDeactivate.getVisibility() == View.VISIBLE;
 
+        String apiKey = edtApiKey.getText().toString();
+        String secretKey = edtSecretKey.getText().toString();
         String validationIntervalText = edtValidationInterval.getText().toString();
         String thresholdRebalancingPercentText = edtThresholdRebalancingPercent.getText().toString();
 
+
         if (!isValidationIntervalInputValid(validationIntervalText)
+                || !isApiKeyValid(apiKey) || !isSecretKeyValid(secretKey)
                 || !isThresholdRebalancingPercentInputValid(thresholdRebalancingPercentText)
                 || !isShouldRebalanceInputValid(shouldRebalanceInput)) {
             return false;
         }
 
-        String apiKey = edtApiKey.getText().toString();
         configurationManager.setApiKey(apiKey);
-
-        String secretKey = edtSecretKey.getText().toString();
         configurationManager.setSecretKey(secretKey);
 
         int newValidationInterval = Integer.parseInt(validationIntervalText);

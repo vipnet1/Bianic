@@ -23,12 +23,13 @@ public class ManualReportDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.C_reports_dialog_reportGenerationTitle);
         builder.setMessage(R.string.C_reports_dialog_reportGenerationMessage);
-        builder.setCancelable(false);
 
         AlertDialog alertDialog = builder.create();
 
         AlertDialogModify alertDialogModify = new AlertDialogModify(context);
         alertDialogModify.modify(alertDialog);
+
+        setCancelable(false);
 
         return alertDialog;
     }

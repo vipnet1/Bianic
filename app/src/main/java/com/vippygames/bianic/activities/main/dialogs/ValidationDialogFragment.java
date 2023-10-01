@@ -23,12 +23,13 @@ public class ValidationDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.C_main_dialog_recordsValidationTitle);
         builder.setMessage(R.string.C_main_dialog_recordsValidationMessage);
-        builder.setCancelable(false);
 
         AlertDialog alertDialog = builder.create();
 
         AlertDialogModify alertDialogModify = new AlertDialogModify(context);
         alertDialogModify.modify(alertDialog);
+
+        setCancelable(false);
 
         return alertDialog;
     }

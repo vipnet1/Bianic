@@ -132,6 +132,10 @@
     <string name="C_main_toast_noEmailAppFound">No email app found</string>
     <string name="C_main_dialog_aboutReview">Review</string>
     <string name="C_main_dialog_aboutCancel">Cancel</string>
+    <string name="C_main_dialog_welcomeTitle">Welcome!</string>
+    <string name="C_main_dialog_welcomeMessage">Dear investor, let\'s get to work.</string>
+    <string name="C_main_dialog_welcomeBtnOkay">Okay</string>
+    <string name="C_main_dialog_requestPermissionsNeverAgain"><![CDATA[No & Never Show Again]]></string>
     <string name="C_main_toast_reviewThankYou">Thank you for your feedback!</string>
     <string name="C_main_toast_reviewNoBrowserApp">No browser app found</string>
     <string name="C_main_toast_onlyOneRecordEdit">Only one concurrent record edit</string>
@@ -167,6 +171,8 @@
     <string name="C_config_dialog_contractAccept">Accept</string>
     <string name="C_config_toast_apiBeginningEmpty">Api key is empty</string>
     <string name="C_config_toast_secretBeginningEmpty">Secret key is empty</string>
+    <string name="C_config_toast_apiKeyNotAlphanumeric">Api key must contain alphanumeric characters</string>
+    <string name="C_config_toast_secretKeyNotAlphanumeric">Secret key must contain alphanumeric characters</string>
     <string name="C_config_toast_apiBeginsWith">"Api key begins with "</string>
     <string name="C_config_toast_secretBeginsWith">"Secret key begins with "</string>
     <string name="C_config_toast_revertedConfiguration">Reverted configuration</string>
@@ -176,6 +182,7 @@
     <string name="C_config_toast_thresholdRebalanceDotNotLast">Threshold rebalancing percent - dot cannot be last character</string>
     <string name="C_config_toast_thresholdRebalanceMoreThan">Threshold rebalancing percent - value cannot be lower than 0.1</string>
     <string name="C_config_toast_thresholdRebalanceUpToDigitsAfterDot">Threshold rebalancing percent - up to 3 digits after dot</string>
+    <string name="C_config_toast_thresholdRebalanceFormatInvalid">Invalid threshold rebalance percent format.</string>
     <string name="C_config_toast_validationIntervalNotEmpty">Validation interval - cannot be empty</string>
     <string name="C_config_toast_validationIntervalNotLowerThan">Validation interval - cannot be lower than 2</string>
     <string name="C_config_toast_rebalanceActivateNeedNotificationsPerm">Need notifications permission to run rebalancing check</string>
@@ -236,9 +243,9 @@
     <string name="manifest_guide_label">Guide</string>
     <string name="manifest_excp_label">Exceptions</string>
     <string name="manifest_rep_label">Reports</string>
-    <string name="C_config_toast_thresholdRebalanceFormatInvalid">Invalid threshold rebalance percent format.</string>
-    <string name="C_main_dialog_welcomeTitle">Welcome!</string>
-    <string name="C_main_dialog_welcomeMessage">Dear investor, let\'s get to work.</string>
-    <string name="C_main_dialog_welcomeBtnOkay">Okay</string>
-    <string name="C_main_dialog_requestPermissionsNeverAgain"><![CDATA[No & Never Show Again]]></string>
+
+    <string name="C_perm_dialog_manualPermReqTitle">Enable Notifications</string>
+    <string name="C_perm_dialog_manualPermReqMessage">We will redirect you to app settings. Please enter the notifications section and enable them.</string>
+    <string name="C_perm_dialog_manualPermReqOpenSettings">Open Settings</string>
+    <string name="C_perm_dialog_manualPermReqCancel">Cancel</string>
 </resources>
